@@ -67,8 +67,8 @@ export const routes: Routes = [
         data: {
             // Add breadcrumb data
             breadcrumb: {
-                title: 'Zn-Templates Level 0',
-                description: 'Description for zn-developercenter'
+                title: 'Developer Center',
+                description: 'Your one stop for all RedLine developer resources.'
             }
         },
         children: [
