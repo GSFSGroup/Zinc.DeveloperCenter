@@ -10,4 +10,8 @@ import { HomeService } from './home.service';
 export class HomeComponent {
     public constructor(private homeService: HomeService) {
     }
+
+    public testClickFunction() {
+        alert('clicked Read More button.');
+    }
 }
