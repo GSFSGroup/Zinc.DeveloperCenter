@@ -1,0 +1,97 @@
+version: '2.4'
+services:
+
+  developercenter:
+    # https://docs.docker.com/compose/compose-file/#init
+    # https://medium.com/factualopinions/docker-compose-tricks-and-best-practices-5e7e43eba8eb
+    # https://github.com/krallin/tini#using-tini
+    init: true
+    volumes:
+      - app-out:/artifacts
+    environment:
+      - OUTPUT=/artifacts/app.web.txt
+    entrypoint: ["/bin/sh", "-c", "pstree && echo \"Writing log to: $$OUTPUT\"; ./run_app.sh 2>1 > $$OUTPUT"]
+
+  developercenter-messaging:
+    init: true
+    volumes:
+      - app-out:/artifacts
+    environment:
+      - OUTPUT=/artifacts/app.messaging.txt
+    entrypoint: ["/bin/sh", "-c", "pstree && echo \"Writing log to: $$OUTPUT\"; ./run_app.sh 2>1 > $$OUTPUT"]
+
+  developercenter-jobs:
+    init: true
+    volumes:
+      - app-out:/artifacts
+    environment:
+      - OUTPUT=/artifacts/app.jobs.txt
+    entrypoint: ["/bin/sh", "-c", "pstree && echo \"Writing log to: $$OUTPUT\"; ./run_app.sh 2>1 > $$OUTPUT"]
+
+  developercenter-migrations:
+    init: true
+    volumes:
+      - app-out:/artifacts
+    environment:
+      - OUTPUT=/artifacts/app.migrations.txt
+    entrypoint: ["/bin/sh", "-c", "pstree && echo \"Writing log to: $$OUTPUT\"; ./run_app.sh 2>1 > $$OUTPUT && touch /app/$$APP_ENTRYPOINT/success; sleep infinity"]
+
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter-tests-csharp:
+    extends:
+      service: builder
+    container_name: developercenter-tests-csharp
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TEST_CS_TAG}
+    build:
+      target: tests-csharp
+    environment:
+      # common
+      - baseUrl=https://developercenter:5001/.well-known/ready
+      - DEPENDENCY_TRY_LIMIT=2
+      - ApplicationContext__ApplicationName
+      - ApplicationContext__ApplicationSystemName
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
+      - Authentication__SigningCert__Password=${RL_CERT_PUBLICPRIVATE_KEYPAIR_PASSWORD}
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - coverage-out:/coverage
+      - csharp-out:/artifacts
+
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter-tests-spa-unit:
+    extends:
+      service: builder
+    container_name: developercenter-tests-spa-unit
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TEST_SPA_UNIT_TAG}
+    build:
+      target: tests-spa-unit
+    environment:
+      # common
+      - TZ
+    volumes:
+      - coverage-out:/coverage
+      - spa-out:/artifacts
+
+  # TODO Uncomment below to enable angular tests
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  # developercenter-tests-spa-integration:
+  #   extends:
+  #     service: builder
+  #   image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TEST_SPA_INTEGRATION_TAG}
+  #   build:
+  #     target: developercenter-tests-spa-integration
+  #   environment:
+  #     - baseUrl=https://app:5001
+  #     - CYPRESS_RECORD_KEY=${CYPRESS_RECORD_KEY:-00000000-0000-0000-0000-000000000000}
+  #     - CYPRESS_testResults=/artifacts/cypress/results.xml
+  #     - CYPRESS_screenshotsFolder=/artifacts/cypress/screenshots
+  #     - CYPRESS_videosFolder=/artifacts/cypress/videos
+  #   depends_on:
+  #     - app
+  #   volumes:
+  #     - spa-out:/artifacts

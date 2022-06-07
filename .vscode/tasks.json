@@ -1,0 +1,52 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "docker-compose-build-debug",
+            "command": "docker-compose build --build-arg DEBUG=true app",
+            "type": "shell",
+        },
+        {
+            "label": "docker-compose-up",
+            "command": "docker-compose up -d app",
+            "type": "shell",
+            "dependsOn": ["docker-compose-build-debug"]
+        },
+        {
+            "label": "build-web",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/App/Zinc.DeveloperCenter.Host.Web/Zinc.DeveloperCenter.Host.Web.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-messaging",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/App/Zinc.DeveloperCenter.Host.Messaging/Zinc.DeveloperCenter.Host.Messaging.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build-migrations",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/App/Zinc.DeveloperCenter.Data.Migrations/Zinc.DeveloperCenter.Data.Migrations.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

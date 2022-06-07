@@ -1,0 +1,174 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v2/#extension-fields
+# https://yaml.org/type/merge.html
+version: '2.4'
+services:
+
+  # app: is a convenience tag to be used locally if you want to start all app hosts at once.
+  #   example: docker-compose up -d app
+  app:
+    image: alpine
+    container_name: app-developercenter
+    command: ["sh", "-c", "echo This is only a shortcut to start all app hosts at once."]
+    depends_on:
+      - developercenter
+      - developercenter-messaging
+      - developercenter-jobs
+
+  # deps: is a convenience tag to be used locally for "F5" development
+  #   example: docker-compose up -d deps
+  deps:
+    container_name: deps-developercenter
+    image: alpine:$ALPINE_LABEL
+    entrypoint: ["sh", "-c", "echo This is only a shortcut to start all dependencies at once."]
+    depends_on:
+      rabbit:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      distribute-grants:
+        condition: service_started
+      authn:
+        condition: service_healthy
+      shell:
+        condition: service_healthy
+
+  # shared container, but we can alter its deps to run after migrations for this application
+  distribute-grants:
+    depends_on:
+      developercenter-migrations:
+        condition: service_healthy
+
+  # init container
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter-migrations:
+    extends:
+      service: builder
+    build:
+      target: release
+    container_name: developercenter-migrations
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TAG}
+    entrypoint: ["sh", "-c", "rm -f /app/$$APP_ENTRYPOINT/success && ./run_app.sh && touch /app/$$APP_ENTRYPOINT/success; sleep infinity"]
+    environment:
+      - APP_ENTRYPOINT=Zinc.DeveloperCenter.Data.Migrations
+      - ApplicationContext__ApplicationName
+      - ApplicationContext__ApplicationSystemName
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
+    healthcheck:
+      test: test -f /app/$$APP_ENTRYPOINT/success
+      interval: 1s
+      start_period: 1m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      authn:
+        condition: service_healthy
+      authz:
+        condition: service_healthy
+
+  # Web Host
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter:
+    container_name: developercenter
+    extends:
+      service: builder
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TAG}
+    build:
+      target: release
+    environment:
+      - APP_ENTRYPOINT=Zinc.DeveloperCenter.Host.Web
+      - ApplicationContext__ApplicationName
+      - ApplicationContext__ApplicationSystemName
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
+    ports:
+      - "${RL_APP_PORT}:5001"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+      distribute-grants:
+        condition: service_started
+      developercenter-migrations:
+        condition: service_healthy
+      authn:
+        condition: service_healthy
+      authz:
+        condition: service_healthy
+      shell:
+        condition: service_healthy
+
+  # Messaging Host
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter-messaging:
+    container_name: developercenter-messaging
+    extends:
+      service: builder
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TAG}
+    build:
+      target: release
+    environment:
+      - APP_ENTRYPOINT=Zinc.DeveloperCenter.Host.Messaging
+      - ApplicationContext__ApplicationName
+      - ApplicationContext__ApplicationSystemName
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
+    ports:
+      - "${RL_MESSAGING_PORT}:5001"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+      authn:
+        condition: service_healthy
+      authz:
+        condition: service_healthy
+      developercenter-migrations:
+        condition: service_healthy
+
+  # Jobs Host
+  # note: since this service extends builder, a lot of yaml sections (including environment) are inherited from shared deps
+  developercenter-jobs:
+    container_name: developercenter-jobs
+    extends:
+      service: builder
+    image: ${RL_DOCKER_REPO_BASE}/${RL_APP_NAME}:${RL_APP_TAG}
+    build:
+      target: release
+    environment:
+      - APP_ENTRYPOINT=Zinc.DeveloperCenter.Host.Jobs
+      - ApplicationContext__ApplicationName
+      - ApplicationContext__ApplicationSystemName
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - RABBITMQ_USER
+      - RABBITMQ_PASSWORD
+    ports:
+      - "${RL_JOBS_PORT}:5001"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+      authn:
+        condition: service_healthy
+      authz:
+        condition: service_healthy
+      developercenter-migrations:
+        condition: service_healthy
+
+  # we can oveerride a small amount of the main shell definition that comes from shareed deps
+  shell:
+    environment:
+      - Shell__Applications__x__Route=developercenter
+      - Shell__Applications__x__ApplicationComponent=zn-developercenter
+      - Shell__Applications__x__IngressUrl=https://host.docker.internal:${RL_APP_PORT}
+      - Shell__Applications__x__Title=Zinc.DeveloperCenter
+      - Shell__Applications__x__Name=Zinc.DeveloperCenter
+      - Shell__Applications__x__Icon__Type=element
+      - Shell__Applications__x__Icon__Value=argon
+      - Shell__Applications__x__Icon__Category=Zinc.DeveloperCenter
+      - Shell__Applications__x__Icon__Abbreviation=Ma
+      - Shell__LandingRoute=developercenter

@@ -1,0 +1,298 @@
+# CircleCI file for CI/CD integration
+#
+
+version: 2.1
+commands:
+  terraform-login:
+    description: "Log Into Terraform Cloud"
+    steps:
+      - run:
+          name: "Log Into Terraform Cloud"
+          working_directory: ~/app/infrastructure
+          command: |
+            mkdir /root/.terraform.d
+            echo "{
+              \"credentials\": {
+                \"app.terraform.io\": {
+                  \"token\": \"${TF_API_TOKEN}\"
+                }
+              }
+            }" >> /root/.terraform.d/credentials.tfrc.json
+  terraform-fmt:
+    description: "Check Terraform Configuration Format"
+    steps:
+      - run:
+          name: "Check Terraform Configuration Format"
+          working_directory: ~/app/infrastructure
+          command: terraform fmt -check -recursive -diff
+  terraform-init:
+    parameters:
+      scientist:
+        type: string
+    description: "Initialize terraform workspace"
+    steps:
+        - run:
+            name: "Init Terraform Working Directory"
+            working_directory: ~/app/infrastructure
+            command: |
+                echo "1" | terraform init
+                terraform workspace select <<parameters.scientist>>
+  terraform-validate:
+    description: "Validate Terraform Configuration"
+    steps:
+      - run:
+          name: "Validate Terraform Configuration"
+          working_directory: ~/app/infrastructure
+          command: terraform validate
+  terraform-plan:
+    description: "Execute terraform plan"
+    steps:
+      - run:
+          name: "Terraform Plan"
+          working_directory: ~/app/infrastructure
+          command: terraform plan
+workflows:
+  version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 8 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build:
+          context: default-context
+          run-tests-csharp: true
+          run-tests-spa-unit: true
+          run-tests-spa-integration: false
+          run-push-images: false
+  build_workflow:
+    jobs:
+      - terraform:
+          context: default-context
+      - build:
+          context: default-context
+          docker-image-repo: quay.io
+          run-tests-csharp: true
+          run-tests-spa-unit: true
+          run-tests-spa-integration: false
+          run-push-images: true
+
+# NOTE - TEMPLATE BELOW :
+#   You will need to add a terraform job to execute terraform in CircleCI. The commands are already defined above to log in,
+#   validate (terraform-fmt and terraform-validate), plan, and apply. Beyond that, you should not need to edit anything below this line.
+#   You can override some of the below sections by changing the above. Please see the documentation in Zinc.DeveloperSetup/build for examples.
+#   If you still find the need to change something, consider making a PR to https://github.com/GSFSGroup/Zinc.DeveloperSetup
+#   you may be solving a common problem.
+jobs:
+  terraform:
+    docker:
+      - image: hashicorp/terraform:0.14.7
+    working_directory: ~/app
+    steps:
+      - checkout
+      - terraform-login
+      - terraform-fmt
+      - terraform-init:
+          scientist: "hawking"
+      - terraform-validate
+      - terraform-plan
+  build:
+    # https://circleci.com/docs/2.0/configuration-reference/#machine
+    # https://docs.docker.com/engine/release-notes/
+    machine:
+      image: ubuntu-2004:202111-02
+      docker_layer_caching: false
+    resource_class: large
+    environment:
+      DOCKER_BUILDKIT: 1
+      COMPOSE_DOCKER_CLI_BUILD: 1
+    shell: bash
+    working_directory: ~/app
+    parameters:
+      rl-docker-compose-up-service:
+        type: string
+        default: developercenter
+      run-tests-csharp:
+        type: boolean
+        default: true
+      run-tests-spa-unit:
+        type: boolean
+        default: true
+      run-tests-spa-integration:
+        type: boolean
+        default: true
+      send-code-coverage:
+        type: boolean
+        default: true
+      run-push-images:
+        type: boolean
+        default: true
+      build-args:
+        type: string
+        default: "--parallel --quiet --progress plain"
+      # default is to build all of the things
+      build-target:
+        type: string
+        default: ""
+      docker-vols-root:
+        type: string
+        default: ~/docker-volumes
+      docker-image-repo:
+        type: string
+        default: quay.io
+      mercury-cli-image:
+        type: string
+        default: quay.io/gsfsgroup/hg-images:mercury
+      pre-build:
+        type: steps
+        description: "Steps to run prior to the build"
+        default: []
+      post-build:
+        type: steps
+        description: "Steps to run after the build"
+        default: []
+      push-images:
+        type: steps
+        description: "Steps to push the desired images to the configured repo. "
+        default:
+          - run:
+              name: "Publish the Release Docker image to the image repository"
+              command: docker push $RL_IMAGE
+          - run:
+              name: "Publish the Release Docker image (as latest) to the image repository"
+              command: docker tag $RL_IMAGE $RL_IMAGE_LATEST && docker push $RL_IMAGE_LATEST
+    steps:
+      - run:
+          name: "Login to the Docker image repository"
+          command: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin << parameters.docker-image-repo >>
+      # Run the built-in checkout script to checkout the code in this repo and clone it in the machine vm
+      - checkout
+      - run:
+          name: "Prepare environment variables and docker container volumes"
+          command: |
+            echo "Clean up old docker volumes"
+            docker volume rm --force $(docker volume ls -q)
+
+            echo "Set execute bits"
+            chmod +x set-execute-bits.sh && ./set-execute-bits.sh
+
+            echo -e "\nSetting parameter-based environment variables..."
+            export RL_DOCKER_VOLS_ROOT=<< parameters.docker-vols-root >>
+            echo "export RL_DOCKER_VOLS_ROOT=<< parameters.docker-vols-root >>" >> $BASH_ENV
+
+            source .cicd/build/make-docker-volumes.sh
+
+            echo -e "\nPull down common redline dependencies..."
+            pushd /tmp
+            git clone --depth 1 https://git:${GITHUB_TOKEN}@github.com/GSFSGroup/Zinc.DeveloperSetup
+            cp -R /tmp/Zinc.DeveloperSetup/docker/deps /home/circleci/docker-volumes/
+            rm -rf /tmp/Zinc.DeveloperSetup
+            popd
+
+            echo 'source .env' >> $BASH_ENV
+            echo 'source $RL_DOCKER_VOLS_ROOT/deps/set-redline-env.sh' >> $BASH_ENV
+            echo 'source .cicd/build/load-env.sh' >> $BASH_ENV
+            source $BASH_ENV
+
+            echo -e "\n\nBASH_ENV -> $BASH_ENV"
+            echo -e "\nContents -> $(cat $BASH_ENV)"
+
+            echo -e "\nNon-secret env vars:"
+            printenv | sort | grep -iv PASS | grep -iv TOKEN | grep -iv SECRET | grep -iv KEY
+
+            echo -e "\nVersions..."
+            echo -e "OpenSSL version -> $(openssl version)"
+            echo -e "Docker version -> $(docker --version)"
+            echo "Docker compose version -> $(rl-docker-compose --version)"
+            echo -e "\n\n'rl-docker-compose-test' function registered -> $(rl-docker-compose-test version)"
+
+            find $RL_DOCKER_VOLS_ROOT -type f
+      - run:
+          name: "Make some certs"
+          command: rl-refresh-certs
+      # Download twistcli from the configured Twistlock console
+      # ...and ensure it's executable.
+      - run:
+          name: "Download twistcli in preparation for the Docker image security scan"
+          command: |
+            curl -k -u $PC_COMPUTE_USER:$PC_COMPUTE_PASS --output ~/app/twistcli $PC_COMPUTE_CONSOLE_URL/api/v1/util/twistcli &&
+            sudo chmod a+x ./twistcli
+      - steps: << parameters.pre-build >>
+      - run:
+          name: "Build docker images (force pulling the latest base images)"
+          command: rl-docker-compose-test build --pull << parameters.build-args >> << parameters.build-target >>
+      - steps: << parameters.post-build >>
+      - run:
+          name: "Bring up the images"
+          command: rl-docker-compose-test pull --quiet --ignore-pull-failures || echo "Create quay repository for the project to fix the errors." && rl-docker-compose-test up -d << parameters.rl-docker-compose-up-service >>
+      - run:
+          name: "Document the runtime environment"
+          when: always
+          command: |
+            #todo(jhadlock): parameterize this?
+            echo -e "\nOur docker images..."
+            docker image ls --digests "quay.io/gsfsgroup/*"
+
+            echo -e "\nVarious dependency docker images..."
+            docker image ls --digests "*"
+
+            echo -e "\nMicrosoft docker images..."
+            docker image ls --digests "microsoft/*"
+
+            echo -e "\nrl-docker-compose services running..."
+            rl-docker-compose-test ps
+      - when:
+          condition: << parameters.run-tests-csharp >>
+          steps:
+            - run:
+                name: "Run csharp unit and integration tests..."
+                command: rl-docker-compose-test run --no-deps << parameters.rl-docker-compose-up-service >>-tests-csharp
+      - when:
+          condition: << parameters.run-tests-spa-unit >>
+          steps:
+            - run:
+                name: "Run spa unit tests..."
+                command: rl-docker-compose-test run --no-deps << parameters.rl-docker-compose-up-service >>-tests-spa-unit
+      - when:
+          condition: << parameters.run-tests-spa-integration >>
+          steps:
+            - run:
+                name: "Run spa integration tests..."
+                command: rl-docker-compose-test run --no-deps << parameters.rl-docker-compose-up-service >>-tests-spa-integration
+      - store_artifacts:
+          name: "Uploading test artifacts..."
+          # pretty sure cannot use envvar subst here
+          path: << parameters.docker-vols-root >>/out
+      - when:
+          condition: << parameters.send-code-coverage >>
+          steps:
+            - run:
+                name: Send coverage to Codacy
+                command: |
+                  echo "Setting Codacy environment variables..."
+                  export CODACY_USERNAME=$CIRCLE_PROJECT_USERNAME
+                  export CODACY_PROJECT_NAME=$CIRCLE_PROJECT_REPONAME
+                  chmod +x .cicd/build/send-coverage.sh
+                  .cicd/build/send-coverage.sh
+      # Run the scan with twistcli, providing detailed results in CircleCI and
+      # pushing the results to the Twistlock console.
+      # --details returns all vulnerabilities & compliance issues rather than just summaries.
+      # --address points to our Twistlock console
+      # --user and --password
+        # provide credentials for the console.  These creds only need the CI User role.
+      # Finally, we provide the name of the image we built with 'docker build', above.
+      - run:
+          name: "Run the security scan over the Docker image"
+          command: |
+            ./twistcli images scan $RL_IMAGE \
+            --details \
+            --address $PC_COMPUTE_CONSOLE_URL \
+            --user $PC_COMPUTE_USER \
+            --password $PC_COMPUTE_PASS
+      # deploy image
+      - when:
+          condition: << parameters.run-push-images >>
+          steps: << parameters.push-images >>

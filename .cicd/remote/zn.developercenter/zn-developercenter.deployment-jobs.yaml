@@ -1,0 +1,206 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zn-developercenter-jobs
+  labels:
+    name: zn-developercenter-jobs
+    app: zn-developercenter
+    platform: redline
+    tier: frontend
+    kube-monkey/enabled: enabled
+    kube-monkey/identifier: zn-developercenter-jobs
+    kube-monkey/mtbf: '2'
+    kube-monkey/kill-mode: "fixed"
+    kube-monkey/kill-value: '1'
+  annotations:
+    flux.weave.works/automated_msg: test
+    flux.weave.works/tag.migrations: regexp:^[a-f0-9]{7,40}$
+    flux.weave.works/tag.zn-developercenter-jobs-pod: regexp:^[a-f0-9]{7,40}$
+    # TODO: Uncomment next line when deploying to preprod. It makes sure that new images for zn-developercenter gets deployed automatically.
+    # fluxcd.io/automated: 'true'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: zn-developercenter-jobs
+      tier: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: zn-developercenter-jobs
+        app: zn-developercenter
+        platform: redline
+        tier: frontend
+        kube-monkey/enabled: enabled
+        kube-monkey/identifier: zn-developercenter-jobs
+        kube-monkey/mtbf: '2'
+        kube-monkey/kill-mode: "fixed"
+        kube-monkey/kill-value: '1'
+      annotations:
+        prometheus.io/scrape: 'true'
+        ad.datadoghq.com/zn-developercenter-jobs-pod.check_names: '[ "prometheus" ]'
+        ad.datadoghq.com/zn-developercenter-jobs-pod.init_configs: '[ {} ]'
+        ad.datadoghq.com/zn-developercenter-jobs-pod.instances: '[
+          {
+            "prometheus_url": "http://%%host%%:5000/metrics",
+            "namespace": "redline",
+            "metrics": [ "*" ]
+          }
+        ]'
+        ad.datadoghq.com/zn-developercenter-jobs-pod.logs: '[ { "source": "zn-developercenter-jobs", "service":
+          "zn-developercenter-jobs"} ]'
+    spec:
+      initContainers:
+      - name: migrations
+        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        env:
+        - name: POSTGRES_CERT
+          value: "/aws-certs/us-east-1-bundle.pem"
+        - name: "APP_ENTRYPOINT"
+          value: "Zinc.DeveloperCenter.Data.Migrations"
+        - name: RL_APP_CONTEXT
+          value: "remote"
+        - name: RL_CLUSTER_NAME
+          value: "hawking"
+        - name: DOTNET_ENVIRONMENT
+          value: "preprod"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: password
+        - name: "ApplicationContext__ServiceAccountPrivateKeyPath"
+          value: "/certs-shared/redline.pfx"
+        - name: "ApplicationContext__ServiceAccountPrivateKeyPassword"
+          valueFrom:
+            secretKeyRef:
+              name: zn-developercenter-svc-cert-private
+              key: password
+        - name: "ApplicationContext__AuthenticationServicePublicKeyPath"
+          value: "/authn-public-key/redline-public.crt"
+        volumeMounts:
+        - name: authn-public-key
+          mountPath: "/authn-public-key"
+          readOnly: true
+        - name: shared-auth-cert
+          mountPath: "/certs-shared"
+        - name: aws-ca-cert-bundle
+          mountPath: /aws-certs
+          readOnly: true
+      containers:
+      - name: zn-developercenter-jobs-pod
+        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        ports:
+        - name: http
+          containerPort: 5000
+        - name: https
+          containerPort: 5001
+        env:
+        - name: POSTGRES_CERT
+          value: "/aws-certs/us-east-1-bundle.pem"
+        - name: "APP_ENTRYPOINT"
+          value: "Zinc.DeveloperCenter.Host.Jobs"
+        - name: "ASPNETCORE_URLS"
+          value: "http://+:5000;https://+:5001"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: preprod
+        - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
+          value: "/certs/redline.pfx"
+        - name: "ASPNETCORE_Kestrel__Certificates__Default__Password"
+          valueFrom:
+            secretKeyRef:
+              name: zn-developercenter-jobs-svc-cert-private
+              key: password
+        - name: "ApplicationContext__ServiceAccountPrivateKeyPath"
+          value: "/certs-shared/redline.pfx"
+        - name: "ApplicationContext__ServiceAccountPrivateKeyPassword"
+          valueFrom:
+            secretKeyRef:
+              name: zn-developercenter-svc-cert-private
+              key: password
+        - name: "ApplicationContext__AuthenticationServicePublicKeyPath"
+          value: "/authn-public-key/redline-public.crt"
+        - name: ApplicationContext__ApplicationName
+          value: "Zinc.DeveloperCenter"
+        - name: RL_APP_CONTEXT
+          value: "remote"
+        - name: RL_CLUSTER_NAME
+          value: "hawking"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: password
+        livenessProbe:
+          httpGet:
+            path: /.well-known/live
+            scheme: HTTPS
+            port: 5001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /.well-known/ready
+            scheme: HTTPS
+            port: 5001
+          initialDelaySeconds: 15
+          periodSeconds: 5
+          timeoutSeconds: 10
+          successThreshold: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: authn-public-key
+          mountPath: "/authn-public-key"
+          readOnly: true
+        - name: cluster-ca-cert-bundle
+          mountPath: /etc/ssl/certs
+          readOnly: true
+        - name: aws-ca-cert-bundle
+          mountPath: /aws-certs
+          readOnly: true
+        - name: https
+          mountPath: "/certs"
+          readOnly: true
+        - name: shared-auth-cert
+          mountPath: "/certs-shared"
+          readOnly: true
+        - name: nsb-license-secret
+          mountPath: "/usr/share/ParticularSoftware"
+          readOnly: true
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "300Mi"
+            cpu: "500m"
+      imagePullSecrets:
+      - name: quay-registry-pull-secret
+      volumes:
+      - name: authn-public-key
+        configMap:
+          name: kr-authentication-svc-cert-public
+      - name: cluster-ca-cert-bundle
+        configMap:
+          name: hawking-dimebox-io-ca-bundle
+      - name: aws-ca-cert-bundle
+        configMap:
+          name: aws-ca-cert-bundle
+      - name: https
+        secret:
+          secretName: zn-developercenter-jobs-svc-cert-private
+      - name: shared-auth-cert
+        secret:
+          secretName: zn-developercenter-svc-cert-private
+      - name: nsb-license-secret
+        secret:
+          secretName: nsb-license
