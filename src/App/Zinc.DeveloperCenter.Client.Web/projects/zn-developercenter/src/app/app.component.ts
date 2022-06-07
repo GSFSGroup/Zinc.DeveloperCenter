@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 menu: document.createElement('zn-developercenter_menu')
             },
             title: 'Developer Center',
-            subtitle: 'Your one stop for all RedLine developer resources.',
+            subtitle: 'Your one-stop-shop for all RedLine developer resources.',
 
             icon: {
                 type: 'element',
