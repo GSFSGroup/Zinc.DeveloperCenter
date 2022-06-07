@@ -8,8 +8,6 @@ import { HomeService } from './home.service';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-    public title = 'Zinc.DeveloperCenter Micro-App';
-
     public constructor(private homeService: HomeService) {
     }
 }

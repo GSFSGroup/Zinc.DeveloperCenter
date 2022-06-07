@@ -32,7 +32,7 @@ describe('HomeComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should render title in a h1 tag', () => {
+    it('should contain a Read More button that is clickable', () => {
         const compiled = fixture.debugElement.nativeElement;
         fixture.detectChanges();
         const h1 = compiled.querySelector('h1');
