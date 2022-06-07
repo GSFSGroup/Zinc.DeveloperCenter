@@ -165,10 +165,10 @@ services:
       - Shell__Applications__x__Route=developercenter
       - Shell__Applications__x__ApplicationComponent=zn-developercenter
       - Shell__Applications__x__IngressUrl=https://host.docker.internal:${RL_APP_PORT}
-      - Shell__Applications__x__Title=Zinc.DeveloperCenter
+      - Shell__Applications__x__Title=Developer Center
       - Shell__Applications__x__Name=Zinc.DeveloperCenter
       - Shell__Applications__x__Icon__Type=element
-      - Shell__Applications__x__Icon__Value=argon
+      - Shell__Applications__x__Icon__Value=zinc
       - Shell__Applications__x__Icon__Category=Zinc.DeveloperCenter
-      - Shell__Applications__x__Icon__Abbreviation=Ma
+      - Shell__Applications__x__Icon__Abbreviation=Kr
       - Shell__LandingRoute=developercenter
