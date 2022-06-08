@@ -292,7 +292,7 @@ mercury redline get-application-configuration --aws-region us-east-1 --json --ap
                     "abbreviation": "R",
                     "category": "RedLine",
                     "type": "element",
-                    "value": "krypton"
+                    "value": "zinc"
                 },
                 "name": "Zinc.DeveloperCenter",
                 "title": "developercenter"

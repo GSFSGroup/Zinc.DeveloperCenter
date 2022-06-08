@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
             icon: {
                 type: 'element',
                 value: 'zinc',
-                abbreviation: 'Kr',
+                abbreviation: 'Zn',
                 category: 'Developer Center'
             }
         });
