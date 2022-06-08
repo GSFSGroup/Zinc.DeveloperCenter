@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: zn-developercenter-ingress
+  labels:
+    app: zn-developercenter
+    platform: redline
+  annotations:
+    kubernetes.io/ingress.class: skipper
+    zalando.org/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:875929998342:certificate/10bb562c-267b-473c-830e-f8a00acea454
+    zalando.org/skipper-ingress-redirect: "true"
+spec:
+  rules:
+  - host: developercenter.hawking.dimebox.io
+    http:
+      paths:
+      - backend:
+          serviceName: zn-developercenter-svc
+          servicePort: 80

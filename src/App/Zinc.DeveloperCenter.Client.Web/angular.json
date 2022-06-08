@@ -1,0 +1,149 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "zn-developercenter": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/zn-developercenter",
+      "sourceRoot": "projects/zn-developercenter/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:build",
+          "options": {
+            "outputPath": "../Zinc.DeveloperCenter.Host.Web/wwwroot/dist/zn-developercenter",
+            "index": "projects/zn-developercenter/src/index.html",
+            "main": "projects/zn-developercenter/src/main.ts",
+            "singleBundle": true,
+            "deleteOutputPath": true,
+            "tsConfig": "projects/zn-developercenter/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/zn-developercenter/src/favicon.ico",
+              "projects/zn-developercenter/src/assets"
+            ],
+            "styles": [
+              "projects/zn-developercenter/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "aot": true,
+              "buildOptimizer": true,
+              "extractLicenses": true,
+              "namedChunks": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "vendorChunk": false,
+              "fileReplacements": [
+                {
+                  "replace": "projects/zn-developercenter/src/environments/environment.ts",
+                  "with": "projects/zn-developercenter/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputPath": "dist/zn-developercenter",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "baseline": "2mb",
+                  "error": "5mb"
+                }
+              ]
+            },
+            "development": {
+              "aot": false,
+              "buildOptimizer": false,
+              "extractLicenses": true,
+              "namedChunks": true,
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "vendorChunk": false,
+              "outputPath": "../Zinc.DeveloperCenter.Host.Web/wwwroot/dist/zn-developercenter",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "baseline": "5mb",
+                  "error": "20mb"
+                }
+              ]
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "options": {
+            "browserTarget": "zn-developercenter:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "zn-developercenter:build:production"
+            },
+            "development": {
+              "browserTarget": "zn-developercenter:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "zn-developercenter:build"
+          }
+        },
+        "test": {
+          "builder": "ngx-build-plus:karma",
+          "options": {
+            "main": "projects/zn-developercenter/src/test.ts",
+            "polyfills": "projects/zn-developercenter/src/polyfills.ts",
+            "tsConfig": "projects/zn-developercenter/tsconfig.spec.json",
+            "karmaConfig": "projects/zn-developercenter/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/zn-developercenter/src/favicon.ico",
+              "projects/zn-developercenter/src/assets"
+            ],
+            "styles": [
+              "projects/zn-developercenter/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "development": {
+              "codeCoverage": false,
+              "browsers": "ChromeHeadless"
+            },
+            "cicd": {
+              "codeCoverage": true,
+              "browsers": "ChromeHeadlessCI",
+              "progress": false
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/zn-developercenter/**/*.ts",
+              "projects/zn-developercenter/**/*.component.html"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "zn-developercenter"
+}

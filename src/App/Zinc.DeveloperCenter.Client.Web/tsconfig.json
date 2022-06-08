@@ -1,0 +1,41 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "typeRoots": ["node_modules/@types"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "paths": {
+      "~/core/*": ["projects/zn-developercenter/src/app/modules/core/*"],
+      "~/screens/*": ["projects/zn-developercenter/src/app/screens/*"],
+      "~/models/*": ["projects/zn-developercenter/src/app/shared/models/*"],
+      "~/pipes/*": ["projects/zn-developercenter/src/app/shared/pipes/*"],
+      "~/modules/*": ["projects/zn-developercenter/src/app/modules/*"],
+      "~/shared/*": ["projects/zn-developercenter/src/app/shared/*"],
+      "~/app/*": ["projects/zn-developercenter/src/app/*"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

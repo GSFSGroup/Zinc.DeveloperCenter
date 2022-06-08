@@ -1,0 +1,21 @@
+{
+  "customSyntax": "postcss-scss",
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss"
+  ],
+  "rules": {
+    "color-hex-length": "long",
+    "font-family-no-missing-generic-family-keyword": [
+      true,
+      {
+        "ignoreFontFamilies": [
+          "Material Icons"
+        ]
+      }
+    ],
+    "no-empty-source": null,
+    "max-line-length": null,
+    "alpha-value-notation": "number"
+  }
+}

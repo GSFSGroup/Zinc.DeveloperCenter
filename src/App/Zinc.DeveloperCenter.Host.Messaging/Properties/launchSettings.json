@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Zinc.DeveloperCenter.Host.Messaging": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "applicationUrl": "https://host.docker.internal:10121",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APP_ENTRYPOINT": "Zinc.DeveloperCenter.Host.Messaging",
+        "ApplicationContext__AuthenticationServicePublicKeyPath": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline-public.crt",
+        "ApplicationContext__ServiceAccountPrivateKeyPath": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline.pfx",
+        "ASPNETCORE_Kestrel__Certificates__Default__Path": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline.pfx",
+        "Authentication__SigningCert__Path": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline.pfx",
+        "Authentication__DataProtectionCert__Path": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline.pfx",
+        "A3__Authentication__PublicKeyPath": "%RL_DOCKER_VOLS_ROOT%/in/certs/redline-public.crt"
+      }
+    }
+  }
+}

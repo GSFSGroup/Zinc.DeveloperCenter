@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="50cm" height="21cm" viewBox="87 44 990 402" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g id="Background">
+    <g>
+      <rect style="fill: #efd769; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="248" y="45" width="828" height="400" rx="0" ry="0"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="662" y="248.9">
+        <tspan x="662" y="248.9"></tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="282" y="88" width="765" height="38" rx="0" ry="0"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="664.5" y="110.9">
+        <tspan x="664.5" y="110.9">ContextAccessor</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="284" y="204" width="190" height="56" rx="0" ry="0"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="379" y="235.9">
+        <tspan x="379" y="235.9">NServiceBus Pipeline</tspan>
+      </text>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="519" y="206" width="528" height="188" rx="0" ry="0"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="783" y="303.9">
+        <tspan x="783" y="303.9">MediatR Pipeline</tspan>
+      </text>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="121" y="216">
+      <tspan x="121" y="216">Incoming Message</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="116" y1="231" x2="274.264" y2="231.942"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="281.764,231.987 271.734,236.927 274.264,231.942 271.794,226.927 "/>
+    </g>
+    <g>
+      <rect style="fill: #ffffff; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x="281.506" y="338" width="190" height="56" rx="0" ry="0"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="376.506" y="369.9">
+        <tspan x="376.506" y="369.9">ASP.Net Request Pipeline</tspan>
+      </text>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="87.5059" y="350">
+      <tspan x="87.5059" y="350">Incoming HTTP Request</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="110.506" y1="365" x2="271.77" y2="365.943"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="279.27,365.987 269.241,370.928 271.77,365.943 269.299,360.929 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="379" y1="204" x2="378.132" y2="139.735"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="378.03,132.236 383.165,142.167 378.132,139.735 373.166,142.303 "/>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="387" y="156">
+      <tspan x="387" y="156">Set CorrelationId</tspan>
+      <tspan x="387" y="172">Set TenantId</tspan>
+    </text>
+    <g>
+      <ellipse style="fill: #e55b1c; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="360.89" cy="105.618" rx="19.7012" ry="20.3223"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="360.89" y="109.518">
+        <tspan x="360.89" y="109.518">C</tspan>
+      </text>
+    </g>
+    <g>
+      <ellipse style="fill: #e55b1c; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="402.725" cy="105.576" rx="19.5284" ry="19.89"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="402.725" y="109.476">
+        <tspan x="402.725" y="109.476">T</tspan>
+      </text>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="323" y1="334" x2="323" y2="141.736"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="323,134.236 328,144.236 323,141.736 318,144.236 "/>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="329.5" y="300.8">
+      <tspan x="329.5" y="300.8">Set CorrelationId</tspan>
+      <tspan x="329.5" y="316.8">Set TenantId</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="536" y1="131" x2="536.853" y2="187.265"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="536.966,194.764 531.815,184.841 536.853,187.265 541.814,184.69 "/>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="551" y="159.7">
+      <tspan x="551" y="159.7">Get CorrelationId</tspan>
+      <tspan x="551" y="175.7">Get TenantId</tspan>
+    </text>
+    <g>
+      <ellipse style="fill: #e55b1c; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="561.201" cy="290.222" rx="19.7012" ry="20.3223"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="561.201" y="294.122">
+        <tspan x="561.201" y="294.122">C</tspan>
+      </text>
+    </g>
+    <g>
+      <ellipse style="fill: #e55b1c; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" cx="603.036" cy="290.181" rx="19.5284" ry="19.89"/>
+      <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:normal" x="603.036" y="294.081">
+        <tspan x="603.036" y="294.081">T</tspan>
+      </text>
+    </g>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="662" y="245">
+      <tspan x="662" y="245"></tspan>
+    </text>
+    <text font-size="12.7998" style="fill: #000000; fill-opacity: 1; stroke: none;text-anchor:start;font-family:sans-serif;font-style:normal;font-weight:normal" x="567" y="62">
+      <tspan x="567" y="62">REQUEST SCOPE</tspan>
+    </text>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="472" y1="229" x2="510.264" y2="229"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="517.764,229 507.764,234 510.264,229 507.764,224 "/>
+    </g>
+    <g>
+      <line style="fill: none; stroke-opacity: 1; stroke-width: 2; stroke: #000000" x1="470.5" y1="362.136" x2="508.764" y2="362.136"/>
+      <polygon style="fill: #000000; fill-opacity: 1; stroke-opacity: 1; stroke-width: 2; stroke: #000000" fill-rule="evenodd" points="516.264,362.136 506.264,367.136 508.764,362.136 506.264,357.136 "/>
+    </g>
+  </g>
+</svg>

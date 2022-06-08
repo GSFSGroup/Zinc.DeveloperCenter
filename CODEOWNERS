@@ -1,0 +1,60 @@
+# 1. Each line is a file pattern followed by one or more owners.
+# 2. The order is important!
+# 3. The LAST matching pattern takes the highest precedence.
+# 4. You can use email addresses or GitHub user names such as @gregmajor
+
+# Backstop (if nobody else then...)
+* @GSFSGroup/final-approvers
+
+# Chapter - DDD
+/src/*.Domain/ @GSFSGroup/chapter-ddd
+
+# Chapter - Data
+/src/*.Data/ @GSFSGroup/chapter-data
+*.sql @GSFSGroup/chapter-data
+
+# Chapter - UI
+angular.json @GSFSGroup/chapter-ui
+tslint.json @GSFSGroup/chapter-ui
+tsconfig.json @GSFSGroup/chapter-ui
+.eslintrc.js @GSFSGroup/chapter-ui
+.prettierrc @GSFSGroup/chapter-ui
+.stylelintrc @GSFSGroup/chapter-ui
+
+# Chapter - UX
+*.css @GSFSGroup/chapter-ux
+*.html @GSFSGroup/chapter-ux
+*.sass @GSFSGroup/chapter-ux
+*.scss @GSFSGroup/chapter-ux
+/ClientApp @GSFSGroup/chapter-ux
+
+# Chapter - DevOps
+.cicd/ @GSFSGroup/chapter-devops
+.circleci/ @GSFSGroup/chapter-devops
+.env @GSFSGroup/chapter-devops
+.dockerignore @GSFSGroup/chapter-devops
+Dockerfile @GSFSGroup/chapter-devops
+docker-compose* @GSFSGroup/chapter-devops
+*.sh @GSFSGroup/chapter-devops
+*.ps1 @GSFSGroup/chapter-devops
+/infrastructure/ @GSFSGroup/chapter-infrastructure
+
+# Chapter - Architecture
+adr/ @GSFSGroup/chapter-architecture
+.gitattributes @GSFSGroup/chapter-architecture
+.gitignore @GSFSGroup/chapter-architecture
+*.ruleset @GSFSGroup/chapter-architecture
+CODEOWNERS @GSFSGroup/chapter-architecture
+*.csproj @GSFSGroup/chapter-architecture
+.editorconfig @GSFSGroup/chapter-architecture
+Directory.Build.props @GSFSGroup/chapter-architecture
+SonarLint.xml @GSFSGroup/chapter-architecture
+stylecop.json @GSFSGroup/chapter-architecture
+.codacy.yml @GSFSGroup/chapter-architecture
+
+
+# Chapter - Security
+AuditEvent.cs @GSFSGroup/chapter-security
+A3/ @GSFSGroup/chapter-security
+Behaviors/ @GSFSGroup/chapter-security
+CorsPolicy.cs @GSFSGroup/chapter-security
