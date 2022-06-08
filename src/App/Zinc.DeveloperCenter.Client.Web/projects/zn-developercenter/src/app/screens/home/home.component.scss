@@ -1,5 +1,18 @@
 $c: royalblue;
 
+.empty-state-container {
+  position: relative;
+  margin: 24px auto;
+  width: 300px;
+  text-align: center;
+
+  .primary-action {
+    margin-top: 16px;
+    max-width: unset;
+    width: auto;
+  }
+}
+
 .mat-card-title {
   color: $c;
 }
