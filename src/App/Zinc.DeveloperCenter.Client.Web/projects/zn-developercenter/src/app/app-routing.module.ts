@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { EmptyComponent } from '~/modules/empty/empty.component';
 import { HomeComponent } from '~/screens/home/home.component';
+import { AdrListComponent } from './screens/adr-list/adr-list.component';
 
 /**
  *   Define routes in this section. It is important that the routes of this application
@@ -74,6 +75,7 @@ export const routes: Routes = [
         children: [
             // TODO: Add your routes here..
             { path: '', component: HomeComponent }, // No breadcrumb for empty routes.
+            { path: '/redline-adrs', component: AdrListComponent },
             { path: '**', redirectTo: '' }
         ]
     },
