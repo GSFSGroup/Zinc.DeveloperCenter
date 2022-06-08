@@ -32,18 +32,10 @@ describe('HomeComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    // it('should render title in a h1 tag', () => {
-    //     const compiled = fixture.debugElement.nativeElement;
-    //     fixture.detectChanges();
-    //     const h1 = compiled.querySelector('h1');
-    //     const title = h1.textContent;
-
-    //     expect(title).toContain('Welcome to Zinc.DeveloperCenter Micro-App');
-    // });
-
     it('should click Read More button', () => {
-        fixture.debugElement.querySelector('#read-more-about-dev-center-button').click();
-        tick();
+        spyOn(component,'testClickFunction');
+        fixture.nativeElement.querySelector('#read-more-about-dev-center-button').click();
+        fixture.detectChanges();
 
         expect(component.testClickFunction).toHaveBeenCalled();
     });

@@ -1,4 +1,6 @@
-$c: royalblue;
+:host {
+  display: block;
+}
 
 .empty-state-container {
   position: relative;
@@ -13,6 +15,23 @@ $c: royalblue;
   }
 }
 
-.mat-card-title {
-  color: $c;
+.item-list {
+  .item-list-item {
+    position: relative;
+    cursor: pointer;
+
+    .item-list-item-version {
+      font-style: italic;
+
+      &::before {
+        content: "v";
+      }
+    }
+
+    .item-list-item-detail {
+      & > * {
+        margin-right: 1em;
+      }
+    }
+  }
 }

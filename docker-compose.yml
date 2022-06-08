@@ -162,7 +162,7 @@ services:
   # we can oveerride a small amount of the main shell definition that comes from shareed deps
   shell:
     environment:
-      - Shell__Applications__x__Route=developercenter
+      - Shell__Applications__x__Route=developer-center
       - Shell__Applications__x__ApplicationComponent=zn-developercenter
       - Shell__Applications__x__IngressUrl=https://host.docker.internal:${RL_APP_PORT}
       - Shell__Applications__x__Title=Developer Center

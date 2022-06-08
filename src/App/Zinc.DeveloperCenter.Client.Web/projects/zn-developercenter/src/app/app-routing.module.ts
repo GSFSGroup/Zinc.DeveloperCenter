@@ -63,7 +63,7 @@ import { HomeComponent } from '~/screens/home/home.component';
  */
 export const routes: Routes = [
     {
-        path: 'developercenter',
+        path: 'developer-center',
         data: {
             // Add breadcrumb data
             breadcrumb: {
