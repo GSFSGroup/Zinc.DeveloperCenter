@@ -11,7 +11,7 @@ export class HomeComponent {
     public constructor(private homeService: HomeService) {
     }
 
-    public testClickFunction() {
+    public goToRedLineADRs() {
         alert('clicked Read More button.');
     }
 }

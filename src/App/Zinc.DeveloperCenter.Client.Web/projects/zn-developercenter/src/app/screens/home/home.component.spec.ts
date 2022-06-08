@@ -33,10 +33,10 @@ describe('HomeComponent', () => {
     });
 
     it('should click Read More button', () => {
-        spyOn(component,'testClickFunction');
+        spyOn(component,'goToRedLineADRs');
         fixture.nativeElement.querySelector('#read-more-about-dev-center-button').click();
         fixture.detectChanges();
 
-        expect(component.testClickFunction).toHaveBeenCalled();
+        expect(component.goToRedLineADRs).toHaveBeenCalled();
     });
 });

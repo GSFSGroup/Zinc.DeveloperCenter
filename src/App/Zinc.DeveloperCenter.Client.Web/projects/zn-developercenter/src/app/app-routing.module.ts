@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { EmptyComponent } from '~/modules/empty/empty.component';
 import { HomeComponent } from '~/screens/home/home.component';
+
 import { AdrListComponent } from './screens/adr-list/adr-list.component';
 
 /**
@@ -75,7 +76,17 @@ export const routes: Routes = [
         children: [
             // TODO: Add your routes here..
             { path: '', component: HomeComponent }, // No breadcrumb for empty routes.
-            { path: '/redline-adrs', component: AdrListComponent },
+            {
+                path: 'redline-adrs',
+                data: {
+                    // Level of breadcrumb is the depth in the routing definition.
+                    breadcrumb: {
+                        title: 'RedLine ADRs',
+                        description: 'Search for and view RedLine architectural decision records.'
+                    }
+                },
+                component: AdrListComponent
+            },
             { path: '**', redirectTo: '' }
         ]
     },

@@ -10,8 +10,8 @@ import { HomeComponent } from '~/screens/home/home.component';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './modules/menu/menu.component';
-import { AutoFocusDirective } from './shared/directives/autofocus.directive';
 import { AdrListComponent } from './screens/adr-list/adr-list.component';
+import { AutoFocusDirective } from './shared/directives/autofocus.directive';
 
 @NgModule({
     declarations: [AppComponent, EmptyComponent, HomeComponent, MenuComponent, AutoFocusDirective, AdrListComponent],
