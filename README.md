@@ -457,3 +457,4 @@ To schedule a job for 12:05pm CST on january 6th 2040 you would use
 | Second | Minute | Hour                       | Day  | Month | Day-of-week | Year |
 | :----- | :----- | :------------------------- | :--- | :---- | :---------- | :--- |
 | 0      | 5      | 12(UTC) + 6(offset) = 18   | 6    | 1     |             | 2040 |
+
