@@ -1,5 +1,3 @@
-![RedLine](redline.png)
-
 # Zinc.DeveloperCenter
 
 Congratulations! You have created a new micro-app using the `redline-app` template. However, your initial setup is not complete yet. Follow the steps outlined in the next section to deploy the micro-app in preprod environment:
