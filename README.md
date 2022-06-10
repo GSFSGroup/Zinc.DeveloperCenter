@@ -1,5 +1,3 @@
-![RedLine](redline.png)
-
 # Zinc.DeveloperCenter
 
 Congratulations! You have created a new micro-app using the `redline-app` template. However, your initial setup is not complete yet. Follow the steps outlined in the next section to deploy the micro-app in preprod environment:
@@ -292,7 +290,7 @@ mercury redline get-application-configuration --aws-region us-east-1 --json --ap
                     "abbreviation": "R",
                     "category": "RedLine",
                     "type": "element",
-                    "value": "krypton"
+                    "value": "zinc"
                 },
                 "name": "Zinc.DeveloperCenter",
                 "title": "developercenter"

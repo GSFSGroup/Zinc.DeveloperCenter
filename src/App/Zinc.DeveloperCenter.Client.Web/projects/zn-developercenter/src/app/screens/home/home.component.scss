@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.empty-state-container {
+  position: relative;
+  margin: 24px auto;
+  width: 300px;
+  text-align: center;
+
+  .primary-action {
+    margin-top: 16px;
+    max-width: unset;
+    width: auto;
+  }
+}
+
+.item-list {
+  .item-list-item {
+    position: relative;
+    cursor: pointer;
+
+    .item-list-item-version {
+      font-style: italic;
+
+      &::before {
+        content: "v";
+      }
+    }
+
+    .item-list-item-detail {
+      & > * {
+        margin-right: 1em;
+      }
+    }
+  }
+}

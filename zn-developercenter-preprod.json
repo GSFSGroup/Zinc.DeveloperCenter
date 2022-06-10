@@ -1,0 +1,11 @@
+{
+    "ApplicationContext": {
+        "PostgresUser": "<$POSTGRES_USER from the previous step>",
+        "PostgresPassword": "<$POSTGRES_PASSWORD from the previous step>",
+        "ServiceAccountName": "zn-developercenter@redline.services"
+    },
+    "Swagger": {
+        "OAuth2RedirectUrl": "https://developercenter.hawking.dimebox.io",
+        "Disabled": "false"
+    }
+}
