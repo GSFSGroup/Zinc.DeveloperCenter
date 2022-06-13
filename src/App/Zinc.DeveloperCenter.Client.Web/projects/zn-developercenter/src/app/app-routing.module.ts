@@ -4,6 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmptyComponent } from '~/modules/empty/empty.component';
 import { HomeComponent } from '~/screens/home/home.component';
 
+import { AdrListComponent } from './screens/adr-list/adr-list.component';
+
 /**
  *   Define routes in this section. It is important that the routes of this application
  * are children to the top-level route `developercenter`, which is registered in the shell config for this app.
@@ -63,17 +65,28 @@ import { HomeComponent } from '~/screens/home/home.component';
  */
 export const routes: Routes = [
     {
-        path: 'developercenter',
+        path: 'developer-center',
         data: {
             // Add breadcrumb data
             breadcrumb: {
-                title: 'Zn-Templates Level 0',
-                description: 'Description for zn-developercenter'
+                title: 'Developer Center',
+                description: 'Your one-stop-shop for all RedLine developer resources.'
             }
         },
         children: [
             // TODO: Add your routes here..
             { path: '', component: HomeComponent }, // No breadcrumb for empty routes.
+            {
+                path: 'redline-adrs',
+                data: {
+                    // Level of breadcrumb is the depth in the routing definition.
+                    breadcrumb: {
+                        title: 'RedLine ADRs',
+                        description: 'Search for and view RedLine architectural decision records.'
+                    }
+                },
+                component: AdrListComponent
+            },
             { path: '**', redirectTo: '' }
         ]
     },

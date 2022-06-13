@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+
+.item-content {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+}

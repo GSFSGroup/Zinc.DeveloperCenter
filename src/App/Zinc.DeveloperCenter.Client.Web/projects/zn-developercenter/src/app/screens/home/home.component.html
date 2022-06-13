@@ -1,3 +1,25 @@
-<div style="text-align: center">
-    <h1>Welcome to {{ title }}!</h1>
+<div class="empty-state-container" *ngIf="false">
+    <h1>Nothing to see here.</h1>
 </div>
+
+<ul class="item-list scrollable-y fill-container padding-all-24" id="item-list">
+    <li class="list-item transform-on-hover pointer">
+        <div class="item-summary item-content">
+            <h3 class="item-title margin-0 capitalize clickable-text">
+                RedLine ADRs
+            </h3>
+            <span class="item-detail margin-bottom-12">
+                Search for and view RedLine architectural design records.
+            </span>
+            <button 
+                style="height:40px; width:110px;" 
+                id="read-more-about-dev-center-button" 
+                type="button" mat-flat-button class="primary-action" 
+                routerLink="redline-adrs"
+                >
+                Read More
+            </button>
+            <span style="clear: both"></span>
+        </div>
+    </li>
+</ul>
