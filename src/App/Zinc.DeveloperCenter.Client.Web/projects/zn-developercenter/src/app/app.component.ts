@@ -26,14 +26,14 @@ export class AppComponent implements OnInit, OnDestroy {
             regions: {
                 menu: document.createElement('zn-developercenter_menu')
             },
-            title: 'Zinc.DeveloperCenter',
-            subtitle: '',
+            title: 'Developer Center',
+            subtitle: 'Your one-stop-shop for all RedLine developer resources.',
 
             icon: {
                 type: 'element',
-                value: 'argon',
-                abbreviation: 'Ma',
-                category: 'Zinc.DeveloperCenter'
+                value: 'zinc',
+                abbreviation: 'Zn',
+                category: 'Developer Center'
             }
         });
     }

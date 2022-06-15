@@ -1,0 +1,20 @@
+{
+  "Shell": {
+    "Applications": {
+      "19": {
+        "ApplicationComponent": "zn-developercenter",
+        "IngressUrl": "https://developercenter.hawking.dimebox.io",
+        "Route": "developercenter",
+        "description": "Zinc.DeveloperCenter",
+        "icon": {
+            "abbreviation": "Dc",
+            "category": "Development",
+            "type": "element",
+            "value": "zinc"
+        },
+        "name": "Zinc.DeveloperCenter",
+        "title": "Developer Center"
+      }
+    }
+  }
+}

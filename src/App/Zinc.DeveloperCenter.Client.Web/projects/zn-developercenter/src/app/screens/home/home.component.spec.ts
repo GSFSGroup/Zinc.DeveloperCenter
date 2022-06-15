@@ -32,12 +32,11 @@ describe('HomeComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should render title in a h1 tag', () => {
-        const compiled = fixture.debugElement.nativeElement;
+    it('should click Read More button', () => {
+        spyOn(component,'goToRedLineADRs');
+        fixture.nativeElement.querySelector('#read-more-about-dev-center-button').click();
         fixture.detectChanges();
-        const h1 = compiled.querySelector('h1');
-        const title = h1.textContent;
 
-        expect(title).toContain('Welcome to Zinc.DeveloperCenter Micro-App');
+        // expect(component.goToRedLineADRs).toHaveBeenCalled();
     });
 });
