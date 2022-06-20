@@ -5,6 +5,7 @@ export interface Repo {
     numADRs: number;
     contentURL: string;
     adrList: ADRSummary[];
+    index: number;
 }
 
 export interface ADRSummary {

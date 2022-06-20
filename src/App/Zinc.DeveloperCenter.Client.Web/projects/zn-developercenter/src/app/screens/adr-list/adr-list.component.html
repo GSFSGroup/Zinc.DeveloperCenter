@@ -1,8 +1,12 @@
-<div class="empty-state-container" *ngIf="!repos.length">
+<!-- <div class="empty-state-container" *ngIf="!repos.length">
+    <h1>Uh oh, something is missing.</h1>
+</div> -->
+
+<div class="empty-state-container" *ngIf="true">
     <h1>Uh oh, something is missing.</h1>
 </div>
 
-<ul class="products-list scrollable-y fill-container padding-all-24" id="products-list">
+<!-- <ul class="products-list scrollable-y fill-container padding-all-24" id="products-list">
     <mat-accordion *ngFor="let repo of repos" [multi]="true" class="flex-fill">
         <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header class="panel-header">
@@ -15,7 +19,10 @@
             <div class="empty-state-container" *ngIf="!repo.numADRs">
                 No ADRs have been added to this repository yet.
             </div>
+            <div class="empty-state-container" *ngFor="let adr of repo.adrList">
+                {{adr.name}}
+            </div>
 
         </mat-expansion-panel>
     </mat-accordion>
-</ul>
+</ul> -->

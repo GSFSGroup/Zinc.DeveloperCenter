@@ -30,12 +30,26 @@ namespace Zinc.DeveloperCenter.Host.Messaging.Events.ActivityGroups
         }
 
         /// <inheritdoc/>
-        public Task Handle(ActivityGroupGranted message, IMessageHandlerContext context) =>
-            DoSync(message.UserId);
+        public Task Handle(ActivityGroupGranted message, IMessageHandlerContext context)
+        {
+            if (message.UserId == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return DoSync(message.UserId);
+        }
 
         /// <inheritdoc/>
-        public Task Handle(ActivityGroupRevoked message, IMessageHandlerContext context) =>
-            DoSync(message.UserId);
+        public Task Handle(ActivityGroupRevoked message, IMessageHandlerContext context)
+        {
+            if (message.UserId == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return DoSync(message.UserId);
+        }
 
         private async Task DoSync(string userId)
         {

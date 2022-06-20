@@ -6,6 +6,7 @@
     <RollForward>LatestMinor</RollForward>
     <UserSecretsId>a4092156-8e19-43ce-93a8-ee082d32ee4c</UserSecretsId>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

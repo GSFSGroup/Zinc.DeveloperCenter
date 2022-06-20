@@ -15,7 +15,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.Configuration
         /// <summary>
         /// Gets or sets the job's cron schedule.
         /// </summary>
-        public string CronSchedule { get; set; }
+        public string? CronSchedule { get; set; }
 
         /// <summary>
         /// Gets or sets the threshold at which a job is considered degraded when there is no response from it.

@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeFrameworkVersion>5.0.0</RuntimeFrameworkVersion>
     <RollForward>LatestMinor</RollForward>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

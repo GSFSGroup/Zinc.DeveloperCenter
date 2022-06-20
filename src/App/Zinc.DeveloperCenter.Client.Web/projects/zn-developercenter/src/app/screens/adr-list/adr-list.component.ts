@@ -13,17 +13,14 @@ export class AdrListComponent implements OnInit {
     // list of repos
     public repos!: Repo[];
 
+    // ADR lists
+    // global ADRs shown in RedLine folder
+    public templateADRs!: ADRSummary[];
+
     public constructor() { }
 
     public ngOnInit(): void {
-        // populate repo accordions
-        this.repos = this.constructRepoList(1);
-        for (var i = 2; i < 5; i++) {
-            this.repos.concat(this.constructRepoList(i));
-        }
-        // get universal ADRs
-        this.getADRsForTemplateRepo();
-        // get repo specific ADRs for individual repos
+        return;
     }
 
     // constructs an array of repos
@@ -50,7 +47,7 @@ export class AdrListComponent implements OnInit {
         
         xhr.onload = function() {
             const data = JSON.parse(this.response);
-            console.log(data);
+
             // populate repos with each repo from query
             for (let i in data) {
                 var idxPeriod = data[i].name.indexOf(".");
@@ -74,6 +71,7 @@ export class AdrListComponent implements OnInit {
                     numADRs: 0,
                     contentURL: data[i].contents_url,
                     adrList: adrList,
+                    index: 0,
                 };
                 repoList.push(repo);
                 // sort the list alphabetically before data is received
@@ -89,7 +87,9 @@ export class AdrListComponent implements OnInit {
     // gets the ADRs from the Zinc.Template repo
     // these ADRs are universal to all GSFS repos
     // other repos will not display these ADRs
-    public getADRsForTemplateRepo() {
+    public getADRsForTemplateRepo(): ADRSummary[] {
+        var templateADRs: ADRSummary[] = [];
+        
         // construct GitHub API query
         const xhr = new XMLHttpRequest();
         const url = `https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine`;
@@ -99,9 +99,19 @@ export class AdrListComponent implements OnInit {
         
         xhr.onload = function() {
             const data = JSON.parse(this.response);
-            console.log(data);
+
+            for (let i in data) {
+                const adr: ADRSummary = {
+                    name: data[i].name,
+                };
+
+                templateADRs.push(adr);
+                templateADRs.sort((a,b) => a.name.localeCompare(b.name));
+            }
         }
 
         xhr.send(null);
+
+        return templateADRs;
     }
 }

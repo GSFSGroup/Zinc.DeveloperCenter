@@ -15,6 +15,6 @@ namespace Zinc.DeveloperCenter.Host.Web.Models.Authorization
         /// <summary>
         /// The human readable full name of the grantee, used for audit messages.
         /// </summary>
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
     }
 }

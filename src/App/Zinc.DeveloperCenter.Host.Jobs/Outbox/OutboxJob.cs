@@ -88,7 +88,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.Outbox
                 .GetSection(SectionName)
                 .Get<JobConfig>();
 
-            if (jobConfig.Disabled)
+            if (jobConfig.Disabled || jobConfig.CronSchedule == null)
             {
                 return;
             }
@@ -121,7 +121,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.Outbox
             }
 
             healthChecks.AddAsyncCheck(
-                typeof(OutboxJob).FullName,
+                typeof(OutboxJob).FullName ?? throw new NullReferenceException(),
                 () => new JobHealthCheck<OutboxJob>(
                     jobConfig.DegradedThreshold,
                     jobConfig.UnhealthyThreshold).CheckAsync());
