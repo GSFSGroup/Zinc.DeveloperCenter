@@ -51,7 +51,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHubService
         {
             var message = new HttpRequestMessage(HttpMethod.Get, endpoint);
 
-            message.SetBearerToken("ghp_");
+            message.SetBearerToken("ghp");
             var productValue = new ProductInfoHeaderValue("RedLine", "1.0");
             message.Headers.UserAgent.Add(productValue);
 

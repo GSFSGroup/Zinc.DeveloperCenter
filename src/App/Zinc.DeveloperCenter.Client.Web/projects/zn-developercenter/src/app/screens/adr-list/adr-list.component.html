@@ -1,11 +1,3 @@
-<div class="empty-state-container" *ngIf="!repos?.items?.length && !fetchedRepos">
-    <h1>Fetching GSFS GitHub data...</h1>
-</div>
-
-<div class="empty-state-container" *ngIf="!repos?.items?.length && fetchedRepos">
-    <h1>Uh oh, something is missing.</h1>
-</div>
-
 <ul class="products-list scrollable-y fill-container" id="products-list">
     <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
         <mat-expansion-panel [expanded]="true">

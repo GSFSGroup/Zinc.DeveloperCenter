@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
 import { Page } from '~/models/page.interface';
 import { ADRSummary, Repo } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
@@ -21,18 +22,27 @@ export class AdrListComponent implements OnInit, OnDestroy {
 
     public constructor(
         private repoService: GitHubRepoService,
-        private router: Router
+        private loadingService: LoadingOverlayService
     ) { }
 
     public ngOnInit(): void {
-        this.repoService.listRepos()
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(repos => this.repos = repos);
-        this.fetchedRepos = true;
+        this.getGSFSGitHubReposInit();
     }
 
     public ngOnDestroy(): void {
         this.destroyed$.next();
         this.destroyed$.complete();
+    }
+
+    public getGSFSGitHubReposInit(): void
+    {
+        this.loadingService.show('Loading');
+        this.repoService.listRepos()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(repos => {
+                this.repos = repos;
+                this.loadingService.hide();
+            });
+        this.fetchedRepos = true;
     }
 }
