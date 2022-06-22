@@ -42,7 +42,7 @@ export class AdrListComponent implements OnInit, OnDestroy {
             .subscribe(repos => {
                 this.repos = repos;
                 this.loadingService.hide();
+                this.fetchedRepos = true;
             });
-        this.fetchedRepos = true;
     }
 }
