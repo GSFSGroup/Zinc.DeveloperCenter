@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
+using Zinc.DeveloperCenter.Application.Services;
+using Zinc.DeveloperCenter.Application.Services.GitHubService;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -21,6 +23,7 @@ namespace Zinc.DeveloperCenter.Application
                 .AddFluentValidation<AssemblyMarker>()
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
+                .AddHttpClient<IGitHubService, GitHubService>()
                 ;
             return services;
         }

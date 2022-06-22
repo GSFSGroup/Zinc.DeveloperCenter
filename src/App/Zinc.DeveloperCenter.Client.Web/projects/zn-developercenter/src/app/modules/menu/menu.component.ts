@@ -6,9 +6,6 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-    ngOnInit(): void {
-        return;
-    }
     public navSections = [
         {
             links: [
@@ -25,4 +22,7 @@ export class MenuComponent implements OnInit {
             ]
         }
     ];
+    public ngOnInit(): void {
+        return;
+    }
 }

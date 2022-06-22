@@ -16,7 +16,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = ApplicationContext.ApplicationName)]
     [Produces("application/json")]
-    [Route("api/v{version:apiVersion}/{tenantId}/repos")]
+    [Route("ux/v{version:apiVersion}/{tenantId}/repos")]
     public class GitHubRepoController : Controller
     {
         private readonly IMediator mediator;

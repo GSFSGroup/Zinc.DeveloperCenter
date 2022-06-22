@@ -1,11 +1,8 @@
 export interface Repo {
     neatName: string;
     dotName: string;
-    element: string,
-    numADRs: number;
+    element: string;
     contentURL: string;
-    adrList: ADRSummary[];
-    index: number;
 }
 
 export interface ADRSummary {

@@ -23,12 +23,14 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.GithubRepoCon
         [Fact]
         public async Task ReturnAllRepos()
         {
+            // Act
             var response = await AuthorizedScenario(_ =>
             {
                 _.Get.Url($"{endpoint}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
+            // Assert
             var result = response.ReadAsJson<IEnumerable<GitHubRepoModel>>();
             result.Should().NotBeNull();
             result.Should().HaveCount(repos.Count);
