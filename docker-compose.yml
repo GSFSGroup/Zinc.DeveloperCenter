@@ -171,4 +171,4 @@ services:
       - Shell__Applications__x__Icon__Value=zinc
       - Shell__Applications__x__Icon__Category=Zinc.DeveloperCenter
       - Shell__Applications__x__Icon__Abbreviation=Zn
-      - Shell__LandingRoute=developercenter
+      - Shell__LandingRoute=developer-center
