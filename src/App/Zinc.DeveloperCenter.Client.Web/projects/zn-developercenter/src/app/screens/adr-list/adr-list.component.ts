@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -16,7 +15,7 @@ import { GitHubRepoService } from '~/shared/services/github-repo.service';
 export class AdrListComponent implements OnInit, OnDestroy {
     public repos!: Page<Repo>;
     public templateADRs!: ADRSummary[];
-    public fetchedRepos: boolean = false;
+    public fetchedRepos = false;
 
     private destroyed$ = new Subject<void>();
 
@@ -34,8 +33,7 @@ export class AdrListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getGSFSGitHubReposInit(): void
-    {
+    public getGSFSGitHubReposInit(): void {
         this.loadingService.show('Loading');
         this.repoService.listRepos()
             .pipe(takeUntil(this.destroyed$))

@@ -16,6 +16,9 @@
     ],
     "no-empty-source": null,
     "max-line-length": null,
-    "alpha-value-notation": "number"
+    "alpha-value-notation": "number",
+    "selector-pseudo-element-no-unknown": [true, {
+      "ignorePseudoElements": ["ng-deep"]
+    }]
   }
 }
