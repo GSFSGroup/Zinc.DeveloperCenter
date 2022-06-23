@@ -38,6 +38,7 @@ namespace Zinc.DeveloperCenter.Host.Web
                 .AddDataServices()
                 .AddApplicationServices()
                 .Configure<ForwardedHeadersOptions>(options => options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost)
+                .Configure<GitHubServiceConfig>(Configuration.GetSection(GitHubServiceConfig.SectionName))
                 ;
 
             services

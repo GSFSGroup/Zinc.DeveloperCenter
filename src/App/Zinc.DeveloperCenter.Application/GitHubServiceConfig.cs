@@ -8,7 +8,7 @@ namespace Zinc.DeveloperCenter.Application
         /// <summary>
         /// The GitHub API Token to pull for <see cref="GitHubServiceConfig"/>.
         /// </summary>
-        public static readonly string GitHubApiToken = "GitHubApiToken";
+        public static readonly string SectionName = "GitHubApi";
 
         /// <summary>
         /// Initializes instance of a GitHubServiceConfig.
@@ -16,6 +16,7 @@ namespace Zinc.DeveloperCenter.Application
         public GitHubServiceConfig()
         {
             BaseUrl = string.Empty;
+            AccessToken = string.Empty;
         }
 
         /// <summary>
@@ -26,6 +27,6 @@ namespace Zinc.DeveloperCenter.Application
         /// <summary>
         /// Enables the HTTP calls to GitHubServiceConfig. If disabled, a fake service is used.
         /// </summary>
-        public bool Enabled { get; set; } = true;
+        public string AccessToken { get; set; }
     }
 }
