@@ -16,7 +16,7 @@ import { GitHubRepoService } from '~/shared/services/github-repo.service';
 export class AdrListComponent implements OnInit, OnDestroy {
     public repos!: Page<Repo>;
     public templateADRs!: ADRSummary[];
-    public fetchedRepos: boolean = false;
+    public fetchedRepos = false;
 
     private destroyed$ = new Subject<void>();
 
