@@ -1,14 +1,44 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+
+import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
+import { Page } from '~/models/page.interface';
+import { Repo } from '~/models/repo.interface';
+import { GitHubRepoService } from '~/shared/services/github-repo.service';
 
 import { AdrListComponent } from './adr-list.component';
 
 describe('AdrListComponent', () => {
     let component: AdrListComponent;
     let fixture: ComponentFixture<AdrListComponent>;
+    let repoService: jasmine.SpyObj<GitHubRepoService>;
+    let loadingOverlayService: jasmine.SpyObj<LoadingOverlayService>;
+    const repoPage: Page<Repo> = {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        isFirstPage: false,
+        isLastPage: false,
+        items: [],
+        page: 0,
+        pageSize: 0,
+        totalItems: 0,
+        totalPages: 0
+    };
 
     beforeEach(async () => {
+        repoService = jasmine.createSpyObj<GitHubRepoService>('repoService', {
+            listRepos: of(repoPage)
+        });
+        loadingOverlayService = jasmine.createSpyObj<LoadingOverlayService>('loadingOverlayService', ['show', 'hide']);
+
         await TestBed.configureTestingModule({
-            declarations: [AdrListComponent]
+            declarations: [AdrListComponent],
+            imports: [HttpClientTestingModule],
+            providers: [
+                { provide: GitHubRepoService, useValue: repoService },
+                { provide: LoadingOverlayService, useValue: loadingOverlayService }
+            ]
         })
             .compileComponents();
     });

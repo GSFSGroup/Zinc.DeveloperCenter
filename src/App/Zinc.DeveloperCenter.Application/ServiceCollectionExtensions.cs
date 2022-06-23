@@ -1,8 +1,8 @@
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
-using Zinc.DeveloperCenter.Application.Services.GitHubService;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -15,16 +15,43 @@ namespace Zinc.DeveloperCenter.Application
         /// Adds the application services to the container.
         /// </summary>
         /// <param name="services">The IoC container.</param>
+        /// <param name="configuration">The GitHub Service Configuration.</param>
         /// <returns><see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services
                 .AddMediatR(typeof(AssemblyMarker))
                 .AddFluentValidation<AssemblyMarker>()
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
-                .AddHttpClient<IGitHubService, GitHubService>()
+                .AddApiServices(configuration)
                 ;
+            return services;
+        }
+
+        /// <summary>
+        /// Adds the api services to the container.
+        /// </summary>
+        /// <param name="services">The IoC container.</param>
+        /// <param name="configuration">The GitHub Service Configuration.</param>
+        /// <returns><see cref="IServiceCollection"/>.</returns>
+        public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            // GitHub
+            var gitHubServiceConfig = configuration
+                .GetSection(GitHubServiceConfig.SectionName)
+                .Get<GitHubServiceConfig>();
+
+            if (gitHubServiceConfig.Enabled)
+            {
+                services
+                    .AddHttpClient<IGitHubService, GitHubService>();
+            }
+            else
+            {
+                services.AddTransient<IGitHubService, FakeGitHubService>();
+            }
+
             return services;
         }
     }

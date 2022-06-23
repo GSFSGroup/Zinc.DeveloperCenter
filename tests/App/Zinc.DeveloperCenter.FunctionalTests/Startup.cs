@@ -48,7 +48,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests
                 .AddRedLineDataServices()
                 .AddDataServices()
                 .AddRedLineApplicationServices()
-                .AddApplicationServices()
+                .AddApplicationServices(configuration)
 
                 // Miscellaneous required bits
                 .AddFluentMigrator(configuration)

@@ -25,8 +25,13 @@ namespace Zinc.DeveloperCenter.Application
         public string BaseUrl { get; set; }
 
         /// <summary>
-        /// Enables the HTTP calls to GitHubServiceConfig. If disabled, a fake service is used.
+        /// Token to allow access to private repos.
         /// </summary>
         public string AccessToken { get; set; }
+
+        /// <summary>
+        /// Enables the HTTP calls to GitHubServiceConfig. If disabled, a fake service is used.
+        /// </summary>
+        public bool Enabled { get; set; } = true;
     }
 }

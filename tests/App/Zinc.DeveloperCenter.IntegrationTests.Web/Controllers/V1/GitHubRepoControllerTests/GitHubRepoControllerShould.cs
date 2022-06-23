@@ -11,7 +11,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.GithubRepoCon
 {
     public class GitHubRepoControllerShould : WebTestBase
     {
-        private readonly string endpoint = $"/api/v1/{TenantId}/repos";
+        private readonly string endpoint = $"/ux/v1/{TenantId}/repos";
         private readonly List<GitHubRepoModel> repos;
 
         public GitHubRepoControllerShould(WebTestFixture fixture, ITestOutputHelper output)

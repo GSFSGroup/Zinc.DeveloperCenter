@@ -36,7 +36,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs
                 .AddRedLineJobHost(WithJobs)
                 .AddRedLineHealthChecks(Configuration, WithCustomHealthChecks)
                 .AddDataServices()
-                .AddApplicationServices()
+                .AddApplicationServices(Configuration)
                 ;
         }
 

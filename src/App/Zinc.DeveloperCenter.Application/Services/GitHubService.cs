@@ -7,7 +7,7 @@ using IdentityModel.Client;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace Zinc.DeveloperCenter.Application.Services.GitHubService
+namespace Zinc.DeveloperCenter.Application.Services
 {
     /// <inheritdoc />
     public class GitHubService : IGitHubService
