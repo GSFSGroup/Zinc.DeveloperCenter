@@ -30,7 +30,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
                 Element = "Test",
                 ContentURL = "example.com",
             }).ToArray();
-            return await Task.Run(() => new PageableResult<GitHubRepoModel>(repoList)).ConfigureAwait(false);
+            return await Task.FromResult(new PageableResult<GitHubRepoModel>(repoList)).ConfigureAwait(false);
         }
 
         public async Task<PageableResult<GitHubRepoModel>> Handle(GitHubGetReposQuery request, CancellationToken cancellationToken)
@@ -92,7 +92,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
 
             List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
 
-            return await Task.Run(() => new PageableResult<GitHubRepoModel>(sortedRepoList)).ConfigureAwait(false);
+            return await Task.FromResult(new PageableResult<GitHubRepoModel>(sortedRepoList)).ConfigureAwait(false);
         }
     }
 }
