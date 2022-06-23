@@ -35,7 +35,7 @@ export class AdrListComponent implements OnInit, OnDestroy {
     }
 
     public getGSFSGitHubReposInit(): void
-    {
+        this.loadingService.show('Loading');
         this.loadingService.show('Loading');
         this.repoService.listRepos()
             .pipe(takeUntil(this.destroyed$))
