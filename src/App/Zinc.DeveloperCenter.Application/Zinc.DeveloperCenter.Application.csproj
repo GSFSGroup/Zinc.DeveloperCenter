@@ -4,12 +4,17 @@
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeFrameworkVersion>5.0.0</RuntimeFrameworkVersion>
     <RollForward>LatestMinor</RollForward>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\RedLine\RedLine.Application\RedLine.Application.csproj" />
     <ProjectReference Include="..\Zinc.DeveloperCenter.Data\Zinc.DeveloperCenter.Data.csproj" />
     <ProjectReference Include="..\Zinc.DeveloperCenter.Domain\Zinc.DeveloperCenter.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="5.2.0" />
   </ItemGroup>
 
   <ItemGroup>

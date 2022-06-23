@@ -10,11 +10,11 @@ namespace Zinc.DeveloperCenter.Host.Messaging
 {
     internal static class Program
     {
-        private static readonly string ApplicationHostName = typeof(Program).Namespace;
+        private static readonly string ApplicationHostName = typeof(Program).Namespace ?? throw new NullReferenceException();
 
         public static async Task<int> Main(string[] args)
         {
-            IHost host = null;
+            IHost host;
 
             try
             {

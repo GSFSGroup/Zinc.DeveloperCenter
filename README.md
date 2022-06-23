@@ -16,6 +16,7 @@ Congratulations! You have created a new micro-app using the `redline-app` templa
 - [Configure AuthZ](#configure-authz)
 - [Ensure logs are accessible through DataDog](#ensure-datadog)
 - [Schedule a job](#schedule-a-job)
+- [Setting up GitHub API Access](#github-api-access)
 
 ## <a id='understand-structure'></a>Understand solution structure
 
@@ -455,3 +456,24 @@ To schedule a job for 12:05pm CST on january 6th 2040 you would use
 | Second | Minute | Hour                       | Day  | Month | Day-of-week | Year |
 | :----- | :----- | :------------------------- | :--- | :---- | :---------- | :--- |
 | 0      | 5      | 12(UTC) + 6(offset) = 18   | 6    | 1     |             | 2040 |
+
+## <a id="github-api-access"></a>Setting up GitHub API Access
+**Developer Center requires use of a GitHub Access Token**
+
+#### Setting Environment Variable:
+
+The GitHub API requires the use of a GitHub access token to access private repositories. In production, Developer Center will pull a token from AWS parameter store. This can be found in PreProd at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken. When working locally, you must first set a local environment variable. This takes two steps:
+
+*   First, grab a valid GitHub access token value. You can utilize the GitHub accesss token in the parameter store. Simple visit AWS PreProd, search for "zn-develoercenter", and view the GitHubApi/AccessToken parameter. You can also use your own token. If you do not already have one, create a new GitHub access token. The only permissions that are necessary for this token are "repo" and "gist". Note that having extra permissions is not dangerous, as the only queries made from Developer Center are of Read type.
+
+* Second, set an environment variable on your machine with this token value. Name the varibale "GITHUB_TOKEN".
+
+You should now be able to run Developer Center locally and see up-to-date GSFS group GitHub data.
+
+#### Renewing the Token:
+
+The token being used for Developer Center does not have an expiration date. Nevertheless, if a new token ever needs to be created, you need to take two steps:
+
+*   Create a new GitHub access token. The permissions need to be "repo" and "gist".
+
+*   Set the value for the Developer Center access token in AWS parameter store. The value is located at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken.

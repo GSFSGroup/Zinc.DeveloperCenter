@@ -34,7 +34,7 @@ namespace Zinc.DeveloperCenter.Host.Messaging.Events.ActivityGroups
         /// <inheritdoc/>
         public async Task Handle(ActivityAddedToGroup message, IMessageHandlerContext context)
         {
-            if (!message.ApplicationName.Equals(ApplicationContext.ApplicationName, StringComparison.OrdinalIgnoreCase))
+            if (message.ApplicationName == null || !message.ApplicationName.Equals(ApplicationContext.ApplicationName, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
@@ -50,7 +50,7 @@ namespace Zinc.DeveloperCenter.Host.Messaging.Events.ActivityGroups
         /// <inheritdoc/>
         public async Task Handle(ActivityRemovedFromGroup message, IMessageHandlerContext context)
         {
-            if (!message.ApplicationName.Equals(ApplicationContext.ApplicationName, StringComparison.OrdinalIgnoreCase))
+            if (message.ApplicationName == null || !message.ApplicationName.Equals(ApplicationContext.ApplicationName, StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
