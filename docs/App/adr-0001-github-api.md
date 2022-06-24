@@ -1,17 +1,17 @@
-# ADR-0001: GitHub API
+# ADR-0001: Devloper Center GitHub API
 
 Date: 2022-06-13
 
 ## Overview
 
-During consideration of which GitHub API to use for Developer Center, we outlined the requirements needed of our selected API. We also compared the pros and cons of both APIs.
+During consideration of which GitHub API to use for Developer Center, we outlined the requirements needed of our selected API. We also compared the pros and cons of both existing GitHub APIs.
 
 ### Requirements
 * Fast query times for repo and file access.
 * Scaleability as the number of RedLine repos and ADRs grows.
 
 ## Status
-Proposed.
+Accepted.
 
 ## Context
 Two options for GitHub APIs currently exist: REST and GraphQL. 

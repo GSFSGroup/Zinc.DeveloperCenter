@@ -17,7 +17,7 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <returns> A List of GitHub Repo Records.</returns>
         public async Task<List<GitHubRepoRecord>> GetGitHubRepoData(int pageNumber)
         {
-            var resource = $"{typeof(FakeGitHubService).Namespace}.response.json";
+            var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetReposResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
 
             if (stream == null)
