@@ -4,12 +4,27 @@
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeFrameworkVersion>5.0.0</RuntimeFrameworkVersion>
     <RollForward>LatestMinor</RollForward>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\RedLine\RedLine.Application\RedLine.Application.csproj" />
     <ProjectReference Include="..\Zinc.DeveloperCenter.Data\Zinc.DeveloperCenter.Data.csproj" />
     <ProjectReference Include="..\Zinc.DeveloperCenter.Domain\Zinc.DeveloperCenter.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Services\GitHubApiGetReposResponse.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Services\GitHubApiGetReposResponse.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>

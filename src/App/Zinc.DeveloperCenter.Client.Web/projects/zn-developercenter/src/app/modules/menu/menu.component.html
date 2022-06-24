@@ -1,1 +1,14 @@
-<p>Add menu content here.</p>
+<mat-nav-list *ngFor="let navSection of navSections" aria-label="Developer Center menu" accesskey="m">
+    <!-- <div matSubheader>
+        {{ navSection.category }}
+    </div> -->
+    <a
+        *ngFor="let link of navSection.links"
+        mat-list-item
+        [title]="link.title"
+        [routerLink]="link.routerLink"
+        [id]="'main-nav-'+link.htmlId+'-action'">
+        <span mat-line>{{ link.title }}</span>
+    </a>
+    <mat-divider></mat-divider>
+</mat-nav-list>

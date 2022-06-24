@@ -2,6 +2,7 @@
 
 Congratulations! You have created a new micro-app using the `redline-app` template. However, your initial setup is not complete yet. Follow the steps outlined in the next section to deploy the micro-app in preprod environment:
 
+- [Running Zinc.Developer Center Locally](#github-api-access)
 - [Understand the solution structure](#understand-structure)
 - [Build and run app with docker-compose](#build-and-run-app)
 - [GitHub repository setup and first pull request](#git-repo-setup)
@@ -17,6 +18,26 @@ Congratulations! You have created a new micro-app using the `redline-app` templa
 - [Ensure logs are accessible through DataDog](#ensure-datadog)
 - [Schedule a job](#schedule-a-job)
 
+## <a id="github-api-access"></a>Running Zinc.Developer Center Locally
+**Developer Center requires use of a GitHub Access Token**
+
+#### Setting Environment Variable:
+
+The GitHub API requires the use of a GitHub access token to access private repositories. In pre-production, Developer Center will pull a token from AWS parameter store. This can be found in PreProd at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken. When working locally, you must first set a local environment variable. This takes two steps:
+
+*   First, grab a valid GitHub access token value. You can utilize the GitHub accesss token in the parameter store. Simple visit AWS PreProd, search for "zn-develoercenter", and view the GitHubApi/AccessToken parameter. You can also use your own token. If you do not already have one, create a new GitHub access token. The only permissions that are necessary for this token are "repo" and "gist". Note that having extra permissions is not dangerous, as the only queries made from Developer Center are of Read type.
+
+* Second, set an environment variable on your machine with this token value. Name the varibale "GITHUB_TOKEN".
+
+You should now be able to run Developer Center locally and see up-to-date GSFS group GitHub data.
+
+#### Renewing the Token:
+
+The token being used for Developer Center does not have an expiration date. Nevertheless, if a new token ever needs to be created, you need to take two steps:
+
+*   Create a new GitHub access token. The permissions need to be "repo" and "gist".
+
+*   Set the value for the Developer Center access token in AWS parameter store. The value is located at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken.
 ## <a id='understand-structure'></a>Understand solution structure
 
 When the solution is created, you will notice that the name of some projects in the solution are prefixed with `Zinc.DeveloperCenter`. These projects contain the code that are specific to this microservice. Projects that start with the name `RedLine` are platform-specific and intended to be left alone. You can think of them as generated code that gets replaced. As we improve the functionality provided by the `RedLine` platform, we will replace the code in `RedLine` projects. So, if you add any changes to those projects, they will get overwritten.

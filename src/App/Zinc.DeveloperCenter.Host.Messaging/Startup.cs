@@ -34,7 +34,7 @@ namespace Zinc.DeveloperCenter.Host.Messaging
                 .AddRedLineMessagingHost()
                 .AddRedLineHealthChecks(Configuration)
                 .AddDataServices()
-                .AddApplicationServices()
+                .AddApplicationServices(Configuration)
                 ;
         }
 

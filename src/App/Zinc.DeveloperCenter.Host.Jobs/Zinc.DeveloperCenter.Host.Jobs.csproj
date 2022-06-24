@@ -5,6 +5,7 @@
     <RuntimeFrameworkVersion>5.0.0</RuntimeFrameworkVersion>
     <RollForward>LatestMinor</RollForward>
     <UserSecretsId>a4092156-8e19-43ce-93a8-ee082d32ee4c</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

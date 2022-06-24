@@ -6,8 +6,23 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-    public constructor() {}
-
-    // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-    public ngOnInit() {}
+    public navSections = [
+        {
+            links: [
+                {
+                    htmlId: 'developer-center',
+                    title: 'Developer Center',
+                    routerLink: 'developer-center/developer-center'
+                },
+                {
+                    htmlId: 'redline-adrs',
+                    title: 'RedLine ADRs',
+                    routerLink: 'developer-center/redline-adrs'
+                }
+            ]
+        }
+    ];
+    public ngOnInit(): void {
+        return;
+    }
 }
