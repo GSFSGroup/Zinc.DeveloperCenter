@@ -12,9 +12,9 @@
                 </mat-panel-description>
             </mat-expansion-panel-header>
 
-            <div class="empty-state-container" *ngIf="true">
-                No ADRs have been added to this repository yet.
-            </div>
+            <app-adr-summary-list
+                [repoDotName]="repo.dotName"
+            ></app-adr-summary-list>
 
         </mat-expansion-panel>
     </mat-accordion>

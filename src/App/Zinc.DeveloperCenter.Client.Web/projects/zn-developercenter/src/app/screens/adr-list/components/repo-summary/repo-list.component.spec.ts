@@ -7,11 +7,11 @@ import { Page } from '~/models/page.interface';
 import { Repo } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
 
-import { AdrListComponent } from './adr-list.component';
+import { RepoListComponent } from './repo-list.component';
 
-describe('AdrListComponent', () => {
-    let component: AdrListComponent;
-    let fixture: ComponentFixture<AdrListComponent>;
+describe('RepoListComponent', () => {
+    let component: RepoListComponent;
+    let fixture: ComponentFixture<RepoListComponent>;
     let repoService: jasmine.SpyObj<GitHubRepoService>;
     let loadingOverlayService: jasmine.SpyObj<LoadingOverlayService>;
     const repoPage: Page<Repo> = {
@@ -33,7 +33,7 @@ describe('AdrListComponent', () => {
         loadingOverlayService = jasmine.createSpyObj<LoadingOverlayService>('loadingOverlayService', ['show', 'hide']);
 
         await TestBed.configureTestingModule({
-            declarations: [AdrListComponent],
+            declarations: [RepoListComponent],
             imports: [HttpClientTestingModule],
             providers: [
                 { provide: GitHubRepoService, useValue: repoService },
@@ -44,7 +44,7 @@ describe('AdrListComponent', () => {
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AdrListComponent);
+        fixture = TestBed.createComponent(RepoListComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -1,0 +1,19 @@
+<div class="empty-state-container" *ngIf="false">
+    <h1>Nothing to see here.</h1>
+</div>
+
+<ul class="item-list padding-all-24" id="adr-summary-list">
+    <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items">
+        <div class="item-summary item-content">
+            <h3 class="item-title margin-0 capitalize clickable-text">
+                {{adr.neatTitle}}
+            </h3>
+            <span class="item-detail margin-bottom-12">
+                {{adr.numberString}}
+                <br>
+                Last updated on {{adr.lastUpdatedDate}}
+            </span>
+            <span style="clear: both"></span>
+        </div>
+    </li>
+</ul>

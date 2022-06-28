@@ -4,7 +4,3 @@ export interface Repo {
     element: string;
     contentURL: string;
 }
-
-export interface ADRSummary {
-    name: string;
-}

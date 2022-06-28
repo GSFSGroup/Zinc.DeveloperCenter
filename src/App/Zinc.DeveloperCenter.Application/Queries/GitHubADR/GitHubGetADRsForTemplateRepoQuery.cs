@@ -8,32 +8,25 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
     /// <summary>
     /// Get product type query.
     /// </summary>
-    public class GitHubGetADRsForRepoQuery : QueryBase<PageableResult<GitHubAdrSummaryModel>>
+    public class GitHubGetADRsForTemplateRepoQuery : QueryBase<PageableResult<GitHubAdrSummaryModel>>
     {
         /// <summary>
         /// Initializes the query.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
-        /// <param name="repoDotName">The product type id.</param>
         /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
-        public GitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName, int pageNumber, int pageSize)
+        public GitHubGetADRsForTemplateRepoQuery(string tenantId, Guid correlationId, int pageNumber, int pageSize)
             : base(tenantId, correlationId)
         {
-            this.RepoDotName = repoDotName;
         }
 
         /// <inheritdoc />
-        public override string ActivityDisplayName => "List the ADRs for a specific repo in the GSFS group.";
+        public override string ActivityDisplayName => "List the global, RedLine ADRs for the Zinc.Templates repo in the GSFS group.";
 
         /// <inheritdoc />
-        public override string ActivityDescription => "List the ADRs for a specific repo in the GSFS group.";
-
-        /// <summary>
-        /// The full repo name for the adr: ex. Platinum.Products.
-        /// </summary>
-        public string RepoDotName { get; }
+        public override string ActivityDescription => "List the global, RedLine ADRs for the Zinc.Templates repo in the GSFS group.";
 
         /// <summary>
         /// The page number.

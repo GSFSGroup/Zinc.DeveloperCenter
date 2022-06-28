@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Zinc.DeveloperCenter.Application.Services
 {
     /// <summary>
@@ -5,5 +7,18 @@ namespace Zinc.DeveloperCenter.Application.Services
     /// </summary>
     public class GitHubAdrRecord
     {
+        /// <summary>
+        /// Name. ex: Platinum.Products.
+        /// </summary>
+        /// <value>name.</value>
+        [JsonProperty("name")]
+        public string Name { get; set; } = default!;
+
+        /// <summary>
+        /// Most recent date of changes to Adr.
+        /// </summary>
+        /// <value>name.</value>
+        [JsonProperty("download_url")]
+        public string LastUpdatedDate { get; set; } = default!;
     }
 }
