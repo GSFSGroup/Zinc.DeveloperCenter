@@ -56,7 +56,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
 
             List<GitHubAdrSummaryModel> sortedAdrList = adrList.OrderBy(o => o.Number).ToList();
 
-            return await Task.FromResult(new PageableResult<GitHubAdrSummaryModel>(sortedAdrList)).ConfigureAwait(false);
+            return new PageableResult<GitHubAdrSummaryModel>(sortedAdrList);
         }
     }
 }
