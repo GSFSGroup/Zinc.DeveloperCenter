@@ -36,7 +36,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
             {
                 // add a file to the list if it is an adr.
                 // an adr will begin with "adr" and end with ".md" or ".markdown".
-                if (adrRecord.Substring(0, 3) == "adr" && (adrRecord.Substring(adrRecord.Length - 3) == ".md" || (adrRecord.Length > 10 && adrRecord.Substring(adrRecord.Length - 9) == ".markdown")))
+                if ((adrRecord.Length > 4 && adrRecord.Substring(0, 3) == "adr") && (adrRecord.Substring(adrRecord.Length - 3) == ".md" || (adrRecord.Length > 10 && adrRecord.Substring(adrRecord.Length - 9) == ".markdown")))
                 {
                     int indexSecondDash = adrRecord.IndexOf('-', adrRecord.IndexOf('-') + 1);
                     var nameParts = adrRecord.Split('-');

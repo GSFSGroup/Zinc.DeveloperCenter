@@ -3,18 +3,18 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
+import { AdrSummary } from '~/models/adr-summary.interface';
 import { Page } from '~/models/page.interface';
-import { Repo } from '~/models/repo.interface';
-import { GitHubRepoService } from '~/shared/services/github-repo.service';
+import { GitHubAdrService } from '~/shared/services/github-adr.service';
 
 import { AdrSummaryComponent } from './adr-summary-list.component';
 
 describe('AdrSummaryComponent', () => {
     let component: AdrSummaryComponent;
     let fixture: ComponentFixture<AdrSummaryComponent>;
-    let repoService: jasmine.SpyObj<GitHubRepoService>;
+    let adrService: jasmine.SpyObj<GitHubAdrService>;
     let loadingOverlayService: jasmine.SpyObj<LoadingOverlayService>;
-    const repoPage: Page<Repo> = {
+    const adrPage: Page<AdrSummary> = {
         hasNextPage: false,
         hasPreviousPage: false,
         isFirstPage: false,
@@ -27,8 +27,8 @@ describe('AdrSummaryComponent', () => {
     };
 
     beforeEach(async () => {
-        repoService = jasmine.createSpyObj<GitHubRepoService>('repoService', {
-            listRepos: of(repoPage)
+        adrService = jasmine.createSpyObj<GitHubAdrService>('adrService', {
+            listAdrs: of(adrPage)
         });
         loadingOverlayService = jasmine.createSpyObj<LoadingOverlayService>('loadingOverlayService', ['show', 'hide']);
 
@@ -36,7 +36,7 @@ describe('AdrSummaryComponent', () => {
             declarations: [AdrSummaryComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                { provide: GitHubRepoService, useValue: repoService },
+                { provide: GitHubAdrService, useValue: adrService },
                 { provide: LoadingOverlayService, useValue: loadingOverlayService }
             ]
         })

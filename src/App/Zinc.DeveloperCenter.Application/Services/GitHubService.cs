@@ -72,6 +72,11 @@ namespace Zinc.DeveloperCenter.Application.Services
 
             var response = await httpClient.SendAsync(CreateMessage(uriBuilder.ToString())).ConfigureAwait(false);
 
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new List<GitHubAdrRecord>();
+            }
+
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             var results = JsonConvert.DeserializeObject<List<GitHubAdrRecord>>(responseContent);

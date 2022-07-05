@@ -1,12 +1,10 @@
-import { Component, OnDestroy, Input, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
-import { Page } from '~/models/page.interface';
-import { Repo } from '~/models/repo.interface';
 import { AdrSummary } from '~/models/adr-summary.interface';
-import { GitHubRepoService } from '~/shared/services/github-repo.service';
+import { Page } from '~/models/page.interface';
 import { GitHubAdrService } from '~/shared/services/github-adr.service';
 
 @Component({
@@ -17,7 +15,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
 export class AdrSummaryComponent implements OnDestroy {
     @Input()
     public repoDotName!: string;
-    
+
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
 
@@ -34,7 +32,6 @@ export class AdrSummaryComponent implements OnDestroy {
     }
 
     public getAdrsForCurrentRepo(): void {
-        console.log("getting adrs");
         this.adrService.listAdrs(this.repoDotName)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(adrs => {
