@@ -43,46 +43,9 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         }
 
         /// <summary>
-        /// Gets the list of global, RedLine ADRs in the Zinc.Templates GSFS GitHub group repo.
-        /// </summary>
-        /// <param name="pageNumber">Page number of query.</param>
-        /// <param name="pageSize">Page size for query.</param>
-        /// <returns>The collection of grantable activities for the user.</returns>
-        /// <response code="200">The grantable activities were returned.</response>
-        /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
-        /// <response code="401">The client is not authenticated.</response>
-        /// <response code="403">The client is forbidden to perform the operation.</response>
-        /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
-        /// <response code="501">An operation was not implemented.</response>
-        [ProducesResponseType(typeof(GitHubAdrSummaryModel), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 401)]
-        [ProducesResponseType(typeof(string), 403)]
-        [ProducesResponseType(typeof(string), 500)]
-        [ProducesResponseType(typeof(string), 501)]
-        [HttpGet]
-        public async Task<IActionResult> GitHubGetTemplateAdrSummaries(int? pageNumber, int? pageSize)
-        {
-            return await this.Execute(logger, async () =>
-            {
-                var request = new GitHubGetADRsForTemplateRepoQuery(
-                    tenantId.Value,
-                    correlationId.Value,
-                    pageNumber ?? 1,
-                    pageSize ?? 100);
-
-                var response = await mediator.Send(request).ConfigureAwait(false);
-
-                return Ok(response);
-            }).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Gets the list of ADRs in a GSFS GitHub group repo.
         /// </summary>
-        /// <param name="repoDotName">The full name of the GitHub repo: ex. Platinum.Products.</param>
-        /// <param name="pageNumber">Page number of query.</param>
-        /// <param name="pageSize">Page size for query.</param>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns>The collection of grantable activities for the user.</returns>
         /// <response code="200">The grantable activities were returned.</response>
         /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
@@ -96,17 +59,15 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         [ProducesResponseType(typeof(string), 403)]
         [ProducesResponseType(typeof(string), 500)]
         [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("{repoDotName}")]
-        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string repoDotName, int? pageNumber, int? pageSize)
+        [HttpGet("{repoDotName}/details")]
+        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string repoDotName)
         {
             return await this.Execute(logger, async () =>
             {
                 var request = new GitHubGetADRsForRepoQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    repoDotName,
-                    pageNumber ?? 1,
-                    pageSize ?? 100);
+                    repoDotName);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 

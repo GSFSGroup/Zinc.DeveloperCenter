@@ -1,8 +1,8 @@
-<div class="empty-state-container" *ngIf="false">
-    <h1>Nothing to see here.</h1>
+<div class="empty-state-container" *ngIf="!adrs?.items?.length">
+    <h3>Nothing to see here.</h3>
 </div>
 
-<ul class="item-list padding-all-24" id="adr-summary-list">
+<ul class="item-list padding-all-24" id="adr-summary-list" *ngIf="adrs?.items?.length">
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items">
         <div class="item-summary item-content">
             <h3 class="item-title margin-0 capitalize clickable-text">

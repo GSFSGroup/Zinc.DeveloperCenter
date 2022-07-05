@@ -43,9 +43,9 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Repos for the GSFS GitHub group.
         /// </summary>
-        /// <param name="isTemplate">Query RedLine Adrs only if querying for Zinc.Templates.</param>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(bool isTemplate)
+        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(string repoDotName)
         {
             var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetAdrsResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);

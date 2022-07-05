@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -6,6 +6,7 @@ import { LoadingOverlayService } from '~/core/loading-module/services/loading-ov
 import { Page } from '~/models/page.interface';
 import { Repo } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
+import { AdrSummaryComponent } from '../adr-summary/adr-summary-list.component';
 
 @Component({
     selector: 'app-repo-list',
@@ -33,6 +34,7 @@ export class RepoListComponent implements OnInit, OnDestroy {
     }
 
     public getGSFSGitHubReposInit(): void {
+        console.log("getting repos");
         this.loadingService.show('Loading');
         this.repoService.listRepos()
             .pipe(takeUntil(this.destroyed$))
@@ -41,5 +43,9 @@ export class RepoListComponent implements OnInit, OnDestroy {
                 this.loadingService.hide();
                 this.fetchedRepos = true;
             });
+    }
+
+    public testOpen(): void {
+        console.log("hey!");
     }
 }

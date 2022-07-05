@@ -8,12 +8,8 @@ import { AdrSummary } from '~/models/adr-summary.interface';
 @Injectable({providedIn: 'root'})
 export class GitHubAdrService {
     public constructor(private backend: BackendService){}
-
-    public listTemplateAdrs(): Observable<Page<AdrSummary>> {
-        return this.backend.query<Page<AdrSummary>>('adrs');
-    }
-
+    
     public listAdrs(repoDotName: string): Observable<Page<AdrSummary>> {
-        return this.backend.query<Page<AdrSummary>>('adrs/{repoDotName}');
+        return this.backend.query<Page<AdrSummary>>(`adrs/${repoDotName}/details`);
     }
 }

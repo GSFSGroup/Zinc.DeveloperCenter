@@ -15,10 +15,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
-        /// <param name="repoDotName">The product type id.</param>
-        /// <param name="pageNumber">The page number.</param>
-        /// <param name="pageSize">The page size.</param>
-        public GitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName, int pageNumber, int pageSize)
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        public GitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName)
             : base(tenantId, correlationId)
         {
             this.RepoDotName = repoDotName;
@@ -31,18 +29,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         public override string ActivityDescription => "List the ADRs for a specific repo in the GSFS group.";
 
         /// <summary>
-        /// The full repo name for the adr: ex. Platinum.Products.
-        /// </summary>
-        public string RepoDotName { get; }
-
-        /// <summary>
         /// The page number.
         /// </summary>
-        public int PageNumber { get; }
-
-        /// <summary>
-        /// The page size.
-        /// </summary>
-        public int PageSize { get; }
+        public string RepoDotName { get; }
     }
 }

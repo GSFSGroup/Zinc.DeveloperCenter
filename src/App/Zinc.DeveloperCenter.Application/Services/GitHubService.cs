@@ -56,13 +56,20 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Adrs for a specific Repo in the GSFS group.
         /// </summary>
-        /// <param name="isTemplate">Query RedLine Adrs only if querying for Zinc.Templates.</param>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
-        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(bool isTemplate)
+        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(string repoDotName)
         {
             var config = gitHubServiceConfig.Value;
-            var pathUrl = $"/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine?per_page=100";
+            var pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/docs/App?per_page=60";
+
+            if (config.AdrDirectoryUrls.ContainsKey(repoDotName))
+            {
+                pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/{config.AdrDirectoryUrls[repoDotName]}?per_page=60";
+            }
+
             var uriBuilder = new UriBuilder($"{config.BaseUrl}{pathUrl}");
+
             var response = await httpClient.SendAsync(CreateMessage(uriBuilder.ToString())).ConfigureAwait(false);
 
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);

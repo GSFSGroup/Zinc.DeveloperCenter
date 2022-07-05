@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
     templateUrl: './adr-summary-list.component.html',
     styleUrls: ['./adr-summary-list.component.scss']
 })
-export class AdrSummaryComponent implements OnInit, OnDestroy {
+export class AdrSummaryComponent implements OnDestroy {
     @Input()
     public repoDotName!: string;
     
@@ -28,36 +28,17 @@ export class AdrSummaryComponent implements OnInit, OnDestroy {
         private loadingService: LoadingOverlayService
     ) { }
 
-    public ngOnInit(): void {
-        if (this.repoDotName == 'Zinc.Templates')
-        {
-            this.getAdrsForTemplateRepo();
-        }
-        // this.getAdrsForCurrentRepo(this.repoDotName);
-    }
-
     public ngOnDestroy(): void {
         this.destroyed$.next();
         this.destroyed$.complete();
     }
 
-    public getAdrsForTemplateRepo(): void {
-        this.loadingService.show('Loading');
-        this.adrService.listTemplateAdrs()
+    public getAdrsForCurrentRepo(): void {
+        console.log("getting adrs");
+        this.adrService.listAdrs(this.repoDotName)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(adrs => {
                 this.adrs = adrs;
-                this.loadingService.hide();
-            });
-    }
-
-    public getAdrsForCurrentRepo(repoDotName: string): void {
-        this.loadingService.show('Loading');
-        this.adrService.listAdrs(repoDotName)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(adrs => {
-                this.adrs = adrs;
-                this.loadingService.hide();
             });
     }
 }

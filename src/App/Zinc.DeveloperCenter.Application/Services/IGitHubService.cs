@@ -18,8 +18,8 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Adrs for a specific Repo in the GSFS group.
         /// </summary>
-        /// <param name="isTemplate">Query RedLine Adrs only if querying for Zinc.Templates.</param>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
-        Task<List<GitHubAdrRecord>> GetGitHubAdrData(bool isTemplate);
+        Task<List<GitHubAdrRecord>> GetGitHubAdrData(string repoDotName);
     }
 }
