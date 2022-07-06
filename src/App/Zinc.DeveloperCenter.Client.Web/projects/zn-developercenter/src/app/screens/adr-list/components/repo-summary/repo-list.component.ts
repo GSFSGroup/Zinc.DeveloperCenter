@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
 import { Page } from '~/models/page.interface';
-import { Repo } from '~/models/repo.interface';
+import { RepositoryListComponent } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { GitHubRepoService } from '~/shared/services/github-repo.service';
     styleUrls: ['./repo-list.component.scss']
 })
 export class RepoListComponent implements OnInit, OnDestroy {
-    public repos!: Page<Repo>;
+    public repos!: Page<RepositoryListComponent>;
     public fetchedRepos = false;
 
     private destroyed$ = new Subject<void>();

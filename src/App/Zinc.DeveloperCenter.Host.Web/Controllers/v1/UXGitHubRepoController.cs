@@ -17,12 +17,12 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
     [ApiExplorerSettings(GroupName = ApplicationContext.ApplicationName)]
     [Produces("application/json")]
     [Route("ux/v{version:apiVersion}/{tenantId}/repos")]
-    public class GitHubRepoController : Controller
+    public class UXGitHubRepoController : Controller
     {
         private readonly IMediator mediator;
         private readonly ICorrelationId correlationId;
         private readonly ITenantId tenantId;
-        private readonly ILogger<GitHubRepoController> logger;
+        private readonly ILogger<UXGitHubRepoController> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -31,11 +31,11 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <param name="correlationId">Unique ID for each request.</param>
         /// <param name="tenantId">Identifier for tenant.</param>
         /// <param name="logger">Diagnostic logger.</param>
-        public GitHubRepoController(
+        public UXGitHubRepoController(
             IMediator mediator,
             ICorrelationId correlationId,
             ITenantId tenantId,
-            ILogger<GitHubRepoController> logger)
+            ILogger<UXGitHubRepoController> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId;
@@ -66,7 +66,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         {
             return await this.Execute(logger, async () =>
             {
-                var request = new GitHubGetReposQuery(
+                var request = new UXGitHubGetReposQuery(
                     tenantId.Value,
                     correlationId.Value,
                     pageNumber ?? 1,

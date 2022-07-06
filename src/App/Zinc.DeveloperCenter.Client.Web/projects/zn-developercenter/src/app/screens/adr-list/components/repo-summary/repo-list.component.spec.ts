@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
 import { Page } from '~/models/page.interface';
-import { Repo } from '~/models/repo.interface';
+import { RepositoryListComponent } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
 
 import { RepoListComponent } from './repo-list.component';
@@ -14,7 +14,7 @@ describe('RepoListComponent', () => {
     let fixture: ComponentFixture<RepoListComponent>;
     let repoService: jasmine.SpyObj<GitHubRepoService>;
     let loadingOverlayService: jasmine.SpyObj<LoadingOverlayService>;
-    const repoPage: Page<Repo> = {
+    const repoPage: Page<RepositoryListComponent> = {
         hasNextPage: false,
         hasPreviousPage: false,
         isFirstPage: false,

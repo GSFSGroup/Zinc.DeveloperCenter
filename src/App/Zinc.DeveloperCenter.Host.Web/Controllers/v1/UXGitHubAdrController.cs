@@ -16,12 +16,12 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
     [ApiExplorerSettings(GroupName = ApplicationContext.ApplicationName)]
     [Produces("application/json")]
     [Route("ux/v{version:apiVersion}/{tenantId}/adrs")]
-    public class GitHubAdrController : Controller
+    public class UXGitHubAdrController : Controller
     {
         private readonly IMediator mediator;
         private readonly ICorrelationId correlationId;
         private readonly ITenantId tenantId;
-        private readonly ILogger<GitHubAdrController> logger;
+        private readonly ILogger<UXGitHubAdrController> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -30,11 +30,11 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         /// <param name="correlationId">Unique ID for each request.</param>
         /// <param name="tenantId">Identifier for tenant.</param>
         /// <param name="logger">Diagnostic logger.</param>
-        public GitHubAdrController(
+        public UXGitHubAdrController(
             IMediator mediator,
             ICorrelationId correlationId,
             ITenantId tenantId,
-            ILogger<GitHubAdrController> logger)
+            ILogger<UXGitHubAdrController> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId;
@@ -64,7 +64,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         {
             return await this.Execute(logger, async () =>
             {
-                var request = new GitHubGetADRsForRepoQuery(
+                var request = new UXGitHubGetADRsForRepoQuery(
                     tenantId.Value,
                     correlationId.Value,
                     repoDotName);

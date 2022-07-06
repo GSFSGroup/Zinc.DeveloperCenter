@@ -11,18 +11,18 @@ using Zinc.DeveloperCenter.Application.Services;
 
 namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
 {
-    internal class GitHubGetADRsForRepoQueryHandler : IRequestHandler<GitHubGetADRsForRepoQuery, PageableResult<GitHubAdrSummaryModel>>
+    internal class UXGitHubGetADRsForRepoQueryHandler : IRequestHandler<UXGitHubGetADRsForRepoQuery, PageableResult<GitHubAdrSummaryModel>>
     {
         private readonly IGitHubService gitHubService;
-        private readonly ILogger<GitHubGetADRsForRepoQueryHandler> logger;
+        private readonly ILogger<UXGitHubGetADRsForRepoQueryHandler> logger;
 
-        public GitHubGetADRsForRepoQueryHandler(IGitHubService gitHubService, ILogger<GitHubGetADRsForRepoQueryHandler> logger)
+        public UXGitHubGetADRsForRepoQueryHandler(IGitHubService gitHubService, ILogger<UXGitHubGetADRsForRepoQueryHandler> logger)
         {
             this.gitHubService = gitHubService;
             this.logger = logger;
         }
 
-        public async Task<PageableResult<GitHubAdrSummaryModel>> Handle(GitHubGetADRsForRepoQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<GitHubAdrSummaryModel>> Handle(UXGitHubGetADRsForRepoQuery request, CancellationToken cancellationToken)
         {
             logger.LogDebug("Invoke api Proxy to get GitHub adrs");
 

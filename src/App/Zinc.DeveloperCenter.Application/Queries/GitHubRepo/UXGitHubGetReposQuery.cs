@@ -8,7 +8,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
     /// <summary>
     /// Lists the repos in the GSFS GitHub group.
     /// </summary>
-    public class GitHubGetReposQuery : QueryBase<PageableResult<GitHubRepoModel>>
+    public class UXGitHubGetReposQuery : QueryBase<PageableResult<GitHubRepoModel>>
     {
         /// <summary>
         /// Intializes the query.
@@ -17,7 +17,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
         /// <param name="correlationId">The correlation identifier.</param>
         /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
-        public GitHubGetReposQuery(string tenantId, Guid correlationId, int pageNumber, int pageSize)
+        public UXGitHubGetReposQuery(string tenantId, Guid correlationId, int pageNumber, int pageSize)
             : base(tenantId, correlationId)
         {
             this.PageNumber = pageNumber;

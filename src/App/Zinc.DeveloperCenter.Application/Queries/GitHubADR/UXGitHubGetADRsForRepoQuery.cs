@@ -8,7 +8,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
     /// <summary>
     /// Get product type query.
     /// </summary>
-    public class GitHubGetADRsForRepoQuery : QueryBase<PageableResult<GitHubAdrSummaryModel>>
+    public class UXGitHubGetADRsForRepoQuery : QueryBase<PageableResult<GitHubAdrSummaryModel>>
     {
         /// <summary>
         /// Initializes the query.
@@ -16,14 +16,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
-        public GitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName)
+        public UXGitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName)
             : base(tenantId, correlationId)
         {
             this.RepoDotName = repoDotName;
         }
 
         /// <inheritdoc />
-        public override string ActivityDisplayName => "List the ADRs for a specific repo in the GSFS group.";
+        public override string ActivityDisplayName => "Get an ADR";
 
         /// <inheritdoc />
         public override string ActivityDescription => "List the ADRs for a specific repo in the GSFS group.";
