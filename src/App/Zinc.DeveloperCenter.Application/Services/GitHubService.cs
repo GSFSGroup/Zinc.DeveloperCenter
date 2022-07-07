@@ -53,6 +53,42 @@ namespace Zinc.DeveloperCenter.Application.Services
             return results;
         }
 
+        /// <summary>
+        /// Retrieves the list of Adrs for a specific Repo in the GSFS group.
+        /// </summary>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
+        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(string repoDotName)
+        {
+            var config = gitHubServiceConfig.Value;
+            var pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/docs/App?per_page=60";
+
+            if (config.AdrDirectoryUrls.ContainsKey(repoDotName))
+            {
+                pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/{config.AdrDirectoryUrls[repoDotName]}?per_page=60";
+            }
+
+            var uriBuilder = new UriBuilder($"{config.BaseUrl}{pathUrl}");
+
+            var response = await httpClient.SendAsync(CreateMessage(uriBuilder.ToString())).ConfigureAwait(false);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new List<GitHubAdrRecord>();
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var results = JsonConvert.DeserializeObject<List<GitHubAdrRecord>>(responseContent);
+
+            if (results == null || results.Count == 0)
+            {
+                return new List<GitHubAdrRecord>();
+            }
+
+            return results;
+        }
+
         private HttpRequestMessage CreateMessage(string endpoint)
         {
             var config = gitHubServiceConfig.Value;

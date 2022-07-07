@@ -6,13 +6,13 @@ using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Application.Queries.GitHubRepo.Models;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.GithubRepoControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXGitHubRepoControllerTests
 {
-    public class GitHubRepoControllerShould : WebTestBase
+    public class UXGitHubRepoControllerShould : WebTestBase
     {
         private readonly string endpoint = $"/ux/v1/{TenantId}/repos";
 
-        public GitHubRepoControllerShould(WebTestFixture fixture, ITestOutputHelper output)
+        public UXGitHubRepoControllerShould(WebTestFixture fixture, ITestOutputHelper output)
             : base(fixture, output)
         {
         }

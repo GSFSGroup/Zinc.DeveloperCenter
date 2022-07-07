@@ -1,0 +1,514 @@
+[
+    {
+        "name": "adr-0001-record-architecture-decisions.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md",
+        "sha": "f7e462b16b6de97c20dc9440ea9b9cfaf62fc4fd",
+        "size": 4380,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/f7e462b16b6de97c20dc9440ea9b9cfaf62fc4fd",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/f7e462b16b6de97c20dc9440ea9b9cfaf62fc4fd",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md"
+        }
+    },
+    {
+        "name": "adr-0002-organize-solution-into-layers.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md",
+        "sha": "9b94f8a6d21964b5fc14dda62f29afb45af15a9a",
+        "size": 4143,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/9b94f8a6d21964b5fc14dda62f29afb45af15a9a",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/9b94f8a6d21964b5fc14dda62f29afb45af15a9a",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md"
+        }
+    },
+    {
+        "name": "adr-0003-implement-outbox-on-web-requests.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md",
+        "sha": "a21eced9881d8fb3c883f7d79d0271cc1c338352",
+        "size": 4052,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/a21eced9881d8fb3c883f7d79d0271cc1c338352",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/a21eced9881d8fb3c883f7d79d0271cc1c338352",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md"
+        }
+    },
+    {
+        "name": "adr-0003-outbox-insert.svg",
+        "path": "dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg",
+        "sha": "320d6e86e00e33c2b17115651c2887a8702f3313",
+        "size": 20375,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/320d6e86e00e33c2b17115651c2887a8702f3313",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/320d6e86e00e33c2b17115651c2887a8702f3313",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0003-outbox-insert.svg"
+        }
+    },
+    {
+        "name": "adr-0004-mediator-as-transactional-boundary.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md",
+        "sha": "a7165d81446ae917ddb3d9f195da3b9b04b9922a",
+        "size": 2591,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/a7165d81446ae917ddb3d9f195da3b9b04b9922a",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/a7165d81446ae917ddb3d9f195da3b9b04b9922a",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0004-mediator-as-transactional-boundary.md"
+        }
+    },
+    {
+        "name": "adr-0005-quartz-vs-hangfire.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md",
+        "sha": "f7656ef9684c745b373fcfc42806db2a992bc796",
+        "size": 4666,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/f7656ef9684c745b373fcfc42806db2a992bc796",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/f7656ef9684c745b373fcfc42806db2a992bc796",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0005-quartz-vs-hangfire.md"
+        }
+    },
+    {
+        "name": "adr-0006-domain-event-versioning.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md",
+        "sha": "ee885e889c0a6c23a6addea70f3e9137af76a0ed",
+        "size": 7092,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/ee885e889c0a6c23a6addea70f3e9137af76a0ed",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/ee885e889c0a6c23a6addea70f3e9137af76a0ed",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0006-domain-event-versioning.md"
+        }
+    },
+    {
+        "name": "adr-0007-context-injection.svg",
+        "path": "dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg",
+        "sha": "de37973d9fc869f618658b34e61f7ad4872b7453",
+        "size": 8502,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/de37973d9fc869f618658b34e61f7ad4872b7453",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/de37973d9fc869f618658b34e61f7ad4872b7453",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0007-context-injection.svg"
+        }
+    },
+    {
+        "name": "adr-0007-correlationid-in-message-headers.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md",
+        "sha": "ad0ed457b350880efd32121c423503699989c632",
+        "size": 1948,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/ad0ed457b350880efd32121c423503699989c632",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/ad0ed457b350880efd32121c423503699989c632",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0007-correlationid-in-message-headers.md"
+        }
+    },
+    {
+        "name": "adr-0008-ux-queries-distinct-from-api-queries.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md",
+        "sha": "250f97fba75570b226c59f124de8b9ae938b3f3f",
+        "size": 4674,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/250f97fba75570b226c59f124de8b9ae938b3f3f",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/250f97fba75570b226c59f124de8b9ae938b3f3f",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0008-ux-queries-distinct-from-api-queries.md"
+        }
+    },
+    {
+        "name": "adr-0009-capturing-and-publishing-domain-events.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md",
+        "sha": "bd6b01a54ecbe4cc3961e9367916a8a0e984979a",
+        "size": 6609,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bd6b01a54ecbe4cc3961e9367916a8a0e984979a",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bd6b01a54ecbe4cc3961e9367916a8a0e984979a",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0009-capturing-and-publishing-domain-events.md"
+        }
+    },
+    {
+        "name": "adr-0009-events-on-aggregate-root.png",
+        "path": "dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png",
+        "sha": "b6c36bd0254457a4cb8958b315b6262ba6b3b272",
+        "size": 51616,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/b6c36bd0254457a4cb8958b315b6262ba6b3b272",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/b6c36bd0254457a4cb8958b315b6262ba6b3b272",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0009-events-on-aggregate-root.png"
+        }
+    },
+    {
+        "name": "adr-0010-integration-testing-from-the-web-layer.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md",
+        "sha": "d4b3e8a85ae2682605291789feee691bc32c0a9c",
+        "size": 4762,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/d4b3e8a85ae2682605291789feee691bc32c0a9c",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/d4b3e8a85ae2682605291789feee691bc32c0a9c",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0010-integration-testing-from-the-web-layer.md"
+        }
+    },
+    {
+        "name": "adr-0011-use-an-api-gateway.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md",
+        "sha": "cbfc4e700775bf11ed1d5d559922acd6437df8e1",
+        "size": 4351,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/cbfc4e700775bf11ed1d5d559922acd6437df8e1",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/cbfc4e700775bf11ed1d5d559922acd6437df8e1",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0011-use-an-api-gateway.md"
+        }
+    },
+    {
+        "name": "adr-0012-limit-migrations-to-a-single-pod.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md",
+        "sha": "1475b88be6e49aaea72da60b38f7664c27bb8c44",
+        "size": 2790,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1475b88be6e49aaea72da60b38f7664c27bb8c44",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1475b88be6e49aaea72da60b38f7664c27bb8c44",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0012-limit-migrations-to-a-single-pod.md"
+        }
+    },
+    {
+        "name": "adr-0013-nightly-builds.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md",
+        "sha": "d7f858bde1b0132d0f58f30ed407bc00827107ff",
+        "size": 2230,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/d7f858bde1b0132d0f58f30ed407bc00827107ff",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/d7f858bde1b0132d0f58f30ed407bc00827107ff",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0013-nightly-builds.md"
+        }
+    },
+    {
+        "name": "adr-0014-json-net-non-public-setters.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md",
+        "sha": "1c0517d861884302c85dacdba03ec825055afa08",
+        "size": 3103,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1c0517d861884302c85dacdba03ec825055afa08",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1c0517d861884302c85dacdba03ec825055afa08",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0014-json-net-non-public-setters.md"
+        }
+    },
+    {
+        "name": "adr-0015-selection-of-ui-automation-tool.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md",
+        "sha": "fccb5e6428868751d61e5815f4bee51a1e6487ab",
+        "size": 10081,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/fccb5e6428868751d61e5815f4bee51a1e6487ab",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/fccb5e6428868751d61e5815f4bee51a1e6487ab",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0015-selection-of-ui-automation-tool.md"
+        }
+    },
+    {
+        "name": "adr-0016-suppress-audit-of-noop-jobs.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md",
+        "sha": "65f1a3dc1af0eebec491636834c3620509730d25",
+        "size": 1232,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/65f1a3dc1af0eebec491636834c3620509730d25",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/65f1a3dc1af0eebec491636834c3620509730d25",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0016-suppress-audit-of-noop-jobs.md"
+        }
+    },
+    {
+        "name": "adr-0017-accounting-rules-for-rounding-money.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md",
+        "sha": "284b02d0feba6e1cf7e3bc7c9ed5c39faf79296f",
+        "size": 4765,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/284b02d0feba6e1cf7e3bc7c9ed5c39faf79296f",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/284b02d0feba6e1cf7e3bc7c9ed5c39faf79296f",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0017-accounting-rules-for-rounding-money.md"
+        }
+    },
+    {
+        "name": "adr-0018-catching-errors-client-side.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md",
+        "sha": "6e94954e8eeb0e6a5c22695ae7b7f637a58aba22",
+        "size": 5684,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/6e94954e8eeb0e6a5c22695ae7b7f637a58aba22",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/6e94954e8eeb0e6a5c22695ae7b7f637a58aba22",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0018-catching-errors-client-side.md"
+        }
+    },
+    {
+        "name": "adr-0019-angular-change-detection.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md",
+        "sha": "e87e91b810d9f85e61f05ffbd7497886154bb75a",
+        "size": 5054,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/e87e91b810d9f85e61f05ffbd7497886154bb75a",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/e87e91b810d9f85e61f05ffbd7497886154bb75a",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0019-angular-change-detection.md"
+        }
+    },
+    {
+        "name": "adr-0020-feature-flags-configmaps.png",
+        "path": "dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png",
+        "sha": "243fd22c438c958aa6a775ba5e26e2e82993175b",
+        "size": 13221,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/243fd22c438c958aa6a775ba5e26e2e82993175b",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/243fd22c438c958aa6a775ba5e26e2e82993175b",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-configmaps.png"
+        }
+    },
+    {
+        "name": "adr-0020-feature-flags-external-service.png",
+        "path": "dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png",
+        "sha": "bacb56b4bdcfabea70c68b40ddbfd307449715ac",
+        "size": 11354,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bacb56b4bdcfabea70c68b40ddbfd307449715ac",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bacb56b4bdcfabea70c68b40ddbfd307449715ac",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-external-service.png"
+        }
+    },
+    {
+        "name": "adr-0020-feature-flags-unleash.png",
+        "path": "dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png",
+        "sha": "565f00a50f4e32a893d2081056c4964fd64ec390",
+        "size": 11380,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/565f00a50f4e32a893d2081056c4964fd64ec390",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/565f00a50f4e32a893d2081056c4964fd64ec390",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags-unleash.png"
+        }
+    },
+    {
+        "name": "adr-0020-feature-flags.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md",
+        "sha": "b994cd91e0745155ea9dbe60fe0044f909c5abec",
+        "size": 4755,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/b994cd91e0745155ea9dbe60fe0044f909c5abec",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/b994cd91e0745155ea9dbe60fe0044f909c5abec",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0020-feature-flags.md"
+        }
+    },
+    {
+        "name": "adr-0021-storing-timestamps-in-postgres.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md",
+        "sha": "4edc63ca3a7ac0421487bad264a11dc24e904026",
+        "size": 10174,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/4edc63ca3a7ac0421487bad264a11dc24e904026",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/4edc63ca3a7ac0421487bad264a11dc24e904026",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0021-storing-timestamps-in-postgres.md"
+        }
+    },
+    {
+        "name": "adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png",
+        "path": "dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png",
+        "sha": "bfa8689b6f013ba3e703ffefd0c55ec1cd8c4268",
+        "size": 31043,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bfa8689b6f013ba3e703ffefd0c55ec1cd8c4268",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/bfa8689b6f013ba3e703ffefd0c55ec1cd8c4268",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0022-Okta-Hooks-SAML-Inline-Hooks2.png"
+        }
+    },
+    {
+        "name": "adr-0022-angular-route-guard-for-legal-consent.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md",
+        "sha": "1f6f1ecf6188b99436a994d00d0db54cfa9eb8af",
+        "size": 4889,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1f6f1ecf6188b99436a994d00d0db54cfa9eb8af",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/1f6f1ecf6188b99436a994d00d0db54cfa9eb8af",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0022-angular-route-guard-for-legal-consent.md"
+        }
+    },
+    {
+        "name": "adr-0023-domain-events-from-event-sourced-domains.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md",
+        "sha": "742397562d6be06cbce81ea49614886a80004d3d",
+        "size": 3349,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/742397562d6be06cbce81ea49614886a80004d3d",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/742397562d6be06cbce81ea49614886a80004d3d",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0023-domain-events-from-event-sourced-domains.md"
+        }
+    },
+    {
+        "name": "adr-0024-activity-display-names-and-descriptions copy.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions copy.md",
+        "sha": "39a04729f912fa588e0ff979852a75e0aee112f8",
+        "size": 3421,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions%20copy.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions%20copy.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/39a04729f912fa588e0ff979852a75e0aee112f8",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions%20copy.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions%20copy.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/39a04729f912fa588e0ff979852a75e0aee112f8",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0024-activity-display-names-and-descriptions%20copy.md"
+        }
+    },
+    {
+        "name": "adr-0025-default-enum-values.md",
+        "path": "dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md",
+        "sha": "4c19f7fdd81002cd074ca6a41ea135b3ce132023",
+        "size": 2474,
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md?ref=master",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md",
+        "git_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/4c19f7fdd81002cd074ca6a41ea135b3ce132023",
+        "download_url": "https://raw.githubusercontent.com/GSFSGroup/Zinc.Templates/master/dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md",
+        "type": "file",
+        "_links": {
+            "self": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md?ref=master",
+            "git": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/blobs/4c19f7fdd81002cd074ca6a41ea135b3ce132023",
+            "html": "https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0025-default-enum-values.md"
+        }
+    }
+]

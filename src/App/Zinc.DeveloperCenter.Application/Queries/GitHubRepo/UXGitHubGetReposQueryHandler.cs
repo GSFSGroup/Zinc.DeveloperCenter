@@ -10,18 +10,18 @@ using Zinc.DeveloperCenter.Application.Services;
 
 namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
 {
-    internal class GitHubGetReposQueryHandler : IRequestHandler<GitHubGetReposQuery, PageableResult<GitHubRepoModel>>
+    internal class UXGitHubGetReposQueryHandler : IRequestHandler<UXGitHubGetReposQuery, PageableResult<GitHubRepoModel>>
     {
         private readonly IGitHubService gitHubService;
-        private readonly ILogger<GitHubGetReposQueryHandler> logger;
+        private readonly ILogger<UXGitHubGetReposQueryHandler> logger;
 
-        public GitHubGetReposQueryHandler(IGitHubService gitHubService, ILogger<GitHubGetReposQueryHandler> logger)
+        public UXGitHubGetReposQueryHandler(IGitHubService gitHubService, ILogger<UXGitHubGetReposQueryHandler> logger)
         {
             this.gitHubService = gitHubService;
             this.logger = logger;
         }
 
-        public async Task<PageableResult<GitHubRepoModel>> HandleTest(GitHubGetReposQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<GitHubRepoModel>> HandleTest(UXGitHubGetReposQuery request, CancellationToken cancellationToken)
         {
             var repoList = Enumerable.Repeat(0, 20).Select(h => new GitHubRepoModel
             {
@@ -33,7 +33,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
             return await Task.FromResult(new PageableResult<GitHubRepoModel>(repoList)).ConfigureAwait(false);
         }
 
-        public async Task<PageableResult<GitHubRepoModel>> Handle(GitHubGetReposQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<GitHubRepoModel>> Handle(UXGitHubGetReposQuery request, CancellationToken cancellationToken)
         {
             logger.LogDebug("Invoke api Proxy to get GitHub repos");
 

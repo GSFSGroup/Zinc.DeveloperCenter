@@ -4,7 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmptyComponent } from '~/modules/empty/empty.component';
 import { HomeComponent } from '~/screens/home/home.component';
 
-import { AdrListComponent } from './screens/adr-list/adr-list.component';
+import { RepoListComponent } from './screens/adr-list/components/repo-summary/repo-list.component';
+
 
 /**
  *   Define routes in this section. It is important that the routes of this application
@@ -85,7 +86,7 @@ export const routes: Routes = [
                         description: 'Search for and view RedLine architectural decision records.'
                     }
                 },
-                component: AdrListComponent
+                component: RepoListComponent
             },
             { path: '**', redirectTo: '' }
         ]

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Zinc.DeveloperCenter.Application
 {
     /// <summary>
@@ -33,5 +35,10 @@ namespace Zinc.DeveloperCenter.Application
         /// Enables the HTTP calls to GitHubServiceConfig. If disabled, a fake service is used.
         /// </summary>
         public bool Enabled { get; set; } = true;
+
+        /// <summary>
+        /// Dictionary of directories where ADRs are stored in specific, non-template repos.
+        /// </summary>
+        public Dictionary<string, string> AdrDirectoryUrls { get; set; } = new Dictionary<string, string>();
     }
 }
