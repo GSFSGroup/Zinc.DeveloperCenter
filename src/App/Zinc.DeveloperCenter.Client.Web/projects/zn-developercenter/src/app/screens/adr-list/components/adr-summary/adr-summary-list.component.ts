@@ -38,4 +38,8 @@ export class AdrSummaryComponent implements OnDestroy {
                 this.adrs = adrs;
             });
     }
+
+    public routeToAdrPage(): void {
+        console.log(this.repoDotName);
+    }
 }

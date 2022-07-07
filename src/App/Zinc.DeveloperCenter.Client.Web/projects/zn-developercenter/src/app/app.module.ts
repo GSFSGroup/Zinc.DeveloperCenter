@@ -10,12 +10,13 @@ import { HomeComponent } from '~/screens/home/home.component';
 
 import { AppComponent } from './app.component';
 import { MenuComponent } from './modules/menu/menu.component';
+import { AdrDisplayComponent } from './screens/adr-display/adr-display.component';
 import { AdrSummaryComponent } from './screens/adr-list/components/adr-summary/adr-summary-list.component';
 import { RepoListComponent } from './screens/adr-list/components/repo-summary/repo-list.component';
 import { AutoFocusDirective } from './shared/directives/autofocus.directive';
 
 @NgModule({
-    declarations: [AppComponent, EmptyComponent, HomeComponent, MenuComponent, AutoFocusDirective, RepoListComponent, AdrSummaryComponent],
+    declarations: [AppComponent, EmptyComponent, HomeComponent, MenuComponent, AutoFocusDirective, RepoListComponent, AdrSummaryComponent, AdrDisplayComponent],
     imports: [AppRoutingModule, BrowserModule, CoreModule],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: []
