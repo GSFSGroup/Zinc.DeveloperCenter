@@ -25,7 +25,7 @@ export class AdrDisplayComponent implements OnInit {
         this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.adrTitle = params.adrTitle;
             this.adrNumberString = params.adrNumberString;
-            this.adrNumberString = this.adrNumberString.toUpperCase();
+            this.adrNumberString = this.adrNumberString?.toUpperCase();
             this.downloadUrl = decodeURIComponent(params.downloadUrl);
             this.publishCrumbs();
         });
