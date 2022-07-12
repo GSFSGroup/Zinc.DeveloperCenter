@@ -16,7 +16,6 @@
     <Folder Include="Model\AggregateRoots\" />
     <Folder Include="Model\Entities\" />
     <Folder Include="Model\ValueObjects\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
 </Project>
