@@ -4,8 +4,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { EmptyComponent } from '~/modules/empty/empty.component';
 import { HomeComponent } from '~/screens/home/home.component';
 
+import { AdrDisplayComponent } from './screens/adr-display/adr-display.component';
 import { RepoListComponent } from './screens/adr-list/components/repo-summary/repo-list.component';
-
 
 /**
  *   Define routes in this section. It is important that the routes of this application
@@ -80,13 +80,24 @@ export const routes: Routes = [
             {
                 path: 'redline-adrs',
                 data: {
-                    // Level of breadcrumb is the depth in the routing definition.
                     breadcrumb: {
                         title: 'RedLine ADRs',
                         description: 'Search for and view RedLine architectural decision records.'
                     }
                 },
-                component: RepoListComponent
+                children: [
+                    { path: '', component: RepoListComponent},
+                    {
+                        path: 'adr-render/:adrTitle/:adrNumberString/download-url/:downloadUrl',
+                        data: {
+                            breadcrumb: {
+                                title: 'ADR Render',
+                                description: 'This data should be passed in.'
+                            }
+                        },
+                        component: AdrDisplayComponent
+                    }
+                ]
             },
             { path: '**', redirectTo: '' }
         ]

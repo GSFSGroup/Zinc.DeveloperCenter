@@ -5,9 +5,10 @@
 // To prevent re-importing the core module elsewhere, you should also add a guard for it in the core module’ constructor.
 
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule, Optional, SkipSelf } from '@angular/core';
 import { SharedServices } from '@gsfsgroup/kr-shell-services';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { ErrorHandlerService } from '~/core/error-handler/error-handler.service';
 import { Logger } from '~/core/logger/logger';
@@ -16,7 +17,7 @@ import { throwIfAlreadyLoaded } from '~/core/module-import-guard';
 
 @NgModule({
     declarations: [],
-    imports: [HttpClientModule, CommonModule, MaterialModule],
+    imports: [HttpClientModule, CommonModule, MarkdownModule.forRoot({ loader: HttpClient }), MaterialModule],
     exports: [CommonModule, HttpClientModule, MaterialModule],
     providers: [
         SharedServices,

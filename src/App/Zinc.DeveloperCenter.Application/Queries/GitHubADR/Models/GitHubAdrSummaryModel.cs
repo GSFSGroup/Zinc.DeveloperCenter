@@ -29,5 +29,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models
         /// Adr number string: ex. adr-0012.
         /// </summary>
         public string? NumberString { get; init; }
+
+        /// <summary>
+        /// Url provided by GitHub API to download Adr.
+        /// </summary>
+        /// <value>name.</value>
+        public string? DownloadUrl { get; set; }
     }
 }

@@ -4,4 +4,5 @@ export interface AdrSummary {
     lastUpdatedDate: Date;
     adrNumber: number;
     numberString: string;
+    downloadUrl: string;
 }
