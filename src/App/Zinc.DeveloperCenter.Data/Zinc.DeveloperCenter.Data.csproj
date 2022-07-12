@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Zinc.DeveloperCenter.Domain\Zinc.DeveloperCenter.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
