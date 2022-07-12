@@ -33,7 +33,6 @@
     <Folder Include="Messages\" />
     <Folder Include="Jobs\" />
     <Folder Include="Notifications\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
 </Project>
