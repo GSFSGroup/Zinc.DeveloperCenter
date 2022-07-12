@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
+using Zinc.DeveloperCenter.Data.Repositories;
+using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -25,6 +27,7 @@ namespace Zinc.DeveloperCenter.Application
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
                 .AddApiServices(configuration)
+                .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
                 ;
             return services;
         }
