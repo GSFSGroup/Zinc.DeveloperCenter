@@ -1,7 +1,7 @@
 namespace Zinc.DeveloperCenter.Application.Queries.UXGetADRsForAppliaction
 {
     /// <summary>
-    /// A model used to return the ADRs for an application
+    /// A model used to return the ADRs for an application.
     /// </summary>
     public class UXGetADRsForAppliactionQueryModel
     {
