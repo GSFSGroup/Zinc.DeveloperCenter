@@ -34,7 +34,9 @@
             "styles": [
               "projects/zn-developercenter/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/marked/marked.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -118,7 +120,9 @@
             "styles": [
               "projects/zn-developercenter/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/marked/marked.min.js"
+            ]
           },
           "configurations": {
             "development": {

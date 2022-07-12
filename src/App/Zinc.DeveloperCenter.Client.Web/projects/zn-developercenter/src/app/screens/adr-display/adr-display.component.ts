@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { IBreadCrumb, SharedServices } from '@gsfsgroup/kr-shell-services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import { IBreadCrumb, SharedServices } from '@gsfsgroup/kr-shell-services';
 
 @Component({
     selector: 'app-adr-display',
@@ -27,12 +26,12 @@ export class AdrDisplayComponent implements OnInit {
             this.adrTitle = params.adrTitle;
             this.adrNumberString = params.adrNumberString;
             this.adrNumberString = this.adrNumberString.toUpperCase();
+            this.downloadUrl = decodeURIComponent(params.downloadUrl);
             this.publishCrumbs();
         });
     }
 
     private publishCrumbs(): void {
-        console.log("publishing crumbs");
         const crumbs = this.getBreadCrumbs(this.activatedRoute.snapshot.root, '', 0);
 
         if (crumbs.length > 0) {

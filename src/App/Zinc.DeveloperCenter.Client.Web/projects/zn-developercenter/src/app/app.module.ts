@@ -1,6 +1,8 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, DoBootstrap, Injector, NgModule } from '@angular/core';
 import { createCustomElement } from '@angular/elements';
 import { BrowserModule } from '@angular/platform-browser';
+import { MarkdownModule } from 'ngx-markdown';
 
 
 import { AppRoutingModule } from '~/app/app-routing.module';
@@ -17,7 +19,7 @@ import { AutoFocusDirective } from './shared/directives/autofocus.directive';
 
 @NgModule({
     declarations: [AppComponent, EmptyComponent, HomeComponent, MenuComponent, AutoFocusDirective, RepoListComponent, AdrSummaryComponent, AdrDisplayComponent],
-    imports: [AppRoutingModule, BrowserModule, CoreModule],
+    imports: [AppRoutingModule, BrowserModule, CoreModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient })],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: []
 })

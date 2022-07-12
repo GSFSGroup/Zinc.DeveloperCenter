@@ -39,7 +39,7 @@ export class AdrSummaryComponent implements OnDestroy {
             });
     }
 
-    public routeToAdrPage(): void {
-        console.log(this.repoDotName);
+    public encodeUrl(val: string): string {
+        return encodeURIComponent(val);
     }
 }
