@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using RedLine.Application.Queries;
 using RedLine.Domain.Model;
-using Zinc.DeveloperCenter.Domain.Model;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXGetADRsForAppliaction
 {
