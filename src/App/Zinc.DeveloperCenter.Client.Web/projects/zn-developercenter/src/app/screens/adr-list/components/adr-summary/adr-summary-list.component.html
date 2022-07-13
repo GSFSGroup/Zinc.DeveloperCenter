@@ -5,7 +5,7 @@
 <ul class="item-list padding-all-24" id="adr-summary-list" *ngIf="adrs?.items?.length">
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items" (click)="adrLink.click()">
         <div class="item-summary item-content">
-            <a id="adr-{{adr.adrTitle}}" routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/download-url/{{encodeUrl(adr.downloadUrl)}}" #adrLink></a>
+            <a id="adr-{{adr.adrTitle}}" routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/download-url/{{encodeUrl(adr.downloadUrl)}}/html-url/{{encodeUrl(adr.htmlUrl)}}" #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
                 {{adr.neatTitle}}
             </h3>

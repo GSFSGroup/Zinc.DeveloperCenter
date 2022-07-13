@@ -19,7 +19,7 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// </summary>
         /// <value>name.</value>
         [JsonProperty("html_url")]
-        public string LastUpdatedDate { get; set; } = default!;
+        public string HtmlUrl { get; set; } = default!;
 
         /// <summary>
         /// Url provided by GitHub API to download Adr.

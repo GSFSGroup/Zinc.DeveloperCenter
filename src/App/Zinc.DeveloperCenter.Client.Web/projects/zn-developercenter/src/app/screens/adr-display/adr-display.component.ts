@@ -13,6 +13,7 @@ export class AdrDisplayComponent implements OnInit {
     public adrTitle!: string;
     public adrNumberString!: string;
     public downloadUrl!: string;
+    public htmlUrl!: string;
 
     private destroyed$ = new Subject<void>();
 
@@ -27,6 +28,7 @@ export class AdrDisplayComponent implements OnInit {
             this.adrNumberString = params.adrNumberString;
             this.adrNumberString = this.adrNumberString?.toUpperCase();
             this.downloadUrl = decodeURIComponent(params.downloadUrl);
+            this.htmlUrl = decodeURIComponent(params.htmlUrl);
             this.publishCrumbs();
         });
     }
