@@ -32,22 +32,23 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
 
             var adrList = new List<GitHubAdrSummaryModel>();
 
-            foreach (var adrRecord in record.Select(x => x.Name))
+            foreach (var adrRecord in record)
             {
                 // add a file to the list if it is an adr.
                 // an adr will begin with "adr" and end with ".md" or ".markdown".
-                if ((adrRecord.Length > 4 && adrRecord.Substring(0, 3) == "adr") && (adrRecord.Substring(adrRecord.Length - 3) == ".md" || (adrRecord.Length > 10 && adrRecord.Substring(adrRecord.Length - 9) == ".markdown")))
+                if ((adrRecord.Name.Length > 4 && adrRecord.Name.Substring(0, 3) == "adr") && (adrRecord.Name.Substring(adrRecord.Name.Length - 3) == ".md" || (adrRecord.Name.Length > 10 && adrRecord.Name.Substring(adrRecord.Name.Length - 9) == ".markdown")))
                 {
-                    int indexSecondDash = adrRecord.IndexOf('-', adrRecord.IndexOf('-') + 1);
-                    var nameParts = adrRecord.Split('-');
+                    int indexSecondDash = adrRecord.Name.IndexOf('-', adrRecord.Name.IndexOf('-') + 1);
+                    var nameParts = adrRecord.Name.Split('-');
 
                     var adr = new GitHubAdrSummaryModel
                     {
-                        NeatTitle = adrRecord.Substring(indexSecondDash, adrRecord.IndexOf('.') - indexSecondDash).Replace('-', ' '),
-                        AdrTitle = adrRecord,
+                        NeatTitle = adrRecord.Name.Substring(indexSecondDash, adrRecord.Name.IndexOf('.') - indexSecondDash).Replace('-', ' '),
+                        AdrTitle = adrRecord.Name,
                         LastUpdatedDate = "x",
                         Number = Convert.ToInt16(nameParts[1]),
                         NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
+                        DownloadUrl = adrRecord.DownloadUrl,
                     };
 
                     adrList.Add(adr);

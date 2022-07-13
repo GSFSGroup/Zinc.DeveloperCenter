@@ -38,4 +38,8 @@ export class AdrSummaryComponent implements OnDestroy {
                 this.adrs = adrs;
             });
     }
+
+    public encodeUrl(val: string): string {
+        return encodeURIComponent(val);
+    }
 }
