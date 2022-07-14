@@ -12,14 +12,14 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
     /// <summary>
     /// Gets the list of applications to display on the AppList screen.
     /// </summary>
-    public class UXAppListGetApplicationsDataQuery : DataQueryBase<IDbConnection, IEnumerable<UXAppListGetApplicationsDataQuery.UXAppListGetApplicationsDataQueryResult>>
+    public class UXAppListGetApplicationsDataQuery : DataQueryBase<IDbConnection, IEnumerable<UXAppListGetApplicationsDataQuery.Result>>
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         public UXAppListGetApplicationsDataQuery()
         {
-            Resolve = async connection => (await connection.QueryAsync<UXAppListGetApplicationsDataQueryResult>(
+            Resolve = async connection => (await connection.QueryAsync<Result>(
                     "SELECT application_name, application_display_name, element FROM developercenter.architecture_decision_record"))
                     .AsList();
         }
@@ -27,7 +27,7 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         /// <summary>
         /// The result from the query.
         /// </summary>
-        public class UXAppListGetApplicationsDataQueryResult
+        public class Result
         {
             /// <summary>
             /// The application name.
