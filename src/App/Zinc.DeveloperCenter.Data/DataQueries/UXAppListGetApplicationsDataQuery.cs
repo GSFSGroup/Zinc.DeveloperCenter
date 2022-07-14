@@ -12,7 +12,7 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
     /// <summary>
     /// Gets the list of applications to display on the AppList screen.
     /// </summary>
-    public class UXAppListGetApplicationsDataQuery : DataQueryBase<IDbConnection, IEnumerable<UXAppListGetApplicationsDataQueryResult>>
+    public class UXAppListGetApplicationsDataQuery : DataQueryBase<IDbConnection, IEnumerable<UXAppListGetApplicationsDataQuery.UXAppListGetApplicationsDataQueryResult>>
     {
         /// <summary>
         /// Initializes a new instance of the class.
