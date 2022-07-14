@@ -1,4 +1,5 @@
 using RedLine.Application.Jobs;
+
 namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 {
     /// <summary>
@@ -11,7 +12,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
-        public RefreshAdrsJob(string tenantId, Guid correlationId)
+        public RefreshAdrsJob(string tenantId, System.Guid correlationId)
             : base(tenantId, correlationId)
         {
             TransactionTimeout = TimeSpan.FromMinutes(5);
