@@ -39,6 +39,20 @@ export class AdrSummaryComponent implements OnDestroy {
             });
     }
 
+    public updateLastUpdatedDates(): void {
+        if (typeof(this.adrs) !== 'undefined') {
+            this.adrs.items.forEach( (adr) => {
+                console.log("before: ",adr.lastUpdatedDate);
+                this.adrService.updateDates(this.repoDotName, adr.adrTitle)
+                    .subscribe(lastUpdatedString => {
+                        console.log("string to use:", lastUpdatedString);
+                        adr.lastUpdatedDate = lastUpdatedString;
+                        console.log("after: ",adr.lastUpdatedDate);
+                    });
+            });
+        }
+    }
+
     public encodeUrl(val: string): string {
         return encodeURIComponent(val);
     }

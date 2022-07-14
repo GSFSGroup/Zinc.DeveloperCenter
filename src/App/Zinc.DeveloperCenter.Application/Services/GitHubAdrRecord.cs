@@ -17,15 +17,22 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Most recent date of changes to Adr.
         /// </summary>
-        /// <value>name.</value>
+        /// <value>html_url.</value>
         [JsonProperty("html_url")]
         public string HtmlUrl { get; set; } = default!;
 
         /// <summary>
         /// Url provided by GitHub API to download Adr.
         /// </summary>
-        /// <value>name.</value>
+        /// <value>download_url.</value>
         [JsonProperty("download_url")]
         public string DownloadUrl { get; set; } = default!;
+
+        /// <summary>
+        /// Url provided by GitHub API to download Adr.
+        /// </summary>
+        /// <value>path.</value>
+        [JsonProperty("path")]
+        public string FilePath { get; set; } = default!;
     }
 }

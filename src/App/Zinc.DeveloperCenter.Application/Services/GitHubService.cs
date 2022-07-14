@@ -89,6 +89,43 @@ namespace Zinc.DeveloperCenter.Application.Services
             return results;
         }
 
+        /// <summary>
+        /// Retrieves the time at which a specific Adr was last updated.
+        /// </summary>
+        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
+        /// <returns> A string of the date on which the Adr was most recently updated.</returns>
+        public async Task<GitHubLastUpdatedDateRecord> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
+        {
+            var config = gitHubServiceConfig.Value;
+            var pathUrl = $"/repos/GSFSGroup/Zinc.Templates/commits?path=dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md&page=1&per_page=1";
+
+            var uriBuilder = new UriBuilder($"{config.BaseUrl}{pathUrl}");
+
+            var response = await httpClient.SendAsync(CreateMessage(uriBuilder.ToString())).ConfigureAwait(false);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return new GitHubLastUpdatedDateRecord();
+            }
+
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var results = JsonConvert.DeserializeObject<dynamic>(responseContent);
+
+            if (results != null)
+            {
+                var dateString = results[0].commit.committer.date.ToString();
+                var toReturn = new GitHubLastUpdatedDateRecord
+                {
+                    Date = dateString,
+                };
+                return toReturn;
+            }
+
+            return new GitHubLastUpdatedDateRecord();
+        }
+
         private HttpRequestMessage CreateMessage(string endpoint)
         {
             var config = gitHubServiceConfig.Value;

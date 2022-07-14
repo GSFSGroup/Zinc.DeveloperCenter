@@ -12,4 +12,8 @@ export class GitHubAdrService {
     public listAdrs(repoDotName: string): Observable<Page<AdrSummary>> {
         return this.backend.query<Page<AdrSummary>>(`adrs/${repoDotName}/details`);
     }
+
+    public updateDates(repoDotName: string, adrTitle: string): Observable<string> {
+        return this.backend.query<string>(`adrs/update-dates/${repoDotName}/${adrTitle}`);
+    }
 }

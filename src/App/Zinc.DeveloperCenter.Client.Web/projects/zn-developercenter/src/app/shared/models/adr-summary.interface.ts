@@ -1,7 +1,7 @@
 export interface AdrSummary {
     neatTitle: string;
     adrTitle: string;
-    lastUpdatedDate: Date;
+    lastUpdatedDate: string;
     adrNumber: number;
     numberString: string;
     downloadUrl: string;
