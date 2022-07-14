@@ -8,7 +8,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
     /// </summary>
     [Migration(2022071201)]
     [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "Migrations are named according to our standards.")]
-    public class Migration_2022071203_AdjustNullability : ForwardOnlyMigration
+    public class Migration_2022071203_AdjustColumns : ForwardOnlyMigration
     {
         private static string schemaName = "developercenter";
         private static string tableName = "architecture_decision_record";
@@ -16,8 +16,12 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
         /// <inheritdoc/>
         public override void Up()
         {
+            Rename
+                .Column("content").OnTable(tableName).InSchema(schemaName)
+                .To("content_url");
+
             Alter.Table(tableName).InSchema(schemaName)
-                .AlterColumn("content").AsAnsiString().Nullable();
+                .AddColumn("element").AsAnsiString().NotNullable();
         }
     }
 }

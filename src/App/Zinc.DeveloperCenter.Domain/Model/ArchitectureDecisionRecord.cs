@@ -15,21 +15,21 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <param name="title">The ADR title.</param>
         /// <param name="number">The ADR number.</param>
         /// <param name="lastUpdated">The ADR last updated date.</param>
-        /// <param name="content">The ADR content.</param>
+        /// <param name="contentUrl">The ADR content.</param>
         public ArchitectureDecisionRecord(
             string applicationName,
             string applicationDisplayName,
             string title,
             string number,
             string lastUpdated,
-            string content)
+            string contentUrl)
         {
             ApplicationName = applicationName;
             ApplicationDisplayName = applicationDisplayName;
             Title = title;
             Number = number;
             LastUpdated = lastUpdated;
-            Content = content;
+            ContentUrl = contentUrl;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR content.
         /// </summary>
-        public string? Content { get; protected set; }
+        public string? ContentUrl { get; protected set; }
 
         /// <inheritdoc/>
         public override string Key => $"{ApplicationName ?? string.Empty}/{Number ?? string.Empty}";

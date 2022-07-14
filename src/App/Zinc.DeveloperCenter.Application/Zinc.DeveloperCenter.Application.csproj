@@ -31,7 +31,6 @@
     <Folder Include="MapperProfiles\" />
     <Folder Include="Commands\" />
     <Folder Include="Messages\" />
-    <Folder Include="Jobs\" />
     <Folder Include="Notifications\" />
   </ItemGroup>
 

@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Model\AggregateRoots\" />
     <Folder Include="Model\Entities\" />
     <Folder Include="Model\ValueObjects\" />
   </ItemGroup>
