@@ -20,14 +20,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList
         public async Task<IEnumerable<UXAppListGetApplicationsQueryModel>> Handle(UXAppListGetApplicationsQuery request, CancellationToken cancellationToken)
         {
             var query = new UXAppListGetApplicationsDataQuery();
-            var results = await repository.Query<UXAppListGetApplicationsDataQuery.UXAppListGetApplicationsDataQueryResult>();
+            var results = await repository.Query<UXAppListGetApplicationsDataQuery.UXAppListGetApplicationsDataQueryResult>(query);
 
             return results.Select(x => new UXAppListGetApplicationsQueryModel
             {
                 ApplicationDisplayName = x.ApplicationDisplayName,
                 ApplicationName = x.ApplicationName,
                 Element = x.Element,
-            });
+            }).ToArray();
         }
     }
 }
