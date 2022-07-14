@@ -6,7 +6,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
     /// <summary>
     /// Adds initial schema for the ADR database.
     /// </summary>
-    [Migration(2022071201)]
+    [Migration(2022071203)]
     [SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "Migrations are named according to our standards.")]
     public class Migration_2022071203_AdjustColumns : ForwardOnlyMigration
     {
