@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using RedLine.Application.Queries;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList
+namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 {
     /// <summary>
     /// A query used to retrieve the list of applications.

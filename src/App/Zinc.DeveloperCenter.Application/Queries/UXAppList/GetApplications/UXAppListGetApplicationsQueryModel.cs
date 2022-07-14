@@ -1,4 +1,4 @@
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList
+namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 {
     /// <summary>
     /// The model returned by the UXAppListGetApplicationsQuery.

@@ -6,7 +6,7 @@ using MediatR;
 using RedLine.Domain.Repositories;
 using Zinc.DeveloperCenter.Data.DataQueries;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList
+namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 {
     internal class UXAppListGetApplicationsQueryHandler : IRequestHandler<UXAppListGetApplicationsQuery, IEnumerable<UXAppListGetApplicationsQueryModel>>
     {
