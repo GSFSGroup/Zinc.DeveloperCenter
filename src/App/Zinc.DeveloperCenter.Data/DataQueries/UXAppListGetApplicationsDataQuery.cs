@@ -16,7 +16,7 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         public UXAppListGetApplicationsDataQuery()
         {
             Resolve = async connection => (await connection.QueryAsync<Result>(
-                    "SELECT application_name, application_display_name, element FROM developercenter.architecture_decision_record"))
+                    "SELECT application_name, application_display_name, element FROM developercenter.architecture_decision_record").ConfigureAwait(false))
                     .AsList();
         }
 
