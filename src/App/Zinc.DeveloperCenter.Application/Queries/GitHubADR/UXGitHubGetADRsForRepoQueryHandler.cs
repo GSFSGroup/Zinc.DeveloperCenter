@@ -45,7 +45,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
                     {
                         NeatTitle = adrRecord.Name.Substring(indexSecondDash, adrRecord.Name.IndexOf('.') - indexSecondDash).Replace('-', ' '),
                         AdrTitle = adrRecord.Name,
-                        LastUpdatedDate = "x",
+                        LastUpdatedDate = string.Empty,
                         Number = Convert.ToInt16(nameParts[1]),
                         NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
                         DownloadUrl = adrRecord.DownloadUrl,

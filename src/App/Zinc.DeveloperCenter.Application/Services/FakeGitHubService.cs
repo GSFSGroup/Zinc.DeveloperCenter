@@ -46,7 +46,7 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns> A string of the date on which the Adr was most recently updated.</returns>
-        public async Task<GitHubLastUpdatedDateRecord> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
+        public async Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
         {
             var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetLastUpdatedDateResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
@@ -61,11 +61,11 @@ namespace Zinc.DeveloperCenter.Application.Services
             var json = await textStreamReader.ReadToEndAsync()
                 .ConfigureAwait(false);
 
-            var results = JsonConvert.DeserializeObject<GitHubLastUpdatedDateRecord>(json);
+            var results = JsonConvert.DeserializeObject<dynamic>(json);
 
             if (results == null)
             {
-                return new GitHubLastUpdatedDateRecord();
+                return new DateTime(2015, 12, 25);
             }
 
             return results;

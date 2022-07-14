@@ -13,7 +13,7 @@ export class GitHubAdrService {
         return this.backend.query<Page<AdrSummary>>(`adrs/${repoDotName}/details`);
     }
 
-    public updateDates(repoDotName: string, adrTitle: string): Observable<string> {
-        return this.backend.query<string>(`adrs/update-dates/${repoDotName}/${adrTitle}`);
+    public updateDates(repoDotName: string, adrTitle: string): Observable<Date> {
+        return this.backend.query<Date>(`adrs/update-dates/${repoDotName}/${adrTitle}`);
     }
 }

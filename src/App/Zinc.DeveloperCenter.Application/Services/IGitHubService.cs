@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,6 +29,6 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns> A string of the date on which the Adr was most recently updated.</returns>
-        Task<GitHubLastUpdatedDateRecord> GetAdrLastUpdatedData(string repoDotName, string adrTitle);
+        Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle);
     }
 }

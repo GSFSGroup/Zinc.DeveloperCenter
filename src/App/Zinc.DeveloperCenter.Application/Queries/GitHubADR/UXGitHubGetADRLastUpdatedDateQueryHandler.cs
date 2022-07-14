@@ -1,13 +1,13 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models;
 using Zinc.DeveloperCenter.Application.Services;
 
 namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
 {
-    internal class UXGitHubGetAdrLastUpdatedDateQueryHandler : IRequestHandler<UXGitHubGetAdrLastUpdatedDateQuery, GitHubAdrLastUpdatedDateModel>
+    internal class UXGitHubGetAdrLastUpdatedDateQueryHandler : IRequestHandler<UXGitHubGetAdrLastUpdatedDateQuery, DateTime>
     {
         private readonly IGitHubService gitHubService;
         private readonly ILogger<UXGitHubGetAdrLastUpdatedDateQueryHandler> logger;
@@ -18,7 +18,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
             this.logger = logger;
         }
 
-        public async Task<GitHubAdrLastUpdatedDateModel> Handle(UXGitHubGetAdrLastUpdatedDateQuery request, CancellationToken cancellationToken)
+        public async Task<DateTime> Handle(UXGitHubGetAdrLastUpdatedDateQuery request, CancellationToken cancellationToken)
         {
             logger.LogDebug("Invoke api Proxy to get Adr update times from GitHub.");
 
@@ -26,12 +26,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
                 .GetAdrLastUpdatedData(request.RepoDotName, request.AdrTitle)
                 .ConfigureAwait(false);
 
-            var dateToAdd = new GitHubAdrLastUpdatedDateModel
-            {
-                LastUpdatedDate = record.Date,
-            };
-
-            return dateToAdd;
+            return record;
         }
     }
 }

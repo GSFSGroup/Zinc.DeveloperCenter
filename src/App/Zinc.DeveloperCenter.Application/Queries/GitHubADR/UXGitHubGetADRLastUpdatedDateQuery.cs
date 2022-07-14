@@ -1,13 +1,12 @@
 using System;
 using RedLine.Application.Queries;
-using Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models;
 
 namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
 {
     /// <summary>
     /// Get product type query.
     /// </summary>
-    public class UXGitHubGetAdrLastUpdatedDateQuery : QueryBase<GitHubAdrLastUpdatedDateModel>
+    public class UXGitHubGetAdrLastUpdatedDateQuery : QueryBase<DateTime>
     {
         /// <summary>
         /// Initializes the query.
