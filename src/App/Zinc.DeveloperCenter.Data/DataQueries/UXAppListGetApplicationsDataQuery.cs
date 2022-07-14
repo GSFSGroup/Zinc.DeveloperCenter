@@ -1,11 +1,7 @@
-using RedLine.Data.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
+using RedLine.Data.Repositories;
 
 namespace Zinc.DeveloperCenter.Data.DataQueries
 {
