@@ -19,10 +19,10 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList
         {
         }
 
-        /// <inheritdoc/> 
+        /// <inheritdoc/>
         public override string ActivityDisplayName => "Gets a list of applications";
 
-        /// <inheritdoc/> 
+        /// <inheritdoc/>
         public override string ActivityDescription => "Retrieves the list of applications for the AppList component.";
     }
 }

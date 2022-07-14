@@ -1,6 +1,4 @@
 using RedLine.Application.Jobs;
-using System;
-
 namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 {
     /// <summary>
