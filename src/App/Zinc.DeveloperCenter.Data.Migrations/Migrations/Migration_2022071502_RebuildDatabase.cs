@@ -42,7 +42,6 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 .Table(contentTableName)
                 .InSchema(schemaName)
                 .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{contentTableName}_pk")
-                .WithColumn("content").AsAnsiString().NotNullable()
                 .WithColumn("content_search").AsCustom("tsvector").NotNullable()
                 ;
 
