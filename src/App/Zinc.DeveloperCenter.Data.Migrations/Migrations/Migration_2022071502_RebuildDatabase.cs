@@ -42,10 +42,9 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 .Table(contentTableName)
                 .InSchema(schemaName)
                 .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{contentTableName}_pk")
-                .WithColumn("content").AsAnsiString().Nullable()
+                .WithColumn("content").AsAnsiString().NotNullable()
+                .WithColumn("content_search").AsCustom("tsvector").NotNullable()
                 ;
-
-            Execute.Sql($"ALTER TABLE {schemaName}.{contentTableName} ADD COLUMN content_search tsvector GENERATED ALWAYS AS(to_tsvector('english', content)) STORED;");
 
             Execute.Sql($"CREATE INDEX {contentTableName}_search_idx ON {schemaName}.{contentTableName} USING GIN (content_search);");
         }
