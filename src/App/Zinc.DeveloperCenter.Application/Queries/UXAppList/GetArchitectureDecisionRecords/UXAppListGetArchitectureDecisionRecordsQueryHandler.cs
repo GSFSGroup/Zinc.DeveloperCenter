@@ -24,9 +24,9 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         public async Task<IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
         {
             var dataQuery = new UXAppListGetArchitectureDecisionRecordsDataQuery(request.ApplicationName);
-            var results = await repository.Query(dataQuery).ConfigureAwait(false);
+            var result = await repository.Query(dataQuery).ConfigureAwait(false);
 
-            return results.Items.Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
+            return result.Items.Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
             {
                 ApplicationName = x.ApplicationName,
                 ContentUrl = x.ContentUrl,
