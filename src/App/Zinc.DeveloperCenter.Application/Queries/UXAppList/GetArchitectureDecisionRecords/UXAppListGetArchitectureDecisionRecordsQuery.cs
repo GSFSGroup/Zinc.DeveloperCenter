@@ -5,7 +5,7 @@ using RedLine.Application.Queries;
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
 {
     /// <summary>
-    /// A query to retrieve the ADRs for a given application.
+    /// Query to retrieve the ADRs for a given application.
     /// </summary>
     public class UXAppListGetArchitectureDecisionRecordsQuery : QueryBase<IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>>
     {
