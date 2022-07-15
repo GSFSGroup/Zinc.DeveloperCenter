@@ -1,5 +1,3 @@
-using System;
-
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
 {
     /// <summary>
