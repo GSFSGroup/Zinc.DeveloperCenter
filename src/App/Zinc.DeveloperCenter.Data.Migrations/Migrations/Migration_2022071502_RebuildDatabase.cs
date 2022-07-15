@@ -22,8 +22,8 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             Create
                 .Table(tableName)
                 .InSchema(schemaName)
-                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{tableName}_pk")
-                .WithColumn("element").AsAnsiString().NotNullable()
+                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{tableName}_pk").Identity()
+                .WithColumn("application_element").AsAnsiString().NotNullable()
                 .WithColumn("application_name").AsAnsiString().NotNullable()
                 .WithColumn("application_display_name").AsAnsiString().NotNullable()
                 .WithColumn("title").AsAnsiString().NotNullable()
@@ -41,7 +41,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             Create
                 .Table(contentTableName)
                 .InSchema(schemaName)
-                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{contentTableName}_pk")
+                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{contentTableName}_pk")
                 .WithColumn("content").AsAnsiString().NotNullable()
                 .WithColumn("content_search").AsCustom("tsvector").NotNullable()
                 ;

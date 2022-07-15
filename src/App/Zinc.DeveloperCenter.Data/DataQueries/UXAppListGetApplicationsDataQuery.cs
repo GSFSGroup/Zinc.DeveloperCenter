@@ -16,8 +16,8 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         public UXAppListGetApplicationsDataQuery()
         {
             Resolve = async connection => (await connection.QueryAsync<Result>(
-                    "SELECT application_name, application_display_name, element FROM developercenter.architecture_decision_record").ConfigureAwait(false))
-                    .AsList();
+                "SELECT DISTINCT application_element, application_name, application_display_name FROM developercenter.architecture_decision_record").ConfigureAwait(false))
+                .AsList();
         }
 
         /// <summary>
@@ -25,6 +25,11 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         /// </summary>
         public class Result
         {
+            /// <summary>
+            /// The application element name.
+            /// </summary>
+            public string? ApplicationElement { get; set; }
+
             /// <summary>
             /// The application name.
             /// </summary>
@@ -34,11 +39,6 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
             /// The application display name.
             /// </summary>
             public string? ApplicationDisplayName { get; set; }
-
-            /// <summary>
-            /// The element name.
-            /// </summary>
-            public string? Element { get; set; }
         }
     }
 }

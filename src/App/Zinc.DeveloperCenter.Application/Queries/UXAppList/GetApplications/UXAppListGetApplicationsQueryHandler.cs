@@ -24,9 +24,9 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 
             return results.Select(x => new UXAppListGetApplicationsQueryModel
             {
-                ApplicationDisplayName = x.ApplicationDisplayName,
+                ApplicationElement = x.ApplicationElement,
                 ApplicationName = x.ApplicationName,
-                Element = x.Element,
+                ApplicationDisplayName = x.ApplicationDisplayName,
             }).ToArray();
         }
     }

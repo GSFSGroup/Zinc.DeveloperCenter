@@ -6,6 +6,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
     public class UXAppListGetApplicationsQueryModel
     {
         /// <summary>
+        /// The application element name.
+        /// </summary>
+        public string? ApplicationElement { get; set; }
+
+        /// <summary>
         /// The application name.
         /// </summary>
         public string? ApplicationName { get; set; }
@@ -14,10 +19,5 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
         /// The application display name.
         /// </summary>
         public string? ApplicationDisplayName { get; set; }
-
-        /// <summary>
-        /// The element name.
-        /// </summary>
-        public string? Element { get; set; }
     }
 }
