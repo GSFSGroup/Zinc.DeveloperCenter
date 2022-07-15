@@ -16,10 +16,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
-        public UXGitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName)
+        /// <param name="sortedOn"> One of three options to sort Adr list: last updated date, number, title.</param>
+        /// <param name="sortAsc"> Denotes whether to sort ascending or descending.</param>
+        public UXGitHubGetADRsForRepoQuery(string tenantId, Guid correlationId, string repoDotName, string sortedOn, bool sortAsc)
             : base(tenantId, correlationId)
         {
             this.RepoDotName = repoDotName;
+            this.SortedOn = sortedOn;
+            this.SortAsc = sortAsc;
         }
 
         /// <inheritdoc />
@@ -32,5 +36,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// The page number.
         /// </summary>
         public string RepoDotName { get; }
+
+        /// <summary>
+        /// The variable to sort on.
+        /// </summary>
+        public string SortedOn { get; }
+
+        /// <summary>
+        /// The direction to sort.
+        /// </summary>
+        public bool SortAsc { get; }
     }
 }

@@ -9,8 +9,8 @@ import { Page } from '~/models/page.interface';
 export class GitHubAdrService {
     public constructor(private backend: BackendService){}
 
-    public listAdrs(repoDotName: string): Observable<Page<AdrSummary>> {
-        return this.backend.query<Page<AdrSummary>>(`adrs/${repoDotName}/details`);
+    public listAdrs(repoDotName: string, sortedOn: string, sortAsc: boolean): Observable<Page<AdrSummary>> {
+        return this.backend.query<Page<AdrSummary>>(`adrs/${repoDotName}/details/sorted-on/${sortedOn}/sort-asc/${sortAsc}`);
     }
 
     public updateDates(repoDotName: string, adrTitle: string): Observable<Date> {

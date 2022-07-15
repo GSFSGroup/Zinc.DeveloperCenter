@@ -81,6 +81,8 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         /// Gets the list of ADRs in a GSFS GitHub group repo.
         /// </summary>
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="sortedOn"> One of three options to sort Adr list: last updated date, number, title.</param>
+        /// <param name="sortAsc"> Denotes whether to sort ascending or descending.</param>
         /// <returns>The collection of grantable activities for the user.</returns>
         /// <response code="200">The grantable activities were returned.</response>
         /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
@@ -94,15 +96,17 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         [ProducesResponseType(typeof(string), 403)]
         [ProducesResponseType(typeof(string), 500)]
         [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("{repoDotName}/details")]
-        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string repoDotName)
+        [HttpGet("{repoDotName}/details/sorted-on/{sortedOn}/sort-asc/{sortAsc}")]
+        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string repoDotName, string sortedOn, bool sortAsc)
         {
             return await this.Execute(logger, async () =>
             {
                 var request = new UXGitHubGetADRsForRepoQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    repoDotName);
+                    repoDotName,
+                    sortedOn,
+                    sortAsc);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 

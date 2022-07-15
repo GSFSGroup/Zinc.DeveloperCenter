@@ -57,7 +57,41 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
                 }
             }
 
-            List<GitHubAdrSummaryModel> sortedAdrList = adrList.OrderBy(o => o.Number).ToList();
+            List<GitHubAdrSummaryModel> sortedAdrList;
+
+            if (request.SortedOn.Equals("lud"))
+            {
+                if (request.SortAsc)
+                {
+                    sortedAdrList = adrList.OrderBy(o => o.LastUpdatedDate).ToList();
+                }
+                else
+                {
+                    sortedAdrList = adrList.OrderByDescending(o => o.LastUpdatedDate).ToList();
+                }
+            }
+            else if (request.SortedOn.Equals("number"))
+            {
+                if (request.SortAsc)
+                {
+                    sortedAdrList = adrList.OrderBy(o => o.Number).ToList();
+                }
+                else
+                {
+                    sortedAdrList = adrList.OrderByDescending(o => o.Number).ToList();
+                }
+            }
+            else
+            {
+                if (request.SortAsc)
+                {
+                    sortedAdrList = adrList.OrderBy(o => o.NeatTitle).ToList();
+                }
+                else
+                {
+                    sortedAdrList = adrList.OrderByDescending(o => o.NeatTitle).ToList();
+                }
+            }
 
             return new PageableResult<GitHubAdrSummaryModel>(sortedAdrList);
         }

@@ -2,3 +2,31 @@
   position: absolute;
   left: 300px;
 }
+
+mat-form-field {
+  display: flex;
+  flex-direction: column;
+  padding: 0px;
+}
+
+.mat-form-field-infix {
+  bottom: 2px;
+}
+
+.arrow-icon {
+  float: right;
+  margin-right: 0px !important;
+  margin-top: 10px;
+}
+
+.mat-menu-item {
+  min-width: 200px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.5em;
+}
+
+.flex-row {
+  flex-direction: row;
+}
