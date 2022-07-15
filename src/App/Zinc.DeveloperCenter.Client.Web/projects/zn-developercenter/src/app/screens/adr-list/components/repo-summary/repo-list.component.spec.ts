@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
@@ -34,7 +35,7 @@ describe('RepoListComponent', () => {
 
         await TestBed.configureTestingModule({
             declarations: [RepoListComponent],
-            imports: [HttpClientTestingModule],
+            imports: [HttpClientTestingModule, MatMenuModule],
             providers: [
                 { provide: GitHubRepoService, useValue: repoService },
                 { provide: LoadingOverlayService, useValue: loadingOverlayService }

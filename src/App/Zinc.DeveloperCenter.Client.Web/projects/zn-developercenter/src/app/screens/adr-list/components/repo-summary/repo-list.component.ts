@@ -16,8 +16,8 @@ export class RepoListComponent implements OnInit, OnDestroy {
     public repos!: Page<RepositoryListComponent>;
     public fetchedRepos = false;
 
-    public sortedOn: string = 'number';
-    public sortAsc: boolean = true;
+    public sortedOn = 'number';
+    public sortAsc = true;
 
     private destroyed$ = new Subject<void>();
 
@@ -50,36 +50,27 @@ export class RepoListComponent implements OnInit, OnDestroy {
     // or they will swap asc/desc.
 
     public sortByLastUpdatedDate(): void {
-        if (this.sortedOn === 'lud')
-        {
+        if (this.sortedOn === 'lud') {
             this.sortAsc = !this.sortAsc;
-        }
-        else
-        {
+        } else {
             this.sortAsc = true;
             this.sortedOn = 'lud';
         }
     }
 
     public sortByNumber(): void {
-        if (this.sortedOn === 'number')
-        {
+        if (this.sortedOn === 'number') {
             this.sortAsc = !this.sortAsc;
-        }
-        else
-        {
+        } else {
             this.sortAsc = true;
             this.sortedOn = 'number';
         }
     }
 
     public sortByTitle(): void {
-        if (this.sortedOn === 'title')
-        {
+        if (this.sortedOn === 'title') {
             this.sortAsc = !this.sortAsc;
-        }
-        else
-        {
+        } else {
             this.sortAsc = true;
             this.sortedOn = 'title';
         }

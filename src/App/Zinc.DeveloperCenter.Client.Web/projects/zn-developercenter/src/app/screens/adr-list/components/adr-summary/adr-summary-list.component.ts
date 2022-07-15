@@ -17,10 +17,10 @@ export class AdrSummaryComponent implements OnDestroy {
     public repoDotName!: string;
 
     @Input()
-    public sortedOn: string = 'number';
+    public sortedOn = 'number';
 
     @Input()
-    public sortAsc: boolean = true;
+    public sortAsc = true;
 
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
@@ -51,17 +51,17 @@ export class AdrSummaryComponent implements OnDestroy {
     }
 
     public updateLastUpdatedDates(): void {
-            this.adrs.items.forEach( (adr) => {
-                this.adrService.updateDates(this.repoDotName, adr.adrTitle)
-                    .subscribe(_lastUpdatedDate => {
-                        adr.lastUpdatedDate = _lastUpdatedDate;
-                        adr.lastUpdatedDateString = new Date(_lastUpdatedDate).toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
+        this.adrs.items.forEach(adr => {
+            this.adrService.updateDates(this.repoDotName, adr.adrTitle)
+                .subscribe(_lastUpdatedDate => {
+                    adr.lastUpdatedDate = _lastUpdatedDate;
+                    adr.lastUpdatedDateString = new Date(_lastUpdatedDate).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
                     });
-            });
+                });
+        });
     }
 
     public encodeUrl(val: string): string {
