@@ -21,18 +21,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
             this.logger = logger;
         }
 
-        public async Task<PageableResult<GitHubRepoModel>> HandleTest(UXGitHubGetReposQuery request, CancellationToken cancellationToken)
-        {
-            var repoList = Enumerable.Repeat(0, 20).Select(h => new GitHubRepoModel
-            {
-                DotName = "Test.TestRepo",
-                NeatName = "TestRepo",
-                Element = "Test",
-                ContentURL = "example.com",
-            }).ToArray();
-            return await Task.FromResult(new PageableResult<GitHubRepoModel>(repoList)).ConfigureAwait(false);
-        }
-
         public async Task<PageableResult<GitHubRepoModel>> Handle(UXGitHubGetReposQuery request, CancellationToken cancellationToken)
         {
             logger.LogDebug("Invoke api Proxy to get GitHub repos");

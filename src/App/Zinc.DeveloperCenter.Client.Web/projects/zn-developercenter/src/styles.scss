@@ -5,3 +5,15 @@
   display: flex;
   flex-grow: 1;
 }
+
+.empty-state-message-container {
+  background-color: inherit;
+}
+
+.empty-state-container {
+  background-color: inherit;
+  position: relative;
+  margin: 24px auto;
+  width: 300px;
+  text-align: center;
+}
