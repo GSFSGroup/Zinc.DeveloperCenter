@@ -16,6 +16,9 @@ export class RepoListComponent implements OnInit, OnDestroy {
     public repos!: Page<RepositoryListComponent>;
     public fetchedRepos = false;
 
+    public sortedOn = 'number';
+    public sortAsc = true;
+
     private destroyed$ = new Subject<void>();
 
     public constructor(
@@ -41,5 +44,35 @@ export class RepoListComponent implements OnInit, OnDestroy {
                 this.loadingService.hide();
                 this.fetchedRepos = true;
             });
+    }
+
+    // sort functions will sort Adrs on one of three options,
+    // or they will swap asc/desc.
+
+    public sortByLastUpdatedDate(): void {
+        if (this.sortedOn === 'lud') {
+            this.sortAsc = !this.sortAsc;
+        } else {
+            this.sortAsc = true;
+            this.sortedOn = 'lud';
+        }
+    }
+
+    public sortByNumber(): void {
+        if (this.sortedOn === 'number') {
+            this.sortAsc = !this.sortAsc;
+        } else {
+            this.sortAsc = true;
+            this.sortedOn = 'number';
+        }
+    }
+
+    public sortByTitle(): void {
+        if (this.sortedOn === 'title') {
+            this.sortAsc = !this.sortAsc;
+        } else {
+            this.sortAsc = true;
+            this.sortedOn = 'title';
+        }
     }
 }

@@ -1,0 +1,81 @@
+[
+    {
+        "sha": "c76c2d9c7b8f99ba7088f85f21317d0dc7e0ed78",
+        "node_id": "MDY6Q29tbWl0MjAxOTk3NTA0OmM3NmMyZDljN2I4Zjk5YmE3MDg4Zjg1ZjIxMzE3ZDBkYzdlMGVkNzg=",
+        "commit": {
+            "author": {
+                "name": "Will Hausman",
+                "email": "will.jhausman@outlook.com",
+                "date": "2021-02-12T03:18:21Z"
+            },
+            "committer": {
+                "name": "Will Hausman",
+                "email": "will.jhausman@outlook.com",
+                "date": "2021-02-12T03:18:31Z"
+            },
+            "message": "ADRs and some tweaks",
+            "tree": {
+                "sha": "605f558a4eda641810482918bdacb927aadbe3ba",
+                "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/trees/605f558a4eda641810482918bdacb927aadbe3ba"
+            },
+            "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/git/commits/c76c2d9c7b8f99ba7088f85f21317d0dc7e0ed78",
+            "comment_count": 0,
+            "verification": {
+                "verified": false,
+                "reason": "unsigned",
+                "signature": null,
+                "payload": null
+            }
+        },
+        "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/commits/c76c2d9c7b8f99ba7088f85f21317d0dc7e0ed78",
+        "html_url": "https://github.com/GSFSGroup/Zinc.Templates/commit/c76c2d9c7b8f99ba7088f85f21317d0dc7e0ed78",
+        "comments_url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/commits/c76c2d9c7b8f99ba7088f85f21317d0dc7e0ed78/comments",
+        "author": {
+            "login": "willhausman",
+            "id": 2905110,
+            "node_id": "MDQ6VXNlcjI5MDUxMTA=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/2905110?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/willhausman",
+            "html_url": "https://github.com/willhausman",
+            "followers_url": "https://api.github.com/users/willhausman/followers",
+            "following_url": "https://api.github.com/users/willhausman/following{/other_user}",
+            "gists_url": "https://api.github.com/users/willhausman/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/willhausman/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/willhausman/subscriptions",
+            "organizations_url": "https://api.github.com/users/willhausman/orgs",
+            "repos_url": "https://api.github.com/users/willhausman/repos",
+            "events_url": "https://api.github.com/users/willhausman/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/willhausman/received_events",
+            "type": "User",
+            "site_admin": false
+        },
+        "committer": {
+            "login": "willhausman",
+            "id": 2905110,
+            "node_id": "MDQ6VXNlcjI5MDUxMTA=",
+            "avatar_url": "https://avatars.githubusercontent.com/u/2905110?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/willhausman",
+            "html_url": "https://github.com/willhausman",
+            "followers_url": "https://api.github.com/users/willhausman/followers",
+            "following_url": "https://api.github.com/users/willhausman/following{/other_user}",
+            "gists_url": "https://api.github.com/users/willhausman/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/willhausman/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/willhausman/subscriptions",
+            "organizations_url": "https://api.github.com/users/willhausman/orgs",
+            "repos_url": "https://api.github.com/users/willhausman/repos",
+            "events_url": "https://api.github.com/users/willhausman/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/willhausman/received_events",
+            "type": "User",
+            "site_admin": false
+        },
+        "parents": [
+            {
+                "sha": "7f8e61dc045ebcc03c89ff691a0f605bfdded68e",
+                "url": "https://api.github.com/repos/GSFSGroup/Zinc.Templates/commits/7f8e61dc045ebcc03c89ff691a0f605bfdded68e",
+                "html_url": "https://github.com/GSFSGroup/Zinc.Templates/commit/7f8e61dc045ebcc03c89ff691a0f605bfdded68e"
+            }
+        ]
+    }
+]

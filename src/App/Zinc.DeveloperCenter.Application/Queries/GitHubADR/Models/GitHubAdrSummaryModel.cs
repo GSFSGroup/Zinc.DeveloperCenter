@@ -33,7 +33,16 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models
         /// <summary>
         /// Url provided by GitHub API to download Adr.
         /// </summary>
-        /// <value>name.</value>
         public string? DownloadUrl { get; set; }
+
+        /// <summary>
+        /// Url provided by GitHub API to view Adr on GitHub.
+        /// </summary>
+        public string? HtmlUrl { get; set; }
+
+        /// <summary>
+        /// Path to Adr in GitHub repo.
+        /// </summary>
+        public string? FilePath { get; set; }
     }
 }

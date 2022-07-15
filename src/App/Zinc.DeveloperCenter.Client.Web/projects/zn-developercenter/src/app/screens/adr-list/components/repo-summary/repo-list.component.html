@@ -2,20 +2,61 @@
     <h1>Uh oh, something is missing.</h1>
 </div>
 
-<ul class="products-list scrollable-y fill-container" id="products-list">
-    <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
-        <mat-expansion-panel (afterExpand)="appAdrSummaryList.getAdrsForCurrentRepo()">
-            <mat-expansion-panel-header class="panel-header">
-                <mat-panel-title class="panel-title">{{repo.neatName}}</mat-panel-title>
-                <mat-panel-description class="panel-header">
-                    {{repo.element}}
-                </mat-panel-description>
-            </mat-expansion-panel-header>
+<div>
+    <mat-toolbar class="toolbar flex-row">
+        <form>
+            <mat-form-field appearance="outline">
+                <mat-label>What ADR are you looking for?</mat-label>
+                <input matInput type="text" placeholder="Ex. ADR-####">
+            </mat-form-field>
+        </form>
+        <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon aria-hidden="false">sort</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate()">
+                <mat-icon *ngIf="!sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_upward</mat-icon>
+                <mat-icon *ngIf="sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_downward</mat-icon>
+                <span>
+                    Last updated date
+                </span>
+            </button>
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByNumber()">
+                <mat-icon *ngIf="!sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_upward</mat-icon>
+                <mat-icon *ngIf="sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_downward</mat-icon>
+                <span>
+                    Number
+                </span>
+            </button>
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle()">
+                <mat-icon *ngIf="!sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_upward</mat-icon>
+                <mat-icon *ngIf="sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_downward</mat-icon>
+                <span>
+                    Title
+                </span>
+            </button>
+        </mat-menu>
+    </mat-toolbar>
+    <span class="spacer"></span>
+</div>
 
-            <app-adr-summary-list #appAdrSummaryList
-                [repoDotName]="repo.dotName"
-            ></app-adr-summary-list>
+<br>
 
-        </mat-expansion-panel>
-    </mat-accordion>
-</ul>
+<div>
+    <ul class="products-list scrollable-y" id="products-list">
+        <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
+            <mat-expansion-panel (afterExpand)="appAdrSummaryList.getAdrsForCurrentRepo()">
+                <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="panel-title">{{repo.neatName}}</mat-panel-title>
+                    <mat-panel-description class="panel-header">
+                        {{repo.element}}
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <app-adr-summary-list #appAdrSummaryList [repoDotName]="repo.dotName" [sortedOn]="sortedOn"
+                    [sortAsc]="sortAsc"></app-adr-summary-list>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+    </ul>
+</div>

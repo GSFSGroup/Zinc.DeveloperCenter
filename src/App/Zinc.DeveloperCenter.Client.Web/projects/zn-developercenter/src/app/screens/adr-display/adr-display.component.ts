@@ -12,7 +12,9 @@ import { takeUntil } from 'rxjs/operators';
 export class AdrDisplayComponent implements OnInit {
     public adrTitle!: string;
     public adrNumberString!: string;
+    public repoDotName!: string;
     public downloadUrl!: string;
+    public htmlUrl!: string;
 
     private destroyed$ = new Subject<void>();
 
@@ -26,7 +28,9 @@ export class AdrDisplayComponent implements OnInit {
             this.adrTitle = params.adrTitle;
             this.adrNumberString = params.adrNumberString;
             this.adrNumberString = this.adrNumberString?.toUpperCase();
+            this.repoDotName = params.repoDotName;
             this.downloadUrl = decodeURIComponent(params.downloadUrl);
+            this.htmlUrl = decodeURIComponent(params.htmlUrl);
             this.publishCrumbs();
         });
     }
@@ -38,7 +42,7 @@ export class AdrDisplayComponent implements OnInit {
             const crumb = crumbs[crumbs.length - 1];
 
             crumb.title = this.adrTitle;
-            crumb.description = this.adrNumberString;
+            crumb.description = this.repoDotName.concat(' - ', this.adrNumberString);
 
             crumbs.forEach(c => this.sharedServices.breadCrumbs.addCrumb(c));
         }
