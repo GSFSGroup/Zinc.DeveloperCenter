@@ -46,7 +46,7 @@ export class RepoListComponent implements OnInit, OnDestroy {
             });
     }
 
-    // sort functions will sort Adrs on one of three options,
+    // sort functions will sort Adrs on one of three options: date, number, or title,
     // or they will swap asc/desc.
 
     public sortByLastUpdatedDate(): void {

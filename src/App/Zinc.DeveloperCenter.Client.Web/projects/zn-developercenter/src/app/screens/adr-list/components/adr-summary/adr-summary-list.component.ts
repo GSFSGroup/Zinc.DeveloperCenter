@@ -1,8 +1,7 @@
 import { Component, OnDestroy, Input } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
 import { AdrSummary } from '~/models/adr-summary.interface';
 import { Page } from '~/models/page.interface';
 import { GitHubAdrService } from '~/shared/services/github-adr.service';
@@ -33,7 +32,6 @@ export class AdrSummaryComponent implements OnDestroy {
 
     public constructor(
         private adrService: GitHubAdrService,
-        private loadingService: LoadingOverlayService
     ) { }
 
     public ngOnDestroy(): void {
@@ -47,6 +45,15 @@ export class AdrSummaryComponent implements OnDestroy {
             .subscribe(adrs => {
                 this.adrs = adrs;
                 this.updateLastUpdatedDates();
+                if (this.sortedOn === 'lud') {
+                    console.log("hit!");
+                    if (this.sortAsc) {
+                        console.log(adrs.items[0].lastUpdatedDate);
+                        this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());
+                    } else {
+                        this.adrs.items.sort((a, b) => new Date(b.lastUpdatedDate).getTime() - new Date(a.lastUpdatedDate).getTime());
+                    }
+                }
             });
     }
 
