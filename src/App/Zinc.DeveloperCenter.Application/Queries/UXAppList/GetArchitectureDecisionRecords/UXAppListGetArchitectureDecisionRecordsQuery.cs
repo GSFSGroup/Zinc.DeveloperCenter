@@ -28,5 +28,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// Gets the application name.
         /// </summary>
         public string ApplicationName { get; init; }
+
+        /// <inheritdoc/>
+        public override string ActivityDisplayName => "Get the ADRs for an application";
+
+        /// <inheritdoc/>
+        public override string ActivityDescription => "Retrieves the list of ADRs defined for an application.";
     }
 }
