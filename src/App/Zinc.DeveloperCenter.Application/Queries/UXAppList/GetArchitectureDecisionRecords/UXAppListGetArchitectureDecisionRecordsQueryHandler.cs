@@ -29,7 +29,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
             return result.Items.Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
             {
                 ApplicationName = x.ApplicationName,
-                ContentUrl = x.ContentUrl,
+                DownloadUrl = x.DownloadUrl,
                 LastUpdated = x.LastUpdated,
                 Number = x.Number,
                 Title = x.Title,

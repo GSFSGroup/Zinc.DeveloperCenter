@@ -27,8 +27,8 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 .WithColumn("application_name").AsAnsiString().NotNullable()
                 .WithColumn("application_display_name").AsAnsiString().NotNullable()
                 .WithColumn("title").AsAnsiString().NotNullable()
-                .WithColumn("number").AsAnsiString().NotNullable()
-                .WithColumn("content_url").AsAnsiString().NotNullable()
+                .WithColumn("number").AsInt32().NotNullable()
+                .WithColumn("download_url").AsAnsiString().NotNullable()
                 .WithColumn("last_updated").AsAnsiString().Nullable()
                 ;
 

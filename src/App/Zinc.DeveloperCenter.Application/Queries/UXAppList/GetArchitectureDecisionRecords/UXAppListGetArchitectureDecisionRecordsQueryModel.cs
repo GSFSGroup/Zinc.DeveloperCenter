@@ -26,8 +26,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         public string? LastUpdated { get; set; }
 
         /// <summary>
-        /// Gets the ADR content url.
+        /// Gets the ADR download url.
         /// </summary>
-        public string? ContentUrl { get; set; }
+        public string? DownloadUrl { get; set; }
     }
 }

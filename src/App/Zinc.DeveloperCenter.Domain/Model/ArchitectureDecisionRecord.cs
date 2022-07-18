@@ -17,7 +17,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <param name="title">The ADR title.</param>
         /// <param name="number">The ADR number.</param>
         /// <param name="lastUpdated">The ADR last updated date.</param>
-        /// <param name="contentUrl">The ADR content url.</param>
+        /// <param name="downloadUrl">The ADR content url.</param>
         /// <param name="content">The raw ADR markdown content.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
         public ArchitectureDecisionRecord(
@@ -27,7 +27,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
             string title,
             string number,
             string lastUpdated,
-            string contentUrl,
+            string downloadUrl,
             string? content = null)
         {
             ApplicationElement = applicationElement;
@@ -36,7 +36,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
             Title = title;
             Number = number;
             LastUpdated = lastUpdated;
-            ContentUrl = contentUrl;
+            DownloadUrl = downloadUrl;
 
             if (!string.IsNullOrEmpty(content))
             {
@@ -86,9 +86,9 @@ namespace Zinc.DeveloperCenter.Domain.Model
         public string? Content { get; protected set; }
 
         /// <summary>
-        /// Gets the ADR content url.
+        /// Gets the ADR download url.
         /// </summary>
-        public string? ContentUrl { get; protected set; }
+        public string? DownloadUrl { get; protected set; }
 
         /// <inheritdoc/>
         public override string Key => $"{ApplicationName}/{Number}";
@@ -143,15 +143,15 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Updates the ADR content url.
         /// </summary>
-        /// <param name="contentUrl">The content url.</param>
-        public void UpdateContentUrl(string contentUrl)
+        /// <param name="downloadUrl">The content url.</param>
+        public void UpdateDownloadUrl(string downloadUrl)
         {
-            if (string.IsNullOrWhiteSpace(contentUrl))
+            if (string.IsNullOrWhiteSpace(downloadUrl))
             {
-                throw new ArgumentException($"The {nameof(contentUrl)} argument is required.", nameof(contentUrl));
+                throw new ArgumentException($"The {nameof(downloadUrl)} argument is required.", nameof(downloadUrl));
             }
 
-            ContentUrl = contentUrl;
+            DownloadUrl = downloadUrl;
         }
     }
 }
