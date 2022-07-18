@@ -80,7 +80,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
 
             List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
 
-            return await Task.FromResult(new PageableResult<GitHubRepoModel>(sortedRepoList)).ConfigureAwait(false);
+            return new PageableResult<GitHubRepoModel>(sortedRepoList);
         }
     }
 }
