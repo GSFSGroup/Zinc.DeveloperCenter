@@ -12,7 +12,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
     {
         private static string schemaName = "developercenter";
         private static string tableName = "architecture_decision_record";
-        private static string contentTableName = "architecture_decision_record_content";
+        private static string searchTableName = "architecture_decision_record_search";
 
         /// <inheritdoc/>
         public override void Up()
@@ -39,13 +39,13 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 ;
 
             Create
-                .Table(contentTableName)
+                .Table(searchTableName)
                 .InSchema(schemaName)
-                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{contentTableName}_pk")
+                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{searchTableName}_pk")
                 .WithColumn("content_search").AsCustom("tsvector").NotNullable()
                 ;
 
-            Execute.Sql($"CREATE INDEX {contentTableName}_search_idx ON {schemaName}.{contentTableName} USING GIN (content_search);");
+            Execute.Sql($"CREATE INDEX {searchTableName}_search_idx ON {schemaName}.{searchTableName} USING GIN (content_search);");
         }
     }
 }
