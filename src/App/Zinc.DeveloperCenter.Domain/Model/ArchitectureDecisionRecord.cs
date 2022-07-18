@@ -25,7 +25,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
             string applicationName,
             string applicationDisplayName,
             string title,
-            string number,
+            int number,
             string lastUpdated,
             string downloadUrl,
             string? content = null)
@@ -73,7 +73,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public string? Number { get; protected set; }
+        public int Number { get; protected set; }
 
         /// <summary>
         /// Gets the ADR last updated date.

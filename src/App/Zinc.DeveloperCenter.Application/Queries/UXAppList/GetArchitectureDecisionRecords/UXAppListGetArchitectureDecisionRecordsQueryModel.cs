@@ -18,7 +18,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public string? Number { get; set; }
+        public int Number { get; set; }
 
         /// <summary>
         /// Gets the ADR last updated date.
