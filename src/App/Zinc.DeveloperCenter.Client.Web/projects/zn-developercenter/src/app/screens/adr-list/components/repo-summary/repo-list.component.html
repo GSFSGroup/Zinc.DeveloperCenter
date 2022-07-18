@@ -14,21 +14,21 @@
         </button>
         <mat-menu #menu="matMenu">
             <span class="menu-section-title">Sort by</span>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate()">
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate(); $event.stopPropagation()">
                 <mat-icon *ngIf="!sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_upward</mat-icon>
                 <mat-icon *ngIf="sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_downward</mat-icon>
                 <span>
                     Last updated date
                 </span>
             </button>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByNumber()">
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByNumber(); $event.stopPropagation()">
                 <mat-icon *ngIf="!sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_upward</mat-icon>
                 <mat-icon *ngIf="sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_downward</mat-icon>
                 <span>
                     Number
                 </span>
             </button>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle()">
+            <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle(); $event.stopPropagation()">
                 <mat-icon *ngIf="!sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_upward</mat-icon>
                 <mat-icon *ngIf="sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_downward</mat-icon>
                 <span>

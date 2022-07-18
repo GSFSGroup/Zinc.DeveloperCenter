@@ -52,9 +52,9 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
 
             var repoList = new List<GitHubRepoModel>();
 
-            foreach (GitHubRepoRecord repoRecord in record)
+            foreach (var repoRecord in record.Select(x => x.Name))
             {
-                var nameParts = repoRecord.Name.Split('.');
+                var nameParts = repoRecord.Split('.');
                 var element = nameParts[0];
                 var neatName = string.Join(".", nameParts.Skip(1));
 
@@ -63,16 +63,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
                 // this swaps the two strings for such repos.
                 if (string.IsNullOrEmpty(neatName))
                 {
-                    neatName = repoRecord.Name;
+                    neatName = repoRecord;
                     element = string.Empty;
                 }
 
                 var repo = new GitHubRepoModel
                 {
-                    DotName = repoRecord.Name,
+                    DotName = repoRecord,
                     NeatName = neatName,
                     Element = element,
-                    ContentURL = repoRecord.ContentsUrl,
                 };
 
                 repoList.Add(repo);

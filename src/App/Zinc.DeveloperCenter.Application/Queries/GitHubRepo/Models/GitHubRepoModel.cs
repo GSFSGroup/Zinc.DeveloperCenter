@@ -19,10 +19,5 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo.Models
         /// Element of repo. ex: Platinum.
         /// </summary>
         public string? Element { get; init; }
-
-        /// <summary>
-        /// URL to get ADR files from repo.
-        /// </summary>
-        public string? ContentURL { get; init; }
     }
 }
