@@ -8,7 +8,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
     {
         public override async Task<JobResult> Handle(RefreshAdrsJob request, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
             return JobResult.NoWorkPerformed;
         }
     }
