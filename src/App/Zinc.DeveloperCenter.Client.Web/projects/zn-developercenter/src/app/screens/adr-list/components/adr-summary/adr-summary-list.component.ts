@@ -1,4 +1,4 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnChanges, OnDestroy, Input, SimpleChange } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -21,6 +21,9 @@ export class AdrSummaryComponent implements OnDestroy {
     @Input()
     public sortAsc = true;
 
+    @Input()
+    public expanded = false;
+
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
 
@@ -39,22 +42,28 @@ export class AdrSummaryComponent implements OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getAdrsForCurrentRepo(): void {
-        this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(adrs => {
-                this.adrs = adrs;
-                this.updateLastUpdatedDates();
-                if (this.sortedOn === 'lud') {
-                    console.log("hit!");
-                    if (this.sortAsc) {
-                        console.log(adrs.items[0].lastUpdatedDate);
-                        this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());
-                    } else {
-                        this.adrs.items.sort((a, b) => new Date(b.lastUpdatedDate).getTime() - new Date(a.lastUpdatedDate).getTime());
+    public ngOnChanges(changes: { [propKey: string]: SimpleChange }): void {
+        this.getAdrsForCurrentRepo();
+    }
+
+    private getAdrsForCurrentRepo(): void {
+        if (this.expanded) {
+            this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(adrs => {
+                    this.adrs = adrs;
+                    this.updateLastUpdatedDates();
+                    if (this.sortedOn === 'lud') {
+                        console.log("hit!");
+                        if (this.sortAsc) {
+                            console.log(adrs.items[0].lastUpdatedDate);
+                            this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());
+                        } else {
+                            this.adrs.items.sort((a, b) => new Date(b.lastUpdatedDate).getTime() - new Date(a.lastUpdatedDate).getTime());
+                        }
                     }
-                }
-            });
+                });
+        }
     }
 
     public updateLastUpdatedDates(): void {

@@ -43,7 +43,8 @@
 <div>
     <ul class="adr-list fill-container scrollable-y" id="adr-list">
         <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
-            <mat-expansion-panel (afterExpand)="appAdrSummaryList.getAdrsForCurrentRepo()">
+            <mat-expansion-panel [expanded]="expanded[repo.dotName]" (opened)="repoToggle(repo.dotName, true)"
+                (closed)="repoToggle(repo.dotName, false)">
                 <mat-expansion-panel-header class="panel-header">
                     <mat-panel-title class="panel-title">{{repo.neatName}}</mat-panel-title>
                     <mat-panel-description class="panel-header">
@@ -52,7 +53,7 @@
                 </mat-expansion-panel-header>
 
                 <app-adr-summary-list #appAdrSummaryList [repoDotName]="repo.dotName" [sortedOn]="sortedOn"
-                    [sortAsc]="sortAsc"></app-adr-summary-list>
+                    [sortAsc]="sortAsc" [expanded]="expanded[repo.dotName]"></app-adr-summary-list>
 
             </mat-expansion-panel>
         </mat-accordion>
