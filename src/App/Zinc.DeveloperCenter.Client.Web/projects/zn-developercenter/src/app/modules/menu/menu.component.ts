@@ -18,6 +18,11 @@ export class MenuComponent implements OnInit {
                     htmlId: 'redline-adrs',
                     title: 'RedLine ADRs',
                     routerLink: 'developer-center/redline-adrs'
+                },
+                {
+                    htmlId: 'developer-metrics',
+                    title: 'Developer Metrics',
+                    routerLink: 'developer-center/developer-metrics'
                 }
             ]
         }
