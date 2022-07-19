@@ -25,62 +25,13 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
         {
             logger.LogDebug("Invoke api Proxy to get GitHub repos");
 
-            int page = 1;
-
-            var record = await gitHubService
-                .GetGitHubRepoData(page)
+            var repoList = await gitHubService
+                .GetGitHubRepoData()
                 .ConfigureAwait(false);
-
-            // pagination solution.
-            // GitHub can query 100 repos at a time.
-            // This repeatedly grabs 100 repos until reaching the last page.
-            while (true)
-            {
-                page++;
-
-                var recordToAppend = await gitHubService
-                    .GetGitHubRepoData(page)
-                    .ConfigureAwait(false);
-
-                record.AddRange(recordToAppend);
-
-                if (recordToAppend.Count < 100)
-                {
-                    break;
-                }
-            }
-
-            var repoList = new List<GitHubRepoModel>();
-
-            foreach (GitHubRepoRecord repoRecord in record)
-            {
-                var nameParts = repoRecord.Name.Split('.');
-                var element = nameParts[0];
-                var neatName = string.Join(".", nameParts.Skip(1));
-
-                // a few repos do not contain periods,
-                // and their neatName will be stored as their element.
-                // this swaps the two strings for such repos.
-                if (string.IsNullOrEmpty(neatName))
-                {
-                    neatName = repoRecord.Name;
-                    element = string.Empty;
-                }
-
-                var repo = new GitHubRepoModel
-                {
-                    DotName = repoRecord.Name,
-                    NeatName = neatName,
-                    Element = element,
-                    ContentURL = repoRecord.ContentsUrl,
-                };
-
-                repoList.Add(repo);
-            }
 
             List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
 
-            return await Task.FromResult(new PageableResult<GitHubRepoModel>(sortedRepoList)).ConfigureAwait(false);
+            return new PageableResult<GitHubRepoModel>(sortedRepoList);
         }
     }
 }

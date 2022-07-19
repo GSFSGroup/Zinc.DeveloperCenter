@@ -25,7 +25,7 @@ Congratulations! You have created a new micro-app using the `redline-app` templa
 
 The GitHub API requires the use of a GitHub access token to access private repositories. In pre-production, Developer Center will pull a token from AWS parameter store. This can be found in PreProd at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken. When working locally, you must first set a local environment variable. This takes two steps:
 
-*   First, grab a valid GitHub access token value. You can utilize the GitHub accesss token in the parameter store. Simple visit AWS PreProd, search for "zn-develoercenter", and view the GitHubApi/AccessToken parameter. You can also use your own token. If you do not already have one, create a new GitHub access token. The only permissions that are necessary for this token are "repo" and "gist". Note that having extra permissions is not dangerous, as the only queries made from Developer Center are of Read type.
+*   First, grab a valid GitHub access token value. You can utilize the GitHub accesss token in the parameter store. Simple visit AWS PreProd, search for "zn-developercenter", and view the GitHubApi/AccessToken parameter. You can also use your own token. If you do not already have one, create a new GitHub access token. The only permissions that are necessary for this token are "repo" and "gist". Note that having extra permissions is not dangerous, as the only queries made from Developer Center are of Read type.
 
 * Second, set an environment variable on your machine with this token value. Name the varibale "GITHUB_TOKEN".
 

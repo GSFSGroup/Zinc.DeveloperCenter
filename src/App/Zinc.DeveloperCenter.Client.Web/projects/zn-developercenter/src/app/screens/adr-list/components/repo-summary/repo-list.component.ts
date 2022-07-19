@@ -19,6 +19,8 @@ export class RepoListComponent implements OnInit, OnDestroy {
     public sortedOn = 'number';
     public sortAsc = true;
 
+    public expanded: { [repository: string]: boolean } = {};
+
     private destroyed$ = new Subject<void>();
 
     public constructor(
@@ -40,13 +42,18 @@ export class RepoListComponent implements OnInit, OnDestroy {
         this.repoService.listRepos()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(repos => {
+                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.dotName] = false);
                 this.repos = repos;
                 this.loadingService.hide();
                 this.fetchedRepos = true;
             });
     }
 
-    // sort functions will sort Adrs on one of three options,
+    public repoToggle(repoDotName: string, openedState: boolean) {
+        this.expanded[repoDotName] = openedState;
+    }
+
+    // sort functions will sort Adrs on one of three options: date, number, or title,
     // or they will swap asc/desc.
 
     public sortByLastUpdatedDate(): void {

@@ -6,6 +6,7 @@ import { HomeComponent } from '~/screens/home/home.component';
 
 import { AdrDisplayComponent } from './screens/adr-display/adr-display.component';
 import { RepoListComponent } from './screens/adr-list/components/repo-summary/repo-list.component';
+import { DeveloperMetricsHomeComponent } from './screens/metrics/developer-metrics-home.component';
 
 /**
  *   Define routes in this section. It is important that the routes of this application
@@ -98,6 +99,16 @@ export const routes: Routes = [
                         component: AdrDisplayComponent
                     }
                 ]
+            },
+            {
+                path: 'developer-metrics',
+                data: {
+                    breadcrumb: {
+                        title: 'Developer Metrics',
+                        description: 'Keep a close eye on RedLine\'s health and progress.'
+                    }
+                },
+                component: DeveloperMetricsHomeComponent
             },
             { path: '**', redirectTo: '' }
         ]

@@ -1,8 +1,7 @@
-import { Component, OnDestroy, Input } from '@angular/core';
+import { Component, OnDestroy, Input, OnChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
 import { AdrSummary } from '~/models/adr-summary.interface';
 import { Page } from '~/models/page.interface';
 import { GitHubAdrService } from '~/shared/services/github-adr.service';
@@ -12,7 +11,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
     templateUrl: './adr-summary-list.component.html',
     styleUrls: ['./adr-summary-list.component.scss']
 })
-export class AdrSummaryComponent implements OnDestroy {
+export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
     public repoDotName!: string;
 
@@ -21,6 +20,9 @@ export class AdrSummaryComponent implements OnDestroy {
 
     @Input()
     public sortAsc = true;
+
+    @Input()
+    public expanded = false;
 
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
@@ -32,8 +34,7 @@ export class AdrSummaryComponent implements OnDestroy {
     private destroyed$ = new Subject<void>();
 
     public constructor(
-        private adrService: GitHubAdrService,
-        private loadingService: LoadingOverlayService
+        private adrService: GitHubAdrService
     ) { }
 
     public ngOnDestroy(): void {
@@ -41,13 +42,27 @@ export class AdrSummaryComponent implements OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getAdrsForCurrentRepo(): void {
-        this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(adrs => {
-                this.adrs = adrs;
-                this.updateLastUpdatedDates();
-            });
+    public ngOnChanges(): void {
+        this.getAdrsForCurrentRepo();
+    }
+
+    private getAdrsForCurrentRepo(): void {
+        if (this.expanded) {
+            this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(adrs => {
+                    this.adrs = adrs;
+                    this.updateLastUpdatedDates();
+                    if (this.sortedOn === 'lud') {
+                        if (this.sortAsc) {
+                            console.log(adrs.items[0].lastUpdatedDate);
+                            this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());
+                        } else {
+                            this.adrs.items.sort((a, b) => new Date(b.lastUpdatedDate).getTime() - new Date(a.lastUpdatedDate).getTime());
+                        }
+                    }
+                });
+        }
     }
 
     public updateLastUpdatedDates(): void {
