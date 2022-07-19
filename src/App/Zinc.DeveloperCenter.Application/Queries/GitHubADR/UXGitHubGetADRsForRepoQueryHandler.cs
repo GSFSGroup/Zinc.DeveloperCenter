@@ -50,7 +50,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
                         NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
                         DownloadUrl = adrRecord.DownloadUrl,
                         HtmlUrl = adrRecord.HtmlUrl,
-                        FilePath = adrRecord.FilePath,
                     };
 
                     adrList.Add(adr);

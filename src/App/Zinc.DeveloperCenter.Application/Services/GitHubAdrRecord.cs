@@ -27,12 +27,5 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <value>download_url.</value>
         [JsonProperty("download_url")]
         public string DownloadUrl { get; set; } = default!;
-
-        /// <summary>
-        /// Url provided by GitHub API to download Adr.
-        /// </summary>
-        /// <value>path.</value>
-        [JsonProperty("path")]
-        public string FilePath { get; set; } = default!;
     }
 }
