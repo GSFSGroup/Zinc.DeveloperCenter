@@ -12,11 +12,17 @@ namespace Zinc.DeveloperCenter.Application.Services
     public interface IGitHubService
     {
         /// <summary>
-        /// Retrieves the list of Repos for the GSFS GitHub group.
+        /// Retrieves a list of all pages of Repos for the GSFS GitHub group.
+        /// </summary>
+        /// <returns> A List of GitHub Repo Records.</returns>
+        Task<List<GitHubRepoModel>> GetGitHubRepoData();
+
+        /// <summary>
+        /// Retrieves one page of Repos for the GSFS GitHub group.
         /// </summary>
         /// <param name="pageNumber"> Page number of GitHub repo query.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        Task<List<GitHubRepoModel>> GetGitHubRepoData(int pageNumber);
+        Task<List<GitHubRepoModel>> GetGitHubRepoDataPage(int pageNumber);
 
         /// <summary>
         /// Retrieves the list of Adrs for a specific Repo in the GSFS group.

@@ -14,11 +14,45 @@ namespace Zinc.DeveloperCenter.Application.Services
     public class FakeGitHubService : IGitHubService
     {
         /// <summary>
+        /// Retrieves a list of all pages of Repos for the GSFS GitHub group.
+        /// </summary>
+        /// <returns> A List of GitHub Repo Records.</returns>
+        public async Task<List<GitHubRepoModel>> GetGitHubRepoData()
+        {
+            int page = 1;
+
+            var repoList = await this
+                .GetGitHubRepoDataPage(page)
+                .ConfigureAwait(false);
+
+            // pagination solution.
+            // GitHub can query 100 repos at a time.
+            // This repeatedly grabs 100 repos until reaching the last page.
+            while (true)
+            {
+                page++;
+
+                var recordToAppend = await this
+                    .GetGitHubRepoDataPage(page)
+                    .ConfigureAwait(false);
+
+                repoList.AddRange(recordToAppend);
+
+                if (recordToAppend.Count < 100)
+                {
+                    break;
+                }
+            }
+
+            return repoList;
+        }
+
+        /// <summary>
         /// Retrieves the list of Repos for the GSFS GitHub group.
         /// </summary>
         /// <param name="pageNumber"> Page number of GitHub repo query.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        public async Task<List<GitHubRepoModel>> GetGitHubRepoData(int pageNumber)
+        public async Task<List<GitHubRepoModel>> GetGitHubRepoDataPage(int pageNumber)
         {
             var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetReposResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);

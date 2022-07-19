@@ -4,10 +4,41 @@
 
 <div>
     <mat-toolbar class="toolbar flex-row">
+        <button mat-button [matMenuTriggerFor]="searchmenu">
+            <mat-icon aria-hidden="false">image_search</mat-icon>
+        </button>
+        <mat-menu #searchmenu="matMenu">
+            <span class="menu-section-title">Search for</span>
+            <button mat-menu-item id="search-all">
+                <span>
+                    All
+                </span>
+            </button>
+            <button mat-menu-item id="search-number" >
+                <span>
+                    Number
+                </span>
+            </button>
+            <button mat-menu-item id="search-title">
+                <span>
+                    Title
+                </span>
+            </button>
+            <button mat-menu-item id="search-in-depth">
+                <span>
+                    In-Depth
+                </span>
+            </button>
+        </mat-menu>
         <form>
-            <mat-form-field appearance="outline">
-                <input matInput type="text" placeholder="What ADR are you looking for?">
-            </mat-form-field>
+            <div id="search-left">
+                <!-- Place search dropdown here -->
+            </div>
+            <div id="search-right">
+                <mat-form-field appearance="outline">
+                    <input matInput type="text" placeholder="What ADR are you looking for?">
+                </mat-form-field>
+            </div>
         </form>
         <button mat-button [matMenuTriggerFor]="menu">
             <mat-icon aria-hidden="false">sort</mat-icon>

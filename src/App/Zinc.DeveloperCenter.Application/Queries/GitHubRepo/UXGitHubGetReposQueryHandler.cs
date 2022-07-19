@@ -25,34 +25,13 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
         {
             logger.LogDebug("Invoke api Proxy to get GitHub repos");
 
-            int page = 1;
-
             var repoList = await gitHubService
-                .GetGitHubRepoData(page)
+                .GetGitHubRepoData()
                 .ConfigureAwait(false);
-
-            // pagination solution.
-            // GitHub can query 100 repos at a time.
-            // This repeatedly grabs 100 repos until reaching the last page.
-            while (true)
-            {
-                page++;
-
-                var recordToAppend = await gitHubService
-                    .GetGitHubRepoData(page)
-                    .ConfigureAwait(false);
-
-                repoList.AddRange(recordToAppend);
-
-                if (recordToAppend.Count < 100)
-                {
-                    break;
-                }
-            }
 
             List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
 
-            return await Task.FromResult(new PageableResult<GitHubRepoModel>(sortedRepoList)).ConfigureAwait(false);
+            return new PageableResult<GitHubRepoModel>(sortedRepoList);
         }
     }
 }

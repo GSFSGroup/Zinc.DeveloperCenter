@@ -32,11 +32,45 @@ namespace Zinc.DeveloperCenter.Application.Services
         }
 
         /// <summary>
+        /// Retrieves a list of all pages of Repos for the GSFS GitHub group.
+        /// </summary>
+        /// <returns> A List of GitHub Repo Records.</returns>
+        public async Task<List<GitHubRepoModel>> GetGitHubRepoData()
+        {
+            int page = 1;
+
+            var repoList = await this
+                .GetGitHubRepoDataPage(page)
+                .ConfigureAwait(false);
+
+            // pagination solution.
+            // GitHub can query 100 repos at a time.
+            // This repeatedly grabs 100 repos until reaching the last page.
+            while (true)
+            {
+                page++;
+
+                var recordToAppend = await this
+                    .GetGitHubRepoDataPage(page)
+                    .ConfigureAwait(false);
+
+                repoList.AddRange(recordToAppend);
+
+                if (recordToAppend.Count < 100)
+                {
+                    break;
+                }
+            }
+
+            return repoList;
+        }
+
+        /// <summary>
         /// Retrieves the list of Repos for the GSFS GitHub group.
         /// </summary>
         /// <param name="pageNumber"> Page number of GitHub repo query.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        public async Task<List<GitHubRepoModel>> GetGitHubRepoData(int pageNumber)
+        public async Task<List<GitHubRepoModel>> GetGitHubRepoDataPage(int pageNumber)
         {
             var config = gitHubServiceConfig.Value;
             var pathUrl = $"/orgs/GSFSGroup/repos?per_page=100&page=";
@@ -80,9 +114,7 @@ namespace Zinc.DeveloperCenter.Application.Services
                 repoList.Add(repo);
             }
 
-            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
-
-            return sortedRepoList;
+            return repoList;
         }
 
         /// <summary>
