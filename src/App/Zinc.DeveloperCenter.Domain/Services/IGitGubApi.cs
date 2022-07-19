@@ -41,6 +41,11 @@ namespace Zinc.DeveloperCenter.Domain.Services
         /// The application display name.
         /// </summary>
         public string? ApplicationDisplayName { get; set; }
+
+        /// <summary>
+        /// Gets the collection of ADRs defined in the repository.
+        /// </summary>
+        public List<ArchitectureDecisionRecordModel> ArchitectureDecisionRecords { get; set; } = new List<ArchitectureDecisionRecordModel>(32);
     }
 
     /// <summary>
@@ -70,8 +75,8 @@ namespace Zinc.DeveloperCenter.Domain.Services
         public string? LastUpdated { get; set; }
 
         /// <summary>
-        /// Gets the ADR content url.
+        /// Gets the ADR download url.
         /// </summary>
-        public string? ContentUrl { get; set; }
+        public string? DownloadUrl { get; set; }
     }
 }
