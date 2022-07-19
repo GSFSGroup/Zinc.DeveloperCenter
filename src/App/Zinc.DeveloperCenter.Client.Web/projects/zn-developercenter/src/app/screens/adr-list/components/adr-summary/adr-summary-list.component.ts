@@ -1,5 +1,5 @@
-import { Component, OnChanges, OnDestroy, Input, SimpleChange } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, OnDestroy, Input, OnChanges } from '@angular/core';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AdrSummary } from '~/models/adr-summary.interface';
@@ -11,7 +11,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
     templateUrl: './adr-summary-list.component.html',
     styleUrls: ['./adr-summary-list.component.scss']
 })
-export class AdrSummaryComponent implements OnDestroy {
+export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
     public repoDotName!: string;
 
@@ -34,7 +34,7 @@ export class AdrSummaryComponent implements OnDestroy {
     private destroyed$ = new Subject<void>();
 
     public constructor(
-        private adrService: GitHubAdrService,
+        private adrService: GitHubAdrService
     ) { }
 
     public ngOnDestroy(): void {
@@ -42,7 +42,7 @@ export class AdrSummaryComponent implements OnDestroy {
         this.destroyed$.complete();
     }
 
-    public ngOnChanges(changes: { [propKey: string]: SimpleChange }): void {
+    public ngOnChanges(): void {
         this.getAdrsForCurrentRepo();
     }
 
@@ -54,7 +54,6 @@ export class AdrSummaryComponent implements OnDestroy {
                     this.adrs = adrs;
                     this.updateLastUpdatedDates();
                     if (this.sortedOn === 'lud') {
-                        console.log("hit!");
                         if (this.sortAsc) {
                             console.log(adrs.items[0].lastUpdatedDate);
                             this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());

@@ -27,7 +27,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
 
             int page = 1;
 
-            var record = await gitHubService
+            var repoList = await gitHubService
                 .GetGitHubRepoData(page)
                 .ConfigureAwait(false);
 
@@ -42,39 +42,12 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
                     .GetGitHubRepoData(page)
                     .ConfigureAwait(false);
 
-                record.AddRange(recordToAppend);
+                repoList.AddRange(recordToAppend);
 
                 if (recordToAppend.Count < 100)
                 {
                     break;
                 }
-            }
-
-            var repoList = new List<GitHubRepoModel>();
-
-            foreach (var repoRecord in record.Select(x => x.Name))
-            {
-                var nameParts = repoRecord.Split('.');
-                var element = nameParts[0];
-                var neatName = string.Join(".", nameParts.Skip(1));
-
-                // a few repos do not contain periods,
-                // and their neatName will be stored as their element.
-                // this swaps the two strings for such repos.
-                if (string.IsNullOrEmpty(neatName))
-                {
-                    neatName = repoRecord;
-                    element = string.Empty;
-                }
-
-                var repo = new GitHubRepoModel
-                {
-                    DotName = repoRecord,
-                    NeatName = neatName,
-                    Element = element,
-                };
-
-                repoList.Add(repo);
             }
 
             List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();

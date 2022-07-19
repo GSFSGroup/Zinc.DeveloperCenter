@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
     styleUrls: ['./developer-metrics-home.component.scss']
 })
 export class DeveloperMetricsHomeComponent {
-    
+
 }

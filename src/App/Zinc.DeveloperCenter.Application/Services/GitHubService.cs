@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models;
+using Zinc.DeveloperCenter.Application.Queries.GitHubRepo.Models;
 
 namespace Zinc.DeveloperCenter.Application.Services
 {
@@ -33,7 +36,7 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// </summary>
         /// <param name="pageNumber"> Page number of GitHub repo query.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        public async Task<List<GitHubRepoRecord>> GetGitHubRepoData(int pageNumber)
+        public async Task<List<GitHubRepoModel>> GetGitHubRepoData(int pageNumber)
         {
             var config = gitHubServiceConfig.Value;
             var pathUrl = $"/orgs/GSFSGroup/repos?per_page=100&page=";
@@ -47,10 +50,39 @@ namespace Zinc.DeveloperCenter.Application.Services
 
             if (results == null || results.Count == 0)
             {
-                return new List<GitHubRepoRecord>();
+                return new List<GitHubRepoModel>();
             }
 
-            return results;
+            var repoList = new List<GitHubRepoModel>();
+
+            foreach (var repoRecord in results.Select(x => x.Name))
+            {
+                var nameParts = repoRecord.Split('.');
+                var element = nameParts[0];
+                var neatName = string.Join(".", nameParts.Skip(1));
+
+                // a few repos do not contain periods,
+                // and their neatName will be stored as their element.
+                // this swaps the two strings for such repos.
+                if (string.IsNullOrEmpty(neatName))
+                {
+                    neatName = repoRecord;
+                    element = string.Empty;
+                }
+
+                var repo = new GitHubRepoModel
+                {
+                    DotName = repoRecord,
+                    NeatName = neatName,
+                    Element = element,
+                };
+
+                repoList.Add(repo);
+            }
+
+            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
+
+            return sortedRepoList;
         }
 
         /// <summary>
@@ -58,8 +90,9 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// </summary>
         /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
-        public async Task<List<GitHubAdrRecord>> GetGitHubAdrData(string repoDotName)
+        public async Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string repoDotName)
         {
+            // getting adr data from GitHub
             var config = gitHubServiceConfig.Value;
             var pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/docs/App?per_page=60";
 
@@ -74,7 +107,7 @@ namespace Zinc.DeveloperCenter.Application.Services
 
             if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return new List<GitHubAdrRecord>();
+                return new List<GitHubAdrSummaryModel>();
             }
 
             var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -83,10 +116,37 @@ namespace Zinc.DeveloperCenter.Application.Services
 
             if (results == null || results.Count == 0)
             {
-                return new List<GitHubAdrRecord>();
+                return new List<GitHubAdrSummaryModel>();
             }
 
-            return results;
+            // converting adr data to a list of adr summary models
+            var adrsToReturn = new List<GitHubAdrSummaryModel>();
+
+            foreach (var adrRecord in results)
+            {
+                // add a file to the list if it is an adr.
+                // an adr will begin with "adr" and end with ".md" or ".markdown".
+                if ((adrRecord.Name.Length > 4 && adrRecord.Name.Substring(0, 3) == "adr") && (adrRecord.Name.Substring(adrRecord.Name.Length - 3) == ".md" || (adrRecord.Name.Length > 10 && adrRecord.Name.Substring(adrRecord.Name.Length - 9) == ".markdown")))
+                {
+                    int indexSecondDash = adrRecord.Name.IndexOf('-', adrRecord.Name.IndexOf('-') + 1);
+                    var nameParts = adrRecord.Name.Split('-');
+
+                    var adr = new GitHubAdrSummaryModel
+                    {
+                        NeatTitle = adrRecord.Name.Substring(indexSecondDash, adrRecord.Name.IndexOf('.') - indexSecondDash).Replace('-', ' '),
+                        AdrTitle = adrRecord.Name,
+                        LastUpdatedDate = string.Empty,
+                        Number = Convert.ToInt16(nameParts[1]),
+                        NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
+                        DownloadUrl = adrRecord.DownloadUrl,
+                        HtmlUrl = adrRecord.HtmlUrl,
+                    };
+
+                    adrsToReturn.Add(adr);
+                }
+            }
+
+            return adrsToReturn;
         }
 
         /// <summary>
