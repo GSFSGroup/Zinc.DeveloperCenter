@@ -16,7 +16,8 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
         public RefreshAdrsJob(string tenantId, Guid correlationId)
             : base(tenantId, correlationId)
         {
-            TransactionTimeout = TimeSpan.FromMinutes(5);
+            // We will handle our own transactions.
+            TransactionBehavior = System.Transactions.TransactionScopeOption.Suppress;
         }
 
         /// <inheritdoc/>
