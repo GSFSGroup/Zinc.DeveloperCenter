@@ -13,12 +13,12 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 {
     internal class RefreshAdrsJobHandler : JobHandlerBase<RefreshAdrsJob>
     {
-        private readonly IGitGubApiService gitHub;
+        private readonly IGitHubApiService gitHub;
         private readonly IArchitectureDecisionRecordRepository repository;
         private readonly ILogger<RefreshAdrsJobHandler> logger;
 
         public RefreshAdrsJobHandler(
-            IGitGubApiService gitHub,
+            IGitHubApiService gitHub,
             IArchitectureDecisionRecordRepository repository,
             ILogger<RefreshAdrsJobHandler> logger)
         {

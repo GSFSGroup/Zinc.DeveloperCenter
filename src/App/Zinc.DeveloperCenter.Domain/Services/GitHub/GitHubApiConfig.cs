@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
-    /// The configuration settings needed by the <see cref="IGitGubApiService"/>.
+    /// The configuration settings needed by the <see cref="IGitHubApiService"/>.
     /// </summary>
     public class GitHubApiConfig
     {

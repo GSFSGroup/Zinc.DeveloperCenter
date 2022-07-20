@@ -6,7 +6,7 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     /// <summary>
     /// The interface that is used to interact with GitHub.
     /// </summary>
-    public interface IGitGubApiService
+    public interface IGitHubApiService
     {
         /// <summary>
         /// Gets the architecture decision records defined in a repository.

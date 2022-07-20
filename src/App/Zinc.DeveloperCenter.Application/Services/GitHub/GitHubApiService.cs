@@ -6,9 +6,9 @@ using Zinc.DeveloperCenter.Domain.Services.GitHub;
 namespace Zinc.DeveloperCenter.Application.Services.GitHub
 {
     /// <summary>
-    /// Provides an implementation of the <see cref="IGitGubApiService"/>.
+    /// Provides an implementation of the <see cref="IGitHubApiService"/>.
     /// </summary>
-    public class GitGubApiService : IGitGubApiService
+    public class GitHubApiService : IGitHubApiService
     {
         /// <inheritdoc/>
         public Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string repositoryName, bool includeContent = false)
