@@ -15,10 +15,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
     internal class UXAppListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAppListGetArchitectureDecisionRecordsQuery, IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
+        private readonly IMapper mapper;
 
-        public UXAppListGetArchitectureDecisionRecordsQueryHandler(IArchitectureDecisionRecordRepository repository)
+        public UXAppListGetArchitectureDecisionRecordsQueryHandler(
+            IArchitectureDecisionRecordRepository repository,
+            IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
@@ -26,14 +30,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
             var dataQuery = new UXAppListGetArchitectureDecisionRecordsDataQuery(request.ApplicationName);
             var result = await repository.Query(dataQuery).ConfigureAwait(false);
 
-            return result.Items.Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
-            {
-                ApplicationName = x.ApplicationName,
-                DownloadUrl = x.DownloadUrl,
-                LastUpdated = x.LastUpdated,
-                Number = x.Number,
-                Title = x.Title,
-            }).ToArray();
+            return result.Items.Select(x => mapper.Map<UXAppListGetArchitectureDecisionRecordsQueryModel>(x)).ToArray()!;
         }
     }
 }

@@ -31,6 +31,11 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         public string? DownloadUrl { get; set; }
 
         /// <summary>
+        /// Gets the url used to view the ADR on GitHub.
+        /// </summary>
+        public string? HtmlUrl { get; set; }
+
+        /// <summary>
         /// Gets the ADR markdown content.
         /// </summary>
         public string? Content { get; set; }

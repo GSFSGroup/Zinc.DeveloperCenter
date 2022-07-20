@@ -18,8 +18,8 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <param name="number">The ADR number.</param>
         /// <param name="lastUpdated">The ADR last updated date.</param>
         /// <param name="downloadUrl">The ADR content url.</param>
+        /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
         /// <param name="content">The raw ADR markdown content.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
         public ArchitectureDecisionRecord(
             string applicationElement,
             string applicationName,
@@ -28,7 +28,8 @@ namespace Zinc.DeveloperCenter.Domain.Model
             int number,
             string lastUpdated,
             string downloadUrl,
-            string? content = null)
+            string htmlUrl,
+            string? content)
         {
             ApplicationElement = applicationElement;
             ApplicationName = applicationName;
@@ -37,12 +38,45 @@ namespace Zinc.DeveloperCenter.Domain.Model
             Number = number;
             LastUpdated = lastUpdated;
             DownloadUrl = downloadUrl;
+            HtmlUrl = htmlUrl;
 
-            if (!string.IsNullOrEmpty(content))
+            if (content?.Length > 0)
             {
                 Content = content;
             }
         }
+
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="applicationElement">The application element name.</param>
+        /// <param name="applicationName">The application name.</param>
+        /// <param name="applicationDisplayName">The application display name.</param>
+        /// <param name="title">The ADR title.</param>
+        /// <param name="number">The ADR number.</param>
+        /// <param name="lastUpdated">The ADR last updated date.</param>
+        /// <param name="downloadUrl">The ADR content url.</param>
+        /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
+        public ArchitectureDecisionRecord(
+            string applicationElement,
+            string applicationName,
+            string applicationDisplayName,
+            string title,
+            int number,
+            string lastUpdated,
+            string downloadUrl,
+            string htmlUrl)
+            : this(
+                  applicationElement,
+                  applicationName,
+                  applicationDisplayName,
+                  title,
+                  number,
+                  lastUpdated,
+                  downloadUrl,
+                  htmlUrl,
+                  content: null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -89,6 +123,11 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// Gets the ADR download url.
         /// </summary>
         public string? DownloadUrl { get; protected set; }
+
+        /// <summary>
+        /// Gets the url used to view the ADR on GitHub.
+        /// </summary>
+        public string? HtmlUrl { get; protected set; }
 
         /// <inheritdoc/>
         public override string Key => $"{ApplicationName}/{Number}";
@@ -152,6 +191,20 @@ namespace Zinc.DeveloperCenter.Domain.Model
             }
 
             DownloadUrl = downloadUrl;
+        }
+
+        /// <summary>
+        /// Updates the ADR content url.
+        /// </summary>
+        /// <param name="htmlUrl">The content url.</param>
+        public void UpdateHtmlUrl(string htmlUrl)
+        {
+            if (string.IsNullOrWhiteSpace(htmlUrl))
+            {
+                throw new ArgumentException($"The {nameof(htmlUrl)} argument is required.", nameof(htmlUrl));
+            }
+
+            HtmlUrl = htmlUrl;
         }
     }
 }
