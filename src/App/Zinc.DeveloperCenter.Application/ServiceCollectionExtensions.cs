@@ -29,6 +29,7 @@ namespace Zinc.DeveloperCenter.Application
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
                 .AddApiServices(configuration)
+                .AddScoped<IApplicationRepository, ApplicationRepository>()
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
                 .AddScoped<IGitHubApiService, GitHubApiService>()
                 ;
