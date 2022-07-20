@@ -18,6 +18,7 @@ export class RepoListComponent implements OnInit, OnDestroy {
 
     public sortedOn = 'number';
     public sortAsc = true;
+    public searchingFor = 'all';
 
     public expanded: { [repository: string]: boolean } = {};
 
@@ -81,5 +82,12 @@ export class RepoListComponent implements OnInit, OnDestroy {
             this.sortAsc = true;
             this.sortedOn = 'title';
         }
+    }
+
+    // search functions will search Adrs on one of four options:
+    // title, number, text body, or all.
+
+    public searchFor(searchForThis: string): void {
+        this.searchingFor = searchForThis;
     }
 }

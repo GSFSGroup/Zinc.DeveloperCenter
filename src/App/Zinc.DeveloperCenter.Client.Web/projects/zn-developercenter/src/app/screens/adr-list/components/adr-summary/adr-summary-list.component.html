@@ -10,6 +10,10 @@
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
                 {{adr.neatTitle}}
+                <button>
+                    <mat-icon *ngIf="!adr.favorited">star_border</mat-icon>
+                    <mat-icon *ngIf="adr.favorited">star</mat-icon>
+                </button>
             </h3>
             <span class="item-detail margin-bottom-12">
                 {{adr.numberString}}

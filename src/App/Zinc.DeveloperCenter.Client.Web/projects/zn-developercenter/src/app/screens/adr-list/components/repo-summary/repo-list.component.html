@@ -9,22 +9,26 @@
         </button>
         <mat-menu #searchmenu="matMenu">
             <span class="menu-section-title">Search for</span>
-            <button mat-menu-item id="search-all">
+            <button mat-menu-item id="search-all" (click)="searchFor('all')">
+                <mat-icon *ngIf="searchingFor === 'all'" class="arrow-icon">search</mat-icon>
                 <span>
                     All
                 </span>
             </button>
-            <button mat-menu-item id="search-number" >
+            <button mat-menu-item id="search-number" (click)="searchFor('number')">
+                <mat-icon *ngIf="searchingFor === 'number'" class="arrow-icon">search</mat-icon>
                 <span>
                     Number
                 </span>
             </button>
-            <button mat-menu-item id="search-title">
+            <button mat-menu-item id="search-title" (click)="searchFor('title')">
+                <mat-icon *ngIf="searchingFor === 'title'" class="arrow-icon">search</mat-icon>
                 <span>
                     Title
                 </span>
             </button>
-            <button mat-menu-item id="search-in-depth">
+            <button mat-menu-item id="search-in-depth" (click)="searchFor('indepth')">
+                <mat-icon *ngIf="searchingFor === 'indepth'" class="arrow-icon">search</mat-icon>
                 <span>
                     In-Depth
                 </span>
