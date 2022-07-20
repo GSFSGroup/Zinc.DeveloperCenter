@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
 using Zinc.DeveloperCenter.Application.Services.GitHub;
 using Zinc.DeveloperCenter.Data.Repositories;
