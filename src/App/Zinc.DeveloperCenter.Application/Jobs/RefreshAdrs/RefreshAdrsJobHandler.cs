@@ -38,7 +38,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             foreach (var application in applications)
             {
-                var adrs = await GetArchitectureDecisionRecords(application.ApplicationName).ConfigureAwait(false);
+                var adrs = await GetArchitectureDecisionRecords(application.ApplicationName ?? string.Empty).ConfigureAwait(false);
 
                 if (adrs.Any())
                 {
