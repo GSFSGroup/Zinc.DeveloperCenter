@@ -11,8 +11,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
     public class GitHubApiService : IGitHubApiService
     {
         /// <inheritdoc/>
-        public Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string repositoryName, bool includeContent = false)
+        public Task<string> DownloadArchitectureDecisionRecord(string downloadUrl)
         {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string repositoryName)
+        {
+            // TODO make the two calls to get the ADRs + the lastUpdated date
             throw new NotImplementedException();
         }
 

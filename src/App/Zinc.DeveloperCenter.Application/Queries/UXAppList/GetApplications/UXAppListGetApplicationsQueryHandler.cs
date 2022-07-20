@@ -1,33 +1,36 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
-using RedLine.Domain.Repositories;
+using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
+using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 {
-    internal class UXAppListGetApplicationsQueryHandler : IRequestHandler<UXAppListGetApplicationsQuery, IEnumerable<UXAppListGetApplicationsQueryModel>>
+    internal class UXAppListGetApplicationsQueryHandler : IRequestHandler<UXAppListGetApplicationsQuery, PageableResult<UXAppListGetApplicationsQueryModel>>
     {
-        private readonly IRepository repository;
+        private readonly IApplicationRepository repository;
+        private readonly IMapper mapper;
 
-        public UXAppListGetApplicationsQueryHandler(IRepository repository)
+        public UXAppListGetApplicationsQueryHandler(
+            IApplicationRepository repository,
+            IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<UXAppListGetApplicationsQueryModel>> Handle(UXAppListGetApplicationsQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<UXAppListGetApplicationsQueryModel>> Handle(UXAppListGetApplicationsQuery request, CancellationToken cancellationToken)
         {
-            var query = new UXAppListGetApplicationsDataQuery();
-            var results = await repository.Query(query).ConfigureAwait(false);
+            var dataQuery = new GetApplicationsDataQuery();
 
-            return results.Select(x => new UXAppListGetApplicationsQueryModel
-            {
-                ApplicationElement = x.ApplicationElement,
-                ApplicationName = x.ApplicationName,
-                ApplicationDisplayName = x.ApplicationDisplayName,
-            }).ToArray();
+            var items = (await repository.Query(dataQuery).ConfigureAwait(false))
+                .Items
+                .Select(x => mapper.Map<UXAppListGetApplicationsQueryModel>(x));
+
+            return new PageableResult<UXAppListGetApplicationsQueryModel>(items);
         }
     }
 }

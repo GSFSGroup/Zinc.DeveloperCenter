@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using RedLine.Application.Queries;
+using RedLine.Domain.Model;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
 {
     /// <summary>
     /// Query to retrieve the ADRs for a given application.
     /// </summary>
-    public class UXAppListGetArchitectureDecisionRecordsQuery : QueryBase<IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>>
+    public class UXAppListGetArchitectureDecisionRecordsQuery : QueryBase<PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>>
     {
         /// <summary>
         /// Initializes a new instance of the class.

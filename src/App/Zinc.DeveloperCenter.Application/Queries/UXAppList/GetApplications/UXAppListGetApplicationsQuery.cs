@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using RedLine.Application.Queries;
+using RedLine.Domain.Model;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 {
     /// <summary>
     /// A query used to retrieve the list of applications.
     /// </summary>
-    public class UXAppListGetApplicationsQuery : QueryBase<IEnumerable<UXAppListGetApplicationsQueryModel>>
+    public class UXAppListGetApplicationsQuery : QueryBase<PageableResult<UXAppListGetApplicationsQueryModel>>
     {
         /// <summary>
         /// Initializes a new instance of the class.

@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using RedLine.Domain.Repositories;
+using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
@@ -13,7 +12,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
     /// <summary>
     /// A handler for <see cref="UXAppListGetArchitectureDecisionRecordsQuery"/>.
     /// </summary>
-    internal class UXAppListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAppListGetArchitectureDecisionRecordsQuery, IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>>
+    internal class UXAppListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAppListGetArchitectureDecisionRecordsQuery, PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
         private readonly IMapper mapper;
@@ -26,12 +25,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = new UXAppListGetArchitectureDecisionRecordsDataQuery(request.ApplicationName);
-            var result = await repository.Query(dataQuery).ConfigureAwait(false);
+            var dataQuery = new GetArchitectureDecisionRecordsDataQuery(request.ApplicationName);
 
-            return result.Items.Select(x => mapper.Map<UXAppListGetArchitectureDecisionRecordsQueryModel>(x)).ToArray()!;
+            var items = (await repository.Query(dataQuery).ConfigureAwait(false))
+                .Items
+                .Select(x => mapper.Map<UXAppListGetArchitectureDecisionRecordsQueryModel>(x));
+
+            return new PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>(items);
         }
     }
 }

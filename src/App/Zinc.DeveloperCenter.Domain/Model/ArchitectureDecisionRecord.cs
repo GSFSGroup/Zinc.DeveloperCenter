@@ -11,29 +11,23 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="applicationElement">The application element name.</param>
         /// <param name="applicationName">The application name.</param>
-        /// <param name="applicationDisplayName">The application display name.</param>
-        /// <param name="title">The ADR title.</param>
         /// <param name="number">The ADR number.</param>
+        /// <param name="title">The ADR title.</param>
         /// <param name="lastUpdated">The ADR last updated date.</param>
         /// <param name="downloadUrl">The ADR content url.</param>
         /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
         /// <param name="content">The raw ADR markdown content.</param>
         public ArchitectureDecisionRecord(
-            string applicationElement,
             string applicationName,
-            string applicationDisplayName,
-            string title,
             int number,
+            string title,
             string lastUpdated,
             string downloadUrl,
             string htmlUrl,
             string? content)
         {
-            ApplicationElement = applicationElement;
             ApplicationName = applicationName;
-            ApplicationDisplayName = applicationDisplayName;
             Title = title;
             Number = number;
             LastUpdated = lastUpdated;
@@ -49,29 +43,23 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="applicationElement">The application element name.</param>
         /// <param name="applicationName">The application name.</param>
-        /// <param name="applicationDisplayName">The application display name.</param>
-        /// <param name="title">The ADR title.</param>
         /// <param name="number">The ADR number.</param>
+        /// <param name="title">The ADR title.</param>
         /// <param name="lastUpdated">The ADR last updated date.</param>
         /// <param name="downloadUrl">The ADR content url.</param>
         /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
         public ArchitectureDecisionRecord(
-            string applicationElement,
             string applicationName,
-            string applicationDisplayName,
-            string title,
             int number,
+            string title,
             string lastUpdated,
             string downloadUrl,
             string htmlUrl)
             : this(
-                  applicationElement,
                   applicationName,
-                  applicationDisplayName,
-                  title,
                   number,
+                  title,
                   lastUpdated,
                   downloadUrl,
                   htmlUrl,
@@ -85,19 +73,9 @@ namespace Zinc.DeveloperCenter.Domain.Model
         { }
 
         /// <summary>
-        /// Gets the application element name.
-        /// </summary>
-        public string? ApplicationElement { get; protected set; }
-
-        /// <summary>
         /// Gets the application name where the ADR is defined.
         /// </summary>
         public string? ApplicationName { get; protected set; }
-
-        /// <summary>
-        /// Gets the application display name where the ADR is defined.
-        /// </summary>
-        public string? ApplicationDisplayName { get; protected set; }
 
         /// <summary>
         /// Gets the ADR title.

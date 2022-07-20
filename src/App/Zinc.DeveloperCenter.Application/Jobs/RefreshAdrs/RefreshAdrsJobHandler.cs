@@ -17,64 +17,46 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
     public class RefreshAdrsJobHandler : JobHandlerBase<RefreshAdrsJob>
     {
         private readonly IGitHubApiService gitHubApi;
-        private readonly IArchitectureDecisionRecordRepository repository;
+        private readonly IApplicationRepository applicationRepository;
+        private readonly IArchitectureDecisionRecordRepository adrRepository;
         private readonly ILogger<RefreshAdrsJobHandler> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="gitHubApi">The <see cref="IGitHubApiService"/>.</param>
-        /// <param name="repository">The <see cref="IArchitectureDecisionRecordRepository"/>.</param>
+        /// <param name="applicationRepository">The <see cref="IApplicationRepository"/>.</param>
+        /// <param name="adrRepository">The <see cref="IArchitectureDecisionRecordRepository"/>.</param>
         /// <param name="logger">A diagnostic logger.</param>
         public RefreshAdrsJobHandler(
             IGitHubApiService gitHubApi,
-            IArchitectureDecisionRecordRepository repository,
+            IApplicationRepository applicationRepository,
+            IArchitectureDecisionRecordRepository adrRepository,
             ILogger<RefreshAdrsJobHandler> logger)
         {
             this.gitHubApi = gitHubApi;
-            this.repository = repository;
+            this.applicationRepository = applicationRepository;
+            this.adrRepository = adrRepository;
             this.logger = logger;
         }
 
+        /// <inheritdoc/>
         public override async Task<JobResult> Handle(RefreshAdrsJob request, CancellationToken cancellationToken)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
             logger.LogInformation("BEGIN {JobName}...", nameof(RefreshAdrsJob));
 
-            var applications = await GetRepositories().ConfigureAwait(false);
-            var aggregateRoots = new List<ArchitectureDecisionRecord>(256);
+            var applications = await UpdateAndReturnApplications().ConfigureAwait(false);
 
-            foreach (var application in applications)
+            int totalUpdates = applications.Count(x => x.WasUpdated);
+
+            foreach (var applicationName in applications.Select(x => x.ApplicationName))
             {
-                var adrs = await GetArchitectureDecisionRecords(application.ApplicationName!).ConfigureAwait(false);
-
-                if (adrs.Any())
-                {
-                    foreach (var adr in adrs)
-                    {
-                        aggregateRoots.Add(new ArchitectureDecisionRecord(
-                            application.ApplicationElement!,
-                            application.ApplicationName!,
-                            application.ApplicationDisplayName!,
-                            adr.Title!,
-                            adr.Number,
-                            adr.LastUpdated!,
-                            adr.DownloadUrl!,
-                            adr.HtmlUrl!,
-                            adr.Content));
-                    }
-                }
+                totalUpdates += await UpdateArchitectureDecisionRecords(applicationName).ConfigureAwait(false);
             }
 
-            int totalUpdates = 0;
-
-            foreach (var aggregate in aggregateRoots)
-            {
-                totalUpdates += await repository.Save(aggregate).ConfigureAwait(false);
-            }
-
-            logger.LogInformation("END {JobName} [Elapsed]", nameof(RefreshAdrsJob), timer.Elapsed.ToString());
+            logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsJob), timer.Elapsed.ToString(), totalUpdates);
 
             if (totalUpdates > 0)
             {
@@ -84,30 +66,82 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             return JobResult.NoWorkPerformed;
         }
 
-        private async Task<IEnumerable<GitHubRepositoryModel>> GetRepositories()
+        private async Task<IEnumerable<(string ApplicationName, bool WasUpdated)>> UpdateAndReturnApplications()
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(GetRepositories), string.Empty);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateAndReturnApplications), string.Empty);
 
-            var results = await gitHubApi.GetRepositories().ConfigureAwait(false);
+            var results = new List<(string ApplicationName, bool WasUpdated)>(256);
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(GetRepositories), string.Empty, timer.Elapsed.ToString());
+            var repositories = await gitHubApi.GetRepositories().ConfigureAwait(false);
+
+            foreach (var applicationName in repositories.Select(x => x.ApplicationName))
+            {
+                bool wasUpdated = false;
+                var exists = await applicationRepository.Exists(applicationName).ConfigureAwait(false);
+
+                if (!exists)
+                {
+                    await applicationRepository.Save(new Domain.Model.Application(applicationName!)).ConfigureAwait(false);
+                    wasUpdated = true;
+                }
+
+                results.Add((ApplicationName: applicationName!, WasUpdated: wasUpdated));
+            }
+
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), string.Empty, timer.Elapsed.ToString());
 
             return results;
         }
 
-        private async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string applicationName)
+        private async Task<int> UpdateArchitectureDecisionRecords(string applicationName)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(GetArchitectureDecisionRecords), applicationName);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), applicationName);
 
-            var results = await gitHubApi.GetArchitectureDecisionRecords(applicationName, true).ConfigureAwait(false);
+            var totalUpdates = 0;
+            var apiResults = await gitHubApi.GetArchitectureDecisionRecords(applicationName).ConfigureAwait(false);
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(GetArchitectureDecisionRecords), applicationName, timer.Elapsed.ToString());
+            foreach (var apiResult in apiResults)
+            {
+                var adr = await adrRepository.Read($"{apiResult.ApplicationName}/{apiResult.Number}").ConfigureAwait(false);
 
-            return results;
+                if (adr == null)
+                {
+                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
+
+                    adr = new ArchitectureDecisionRecord(
+                        apiResult.ApplicationName!,
+                        apiResult.Number,
+                        apiResult.Title!,
+                        apiResult.LastUpdated!,
+                        apiResult.DownloadUrl!,
+                        apiResult.HtmlUrl!,
+                        content);
+
+                    await adrRepository.Save(adr).ConfigureAwait(false);
+                    totalUpdates++;
+                }
+                else if (adr.LastUpdated != apiResult.LastUpdated)
+                {
+                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
+
+                    adr.UpdateContent(content);
+                    adr.UpdateDownloadUrl(apiResult.DownloadUrl!);
+                    adr.UpdateHtmlUrl(apiResult.HtmlUrl!);
+                    adr.UpdateLastUpdated(apiResult.LastUpdated!);
+                    adr.UpdateTitle(apiResult.Title!);
+
+                    await adrRepository.Save(adr).ConfigureAwait(false);
+                    totalUpdates++;
+                }
+            }
+
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), applicationName, timer.Elapsed.ToString());
+
+            return totalUpdates;
         }
     }
 }

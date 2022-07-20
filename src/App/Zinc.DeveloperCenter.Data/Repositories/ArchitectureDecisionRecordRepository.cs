@@ -2,7 +2,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using RedLine.Data.Exceptions;
 using RedLine.Data.Outbox;
 using RedLine.Data.Repositories;
 using RedLine.Domain;
@@ -32,28 +31,19 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         }
 
         /// <inheritdoc/>
-        protected override async Task<ArchitectureDecisionRecord> ReadInternal(string key)
+        protected override async Task<bool> ExistsInternal(string key)
         {
-            var components = key.Split('/');
-            var applicationName = components[0];
-            var number = components[1];
+            var keyParts = key.Split('/');
+            var applicationName = keyParts[0];
+            var number = int.Parse(keyParts[1]);
 
-            var sql = @"
-SELECT *
-FROM developercenter.architecture_decision_record
-WHERE application_name = @applicationName
-AND   number = @number
-";
             var args = new
             {
                 applicationName,
                 number,
             };
 
-            var result = (await connection.QueryAsync<ArchitectureDecisionRecord>(sql, args).ConfigureAwait(false))
-                .SingleOrDefault();
-
-            return result ?? throw new ResourceNotFoundException(nameof(ArchitectureDecisionRecord), key);
+            return await connection.ExecuteScalarAsync<bool>(Sql.Exists, args).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -64,6 +54,113 @@ AND   number = @number
             return new PageableResult<ArchitectureDecisionRecord>(results);
         }
 
-        // TODO - Exists, Save
+        /// <inheritdoc/>
+        protected override async Task<ArchitectureDecisionRecord> ReadInternal(string key)
+        {
+            var keyParts = key.Split('/');
+            var applicationName = keyParts[0];
+            var number = int.Parse(keyParts[1]);
+
+            var args = new
+            {
+                applicationName,
+                number,
+            };
+
+            var result = (await connection.QueryAsync<ArchitectureDecisionRecord>(Sql.Read, args)
+                .ConfigureAwait(false))
+                .SingleOrDefault();
+
+            return result!;
+        }
+
+        /// <inheritdoc/>
+        protected override async Task<int> SaveInternal(ArchitectureDecisionRecord aggregate, string etag, string newETag)
+        {
+            var args = new
+            {
+                aggregate.ApplicationName,
+                aggregate.Number,
+                aggregate.Title,
+                aggregate.DownloadUrl,
+                aggregate.HtmlUrl,
+                aggregate.LastUpdated,
+            };
+
+            var sid = await connection.ExecuteScalarAsync<int>(Sql.Save, args).ConfigureAwait(false);
+
+            if (aggregate.Content?.Length > 0)
+            {
+                await connection.ExecuteAsync(
+                    Sql.SaveSearch,
+                    new { Sid = sid, Content = aggregate.Content }).ConfigureAwait(false);
+            }
+
+            return 1;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "By design.")]
+        internal static class Sql
+        {
+            private static readonly string TableName = "developercenter.architecture_decision_record";
+
+            internal static readonly string Exists = $@"
+SELECT EXISTS (
+    SELECT 1 FROM {TableName}
+    WHERE application_name = @applicationName
+    AND   number = @number
+);";
+
+            internal static readonly string Read = $@"
+SELECT *
+FROM {TableName}
+WHERE application_name = @applicationName
+AND   number = @number
+;";
+
+            internal static readonly string ReadAllForApplication = $@"
+SELECT *
+FROM {TableName}
+WHERE application_name = @applicationName
+;";
+
+            internal static readonly string Save = $@"
+INSERT INTO {TableName} (
+    application_name,
+    number,
+    title,
+    download_url,
+    html_url,
+    last_updated
+) VALUES (
+    @ApplicationName,
+    @Number,
+    @Title,
+    @DownloadUrl,
+    @HtmlUrl,
+    @LastUpdated
+)
+ON CONFLICT ON CONSTRAINT {TableName}_key
+DO UPDATE SET
+    title = EXCLUDED.title,
+    download_url = EXCLUDED.download_url,
+    html_url = EXCLUDED.html_url,
+    last_updated = EXCLUDED.last_updated
+REURNING sid
+;";
+
+            internal static readonly string SaveSearch = $@"
+INSERT INTO {TableName}_search (
+    sid,
+    content_search
+) VALUES (
+    @Sid,
+    to_tsvector(@Content)
+)
+ON CONFLICT ON CONSTRAINT (sid)
+DO UPDATE SET
+    content_search = to_tsvector(@Content)
+;";
+        }
     }
 }

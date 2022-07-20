@@ -9,15 +9,18 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     public interface IGitHubApiService
     {
         /// <summary>
+        /// Downloads the ADR markdown.
+        /// </summary>
+        /// <param name="downloadUrl">The download url.</param>
+        /// <returns>The raw ADR markdown content.</returns>
+        Task<string> DownloadArchitectureDecisionRecord(string downloadUrl);
+
+        /// <summary>
         /// Gets the architecture decision records defined in a repository.
         /// </summary>
         /// <param name="repositoryName">The repository name.</param>
-        /// <param name="includeContent">If true, the ADR content will be returned as well.</param>
         /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
-        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(
-            string repositoryName,
-            bool includeContent = false);
+        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string repositoryName);
 
         /// <summary>
         /// Gets the collection of repositories defined for the organization.
