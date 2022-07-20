@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
+using Zinc.DeveloperCenter.Application.Services.GitHub;
 using Zinc.DeveloperCenter.Data.Repositories;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -28,6 +30,7 @@ namespace Zinc.DeveloperCenter.Application
                 .AddActivities<AssemblyMarker>()
                 .AddApiServices(configuration)
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
+                .AddScoped<IGitHubApiService, GitHubApiService>()
                 ;
             return services;
         }
