@@ -190,11 +190,11 @@ namespace Zinc.DeveloperCenter.Application.Services
         public async Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
         {
             var config = gitHubServiceConfig.Value;
-            var pathUrl = $"/repos/GSFSGroup/Zinc.Templates/commits?path=dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md&page=1&per_page=1";
+            var pathUrl = $"/repos/GSFSGroup/{repoDotName}/commits?path={config.AdrDirectoryUrls[repoDotName]}/{adrTitle}&page=1&per_page=1";
 
-            if (config.AdrDirectoryUrls.ContainsKey(repoDotName))
+            if (!config.AdrDirectoryUrls.ContainsKey(repoDotName))
             {
-                pathUrl = $"/repos/GSFSGroup/{repoDotName}/commits?path={config.AdrDirectoryUrls[repoDotName]}/{adrTitle}&page=1&per_page=1";
+                return new DateTime(2015, 12, 25);
             }
 
             var uriBuilder = new UriBuilder($"{config.BaseUrl}{pathUrl}");
