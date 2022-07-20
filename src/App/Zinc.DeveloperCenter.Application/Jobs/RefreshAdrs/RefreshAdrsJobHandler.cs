@@ -94,11 +94,11 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(GetArchitectureDecisionRecords), applicationName);
 
             // TODO do the work
-            // var results = gitGub.GetArchitectureDecisionRecords(applicationName, true)
+            var results = await gitHub.GetArchitectureDecisionRecords(applicationName, true).ConfigureAwait(false);
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(GetArchitectureDecisionRecords), applicationName, timer.Elapsed.ToString());
 
-            return await Task.FromResult(Enumerable.Empty<GitHubArchitectureDecisionRecordModel>()).ConfigureAwait(false);
+            return results;
         }
     }
 }
