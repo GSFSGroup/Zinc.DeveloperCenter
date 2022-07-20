@@ -22,6 +22,8 @@ export class RepoListComponent implements OnInit, OnDestroy {
 
     public expanded: { [repository: string]: boolean } = {};
 
+    public isSideBarOpen = false;
+
     private destroyed$ = new Subject<void>();
 
     public constructor(
@@ -52,6 +54,10 @@ export class RepoListComponent implements OnInit, OnDestroy {
 
     public repoToggle(repoDotName: string, openedState: boolean) {
         this.expanded[repoDotName] = openedState;
+    }
+
+    public toggleSideBarClicked() {
+        this.isSideBarOpen = !this.isSideBarOpen;
     }
 
     // sort functions will sort Adrs on one of three options: date, number, or title,
