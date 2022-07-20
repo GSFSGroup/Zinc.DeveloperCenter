@@ -84,7 +84,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(GetRepositories), timer.Elapsed.ToString());
 
-            return await Task.FromResult(Enumerable.Empty<GitHubRepositoryModel>());
+            return await Task.FromResult(Enumerable.Empty<GitHubRepositoryModel>()).ConfigureAwait(false);
         }
 
         private async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> GetArchitectureDecisionRecords(string applicationName)

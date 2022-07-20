@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
