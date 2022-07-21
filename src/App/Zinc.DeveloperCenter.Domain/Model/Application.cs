@@ -13,25 +13,31 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="applicationElement">The application element.</param>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application full name.</param>
         /// <param name="applicationDisplayName">The application display name.</param>
+        /// <param name="applicationElement">The application element.</param>
         public Application(
-            string? applicationElement,
+            string tenantId,
             string applicationName,
-            string applicationDisplayName)
+            string applicationDisplayName,
+            string? applicationElement)
         {
-            ApplicationElement = applicationElement;
+            TenantId = tenantId;
             ApplicationName = applicationName;
             ApplicationDisplayName = applicationDisplayName;
+            ApplicationElement = applicationElement;
         }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application full name.</param>
-        public Application(string applicationName)
+        public Application(string tenantId, string applicationName)
         {
+            TenantId = tenantId;
+
             var nameParts = applicationName.Split('.', 2, StringSplitOptions.RemoveEmptyEntries);
 
             if (nameParts.Length == 1)
@@ -69,7 +75,12 @@ namespace Zinc.DeveloperCenter.Domain.Model
         public string? ApplicationDisplayName { get; protected set; }
 
         /// <inheritdoc/>
-        public override string Key => ApplicationName!;
+        public override string Key => $"{TenantId}/{ApplicationName}";
+
+        /// <summary>
+        /// Gets the tenant identifier.
+        /// </summary>
+        public string? TenantId { get; protected set; }
 
         private static string GetDisplayName(string value)
         {

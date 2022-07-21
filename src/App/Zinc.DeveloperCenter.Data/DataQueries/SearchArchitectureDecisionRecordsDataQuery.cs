@@ -12,11 +12,12 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="searchPattern">The search pattern.</param>
-        public SearchArchitectureDecisionRecordsDataQuery(string searchPattern)
+        public SearchArchitectureDecisionRecordsDataQuery(string tenantId, string searchPattern)
         {
             Command = ArchitectureDecisionRecordRepository.Sql.SearchArchitectureDecisionRecords;
-            Params = new { searchPattern };
+            Params = new { tenantId, searchPattern };
         }
     }
 }

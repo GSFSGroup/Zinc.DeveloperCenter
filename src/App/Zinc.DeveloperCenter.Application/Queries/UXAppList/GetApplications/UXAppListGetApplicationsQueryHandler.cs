@@ -24,7 +24,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 
         public async Task<PageableResult<UXAppListGetApplicationsQueryModel>> Handle(UXAppListGetApplicationsQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = new GetApplicationsDataQuery();
+            var dataQuery = new GetApplicationsDataQuery(request.TenantId);
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items

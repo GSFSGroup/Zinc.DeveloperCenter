@@ -49,7 +49,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 var content = EmbeddedResources.EmbeddedResource.Read($"Migration_2022072101_TestData_adr_0{i + 1}.md");
 
                 connection.Execute(
-                    $"INSERT INTO {schemaName}.{searchTableName} (sid, content_search) VALUES (@sid, to_tsvector('english', @content))",
+                    $"INSERT INTO {schemaName}.{searchTableName} (sid, search_vector) VALUES (@sid, to_tsvector('english', @content))",
                     new { sid = sids[i], content = content },
                     transaction);
             }

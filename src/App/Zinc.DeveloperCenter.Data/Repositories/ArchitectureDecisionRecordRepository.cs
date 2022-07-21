@@ -34,11 +34,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         protected override async Task<bool> ExistsInternal(string key)
         {
             var keyParts = key.Split('/');
-            var applicationName = keyParts[0];
-            var number = int.Parse(keyParts[1]);
+            var tenantId = keyParts[0];
+            var applicationName = keyParts[1];
+            var number = int.Parse(keyParts[2]);
 
             var args = new
             {
+                tenantId,
                 applicationName,
                 number,
             };
@@ -58,11 +60,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         protected override async Task<ArchitectureDecisionRecord> ReadInternal(string key)
         {
             var keyParts = key.Split('/');
-            var applicationName = keyParts[0];
-            var number = int.Parse(keyParts[1]);
+            var tenantId = keyParts[0];
+            var applicationName = keyParts[1];
+            var number = int.Parse(keyParts[2]);
 
             var args = new
             {
+                tenantId,
                 applicationName,
                 number,
             };
@@ -79,12 +83,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         {
             var args = new
             {
+                aggregate.TenantId,
                 aggregate.ApplicationName,
                 aggregate.Number,
                 aggregate.Title,
                 aggregate.DownloadUrl,
                 aggregate.HtmlUrl,
-                aggregate.LastUpdated,
+                aggregate.LastUpdatedOn,
             };
 
             var sid = await connection.ExecuteScalarAsync<int>(Sql.Save, args).ConfigureAwait(false);
@@ -107,59 +112,67 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             internal static readonly string Exists = $@"
 SELECT EXISTS (
     SELECT 1 FROM {TableName}
-    WHERE application_name = @applicationName
+    WHERE tenant_id = @tenantId
+    AND   application_name = @applicationName
     AND   number = @number
 );";
 
             internal static readonly string Read = $@"
 SELECT *
 FROM {TableName}
-WHERE application_name = @applicationName
+WHERE tenant_id = @tenantId
+AND   application_name = @applicationName
 AND   number = @number
 ;";
 
             internal static readonly string ReadAllForApplication = $@"
 SELECT *
 FROM {TableName}
-WHERE application_name = @applicationName
+WHERE tenant_id = @tenantId
+AND   application_name = @applicationName
 ;";
 
             internal static readonly string Save = $@"
 INSERT INTO {TableName} (
+    tenant_id,
     application_name,
     number,
     title,
     download_url,
     html_url,
-    last_updated
+    last_updated_by,
+    last_updated_on,
 ) VALUES (
+    @TenantId,
     @ApplicationName,
     @Number,
     @Title,
     @DownloadUrl,
     @HtmlUrl,
-    @LastUpdated
+    @LastUpdatedBy,
+    @LastUpdatedOn
 )
 ON CONFLICT (application_name, number)
 DO UPDATE SET
     title = EXCLUDED.title,
     download_url = EXCLUDED.download_url,
     html_url = EXCLUDED.html_url,
-    last_updated = EXCLUDED.last_updated
+    last_updated_by = EXCLUDED.last_updated_by,
+    last_updated_on = EXCLUDED.last_updated_on
 REURNING sid
 ;";
 
             internal static readonly string SaveSearchContent = $@"
 INSERT INTO {TableName}_search (
     sid,
-    content_search
+    search_vector
 ) VALUES (
     @Sid,
     to_tsvector('english', @Content)
 )
 ON CONFLICT (sid)
 DO UPDATE SET
-    content_search = to_tsvector('english', @Content)
+    search_vector = to_tsvector('english', @Content)
 ;";
 
             /* The current search implementation is rather simple, but Postgres allows for much more
@@ -172,7 +185,8 @@ SELECT adr.*
 FROM {TableName} AS adr
 INNER JOIN {TableName}_search AS search
     ON adr.sid = search.sid
-WHERE search.content_search @@ to_tsquery('english', @searchPattern)
+WHERE adr.tenant_id = @tenantId
+AND search.search_vector @@ to_tsquery('english', @searchPattern)
 ;";
         }
     }

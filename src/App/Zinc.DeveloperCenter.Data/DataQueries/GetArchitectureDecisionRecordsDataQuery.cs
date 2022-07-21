@@ -12,11 +12,12 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
-        public GetArchitectureDecisionRecordsDataQuery(string applicationName)
+        public GetArchitectureDecisionRecordsDataQuery(string tenantId, string applicationName)
         {
             Command = ArchitectureDecisionRecordRepository.Sql.ReadAllForApplication;
-            Params = new { applicationName };
+            Params = new { tenantId, applicationName };
         }
     }
 }

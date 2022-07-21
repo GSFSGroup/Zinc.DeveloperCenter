@@ -12,9 +12,11 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        public GetApplicationsDataQuery()
+        /// <param name="tenantId">The tenant identifier.</param>
+        public GetApplicationsDataQuery(string tenantId)
         {
             Command = ApplicationRepository.Sql.ReadAll;
+            Params = new { tenantId };
         }
     }
 }

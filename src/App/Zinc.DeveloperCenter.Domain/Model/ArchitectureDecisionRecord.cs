@@ -11,26 +11,32 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
         /// <param name="number">The ADR number.</param>
         /// <param name="title">The ADR title.</param>
-        /// <param name="lastUpdated">The ADR last updated date.</param>
         /// <param name="downloadUrl">The ADR content url.</param>
         /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
+        /// <param name="lastUpdatedBy">The user who last updated the ADR.</param>
+        /// <param name="lastUpdatedOn">The ADR last updated date.</param>
         /// <param name="content">The raw ADR markdown content.</param>
         public ArchitectureDecisionRecord(
+            string tenantId,
             string applicationName,
             int number,
             string title,
-            string lastUpdated,
             string downloadUrl,
             string htmlUrl,
+            string? lastUpdatedBy,
+            DateTime? lastUpdatedOn,
             string? content)
         {
+            TenantId = tenantId;
             ApplicationName = applicationName;
             Title = title;
             Number = number;
-            LastUpdated = lastUpdated;
+            LastUpdatedBy = lastUpdatedBy;
+            LastUpdatedOn = lastUpdatedOn;
             DownloadUrl = downloadUrl;
             HtmlUrl = htmlUrl;
 
@@ -43,26 +49,32 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
         /// <param name="number">The ADR number.</param>
         /// <param name="title">The ADR title.</param>
-        /// <param name="lastUpdated">The ADR last updated date.</param>
         /// <param name="downloadUrl">The ADR content url.</param>
         /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
+        /// <param name="lastUpdatedBy">The user who last updated the ADR.</param>
+        /// <param name="lastUpdatedOn">The ADR last updated date.</param>
         public ArchitectureDecisionRecord(
+            string tenantId,
             string applicationName,
             int number,
             string title,
-            string lastUpdated,
             string downloadUrl,
-            string htmlUrl)
+            string htmlUrl,
+            string? lastUpdatedBy,
+            DateTime? lastUpdatedOn)
             : this(
+                  tenantId,
                   applicationName,
                   number,
                   title,
-                  lastUpdated,
                   downloadUrl,
                   htmlUrl,
+                  lastUpdatedBy,
+                  lastUpdatedOn,
                   content: null)
         { }
 
@@ -88,9 +100,14 @@ namespace Zinc.DeveloperCenter.Domain.Model
         public int Number { get; protected set; }
 
         /// <summary>
+        /// Gets the user who last updated the ADR.
+        /// </summary>
+        public string? LastUpdatedBy { get; protected set; }
+
+        /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public string? LastUpdated { get; protected set; }
+        public DateTime? LastUpdatedOn { get; protected set; }
 
         /// <summary>
         /// Gets the ADR raw markdown content.
@@ -108,12 +125,12 @@ namespace Zinc.DeveloperCenter.Domain.Model
         public string? HtmlUrl { get; protected set; }
 
         /// <inheritdoc/>
-        public override string Key => $"{ApplicationName}/{Number}";
+        public override string Key => $"{TenantId}/{ApplicationName}/{Number}";
 
         /// <summary>
-        /// Gets surrogate the id for the ADR.
+        /// Gets the tenant identifier.
         /// </summary>
-        internal int Sid { get; set; }
+        public string? TenantId { get; protected set; }
 
         /// <summary>
         /// Updates the ADR title.
@@ -126,21 +143,22 @@ namespace Zinc.DeveloperCenter.Domain.Model
                 throw new ArgumentException($"The {nameof(newTitle)} argument is required.", nameof(newTitle));
             }
 
-            Title = newTitle;
+            if (Title != newTitle)
+            {
+                Title = newTitle;
+            }
         }
 
         /// <summary>
         /// Updates the ADR last updated date.
         /// </summary>
         /// <param name="lastUpdated">The last updated date.</param>
-        public void UpdateLastUpdated(string lastUpdated)
+        public void UpdateLastUpdated(DateTime? lastUpdated)
         {
-            if (string.IsNullOrWhiteSpace(lastUpdated))
+            if (LastUpdatedOn != lastUpdated)
             {
-                throw new ArgumentException($"The {nameof(lastUpdated)} argument is required.", nameof(lastUpdated));
+                LastUpdatedOn = lastUpdated;
             }
-
-            LastUpdated = lastUpdated;
         }
 
         /// <summary>
@@ -168,7 +186,10 @@ namespace Zinc.DeveloperCenter.Domain.Model
                 throw new ArgumentException($"The {nameof(downloadUrl)} argument is required.", nameof(downloadUrl));
             }
 
-            DownloadUrl = downloadUrl;
+            if (DownloadUrl != downloadUrl)
+            {
+                DownloadUrl = downloadUrl;
+            }
         }
 
         /// <summary>
@@ -182,7 +203,10 @@ namespace Zinc.DeveloperCenter.Domain.Model
                 throw new ArgumentException($"The {nameof(htmlUrl)} argument is required.", nameof(htmlUrl));
             }
 
-            HtmlUrl = htmlUrl;
+            if (HtmlUrl != htmlUrl)
+            {
+                HtmlUrl = htmlUrl;
+            }
         }
     }
 }

@@ -41,7 +41,11 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         /// <inheritdoc/>
         protected override async Task<Application> ReadInternal(string key)
         {
-            var args = new { ApplicationName = key };
+            var keyParts = key.Split('/');
+            var tenantId = keyParts[0];
+            var applicationName = keyParts[1];
+
+            var args = new { TenantId = tenantId, ApplicationName = applicationName };
 
             return (await connection.QueryAsync<Application>(Sql.Read, args).ConfigureAwait(false))
                 .SingleOrDefault()!;
@@ -67,12 +71,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         {
             var args = new
             {
-                aggregate.ApplicationName,
-                aggregate.ApplicationDisplayName,
-                aggregate.ApplicationElement,
+                TenantId = aggregate.TenantId,
+                ApplicationName = aggregate.ApplicationName,
+                ApplicationDisplayName = aggregate.ApplicationDisplayName,
+                ApplicationElement = aggregate.ApplicationElement,
             };
 
-            return await connection.ExecuteScalarAsync<int>(Sql.Save, args).ConfigureAwait(false);
+            return await connection.ExecuteAsync(Sql.Save, args).ConfigureAwait(false);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "By design.")]
@@ -84,35 +89,40 @@ namespace Zinc.DeveloperCenter.Data.Repositories
 SELECT EXISTS (
     SELECT 1
     FROM {TableName}
-    WHERE application_name = @ApplicationName
+    WHERE tenant_id = @TenantId
+    AND application_name = @ApplicationName
 );
 ";
 
             internal static readonly string Read = $@"
 SELECT *
 FROM {TableName}
-WHERE application_name = @ApplicationName
+WHERE tenant_id = @TenantId
+AND application_name = @ApplicationName
 ;";
 
             internal static readonly string ReadAll = $@"
 SELECT *
 FROM {TableName}
+WHERE tenant_id = @TenantId
 ;";
 
             internal static readonly string Save = $@"
 INSERT INTO {TableName} (
+    tenant_id,
     application_name,
     application_display_name,
     application_element
 ) VALUES (
+    @TenantId,
     @ApplicationName,
     @ApplicationDisplayName,
     @ApplicationElement
 )
-ON CONFLICT (application_name)
+ON CONFLICT ON CONSTRAINT {TableName}_key
 DO UPDATE SET
-    application_display_name = EXCLUDED.application_display_name,
-    application_element = EXCLUDED.application_element
+    application_display_name = @ApplicationDisplayName,
+    application_element = @ApplicationElement
 ;    
 ";
         }

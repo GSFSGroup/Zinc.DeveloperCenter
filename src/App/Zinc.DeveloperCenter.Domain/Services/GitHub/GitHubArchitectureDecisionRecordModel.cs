@@ -1,3 +1,5 @@
+using System;
+
 namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
@@ -21,9 +23,14 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         public int Number { get; set; }
 
         /// <summary>
+        /// Gets the user who last updated the ADR.
+        /// </summary>
+        public string? LastUpdatedBy { get; set; }
+
+        /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public string? LastUpdated { get; set; }
+        public DateTime? LastUpdatedOn { get; set; }
 
         /// <summary>
         /// Gets the ADR download url.
@@ -34,10 +41,5 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         /// Gets the url used to view the ADR on GitHub.
         /// </summary>
         public string? HtmlUrl { get; set; }
-
-        /// <summary>
-        /// Gets the ADR markdown content.
-        /// </summary>
-        public string? Content { get; set; }
     }
 }

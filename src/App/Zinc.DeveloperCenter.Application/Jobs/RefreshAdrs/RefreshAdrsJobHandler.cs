@@ -47,13 +47,13 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             logger.LogInformation("BEGIN {JobName}...", nameof(RefreshAdrsJob));
 
-            var applications = await UpdateAndReturnApplications().ConfigureAwait(false);
+            var applications = await UpdateAndReturnApplications(request.TenantId).ConfigureAwait(false);
 
             int totalUpdates = applications.Count(x => x.WasUpdated);
 
             foreach (var applicationName in applications.Select(x => x.ApplicationName))
             {
-                totalUpdates += await UpdateArchitectureDecisionRecords(applicationName).ConfigureAwait(false);
+                totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
             }
 
             logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsJob), timer.Elapsed.ToString(), totalUpdates);
@@ -66,11 +66,11 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             return JobResult.NoWorkPerformed;
         }
 
-        private async Task<IEnumerable<(string ApplicationName, bool WasUpdated)>> UpdateAndReturnApplications()
+        private async Task<IEnumerable<(string ApplicationName, bool WasUpdated)>> UpdateAndReturnApplications(string tenantId)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateAndReturnApplications), string.Empty);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateAndReturnApplications), tenantId);
 
             var results = new List<(string ApplicationName, bool WasUpdated)>(256);
 
@@ -79,59 +79,66 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             foreach (var applicationName in repositories.Select(x => x.ApplicationName))
             {
                 bool wasUpdated = false;
-                var exists = await applicationRepository.Exists(applicationName).ConfigureAwait(false);
+
+                var key = string.Join("/", tenantId, applicationName);
+
+                var exists = await applicationRepository.Exists(key).ConfigureAwait(false);
 
                 if (!exists)
                 {
-                    await applicationRepository.Save(new Domain.Model.Application(applicationName!)).ConfigureAwait(false);
+                    await applicationRepository.Save(new Domain.Model.Application(tenantId, applicationName!)).ConfigureAwait(false);
                     wasUpdated = true;
                 }
 
                 results.Add((ApplicationName: applicationName!, WasUpdated: wasUpdated));
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), string.Empty, timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), tenantId, timer.Elapsed.ToString());
 
             return results;
         }
 
-        private async Task<int> UpdateArchitectureDecisionRecords(string applicationName)
+        private async Task<int> UpdateArchitectureDecisionRecords(string tenantId, string applicationName)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), applicationName);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId, applicationName);
 
             var totalUpdates = 0;
             var apiResults = await gitHubApi.GetArchitectureDecisionRecords(applicationName).ConfigureAwait(false);
 
             foreach (var apiResult in apiResults)
             {
-                var adr = await adrRepository.Read($"{apiResult.ApplicationName}/{apiResult.Number}").ConfigureAwait(false);
+                var key = string.Join('/', tenantId, apiResult.ApplicationName, apiResult.Number);
+
+                var adr = await adrRepository.Read(key).ConfigureAwait(false);
 
                 if (adr == null)
                 {
                     var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
 
                     adr = new ArchitectureDecisionRecord(
+                        tenantId,
                         apiResult.ApplicationName!,
                         apiResult.Number,
                         apiResult.Title!,
-                        apiResult.LastUpdated!,
                         apiResult.DownloadUrl!,
                         apiResult.HtmlUrl!,
+                        apiResult.LastUpdatedBy,
+                        apiResult.LastUpdatedOn,
                         content);
 
                     await adrRepository.Save(adr).ConfigureAwait(false);
                     totalUpdates++;
                 }
-                else if (adr.LastUpdated != apiResult.LastUpdated)
+                else if (adr.LastUpdatedOn != apiResult.LastUpdatedOn)
                 {
                     var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
 
                     adr.UpdateContent(content);
                     adr.UpdateDownloadUrl(apiResult.DownloadUrl!);
                     adr.UpdateHtmlUrl(apiResult.HtmlUrl!);
-                    adr.UpdateLastUpdated(apiResult.LastUpdated!);
+                    adr.UpdateLastUpdated(apiResult.LastUpdatedOn!);
                     adr.UpdateTitle(apiResult.Title!);
 
                     await adrRepository.Save(adr).ConfigureAwait(false);
@@ -139,7 +146,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 }
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), applicationName, timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, applicationName, timer.Elapsed.ToString());
 
             return totalUpdates;
         }
