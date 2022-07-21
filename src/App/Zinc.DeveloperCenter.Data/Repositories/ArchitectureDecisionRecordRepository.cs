@@ -79,6 +79,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         }
 
         /// <inheritdoc/>
+        protected override async Task<ArchitectureDecisionRecord> ReadInternal(IDbAggregateQuery<ArchitectureDecisionRecord> qry)
+        {
+            return (await connection.QueryAsync<ArchitectureDecisionRecord>(qry.Command, qry.Params).ConfigureAwait(false))
+                .SingleOrDefault()!;
+        }
+
+        /// <inheritdoc/>
         protected override async Task<int> SaveInternal(ArchitectureDecisionRecord aggregate, string etag, string newETag)
         {
             var args = new
@@ -89,6 +96,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
                 aggregate.Title,
                 aggregate.DownloadUrl,
                 aggregate.HtmlUrl,
+                aggregate.LastUpdatedBy,
                 aggregate.LastUpdatedOn,
             };
 
@@ -97,7 +105,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             if (aggregate.Content?.Length > 0)
             {
                 await connection.ExecuteAsync(
-                    Sql.SaveSearchContent,
+                    Sql.SaveSearchVector,
                     new { Sid = sid, Content = aggregate.Content }).ConfigureAwait(false);
             }
 
@@ -152,7 +160,7 @@ INSERT INTO {TableName} (
     @LastUpdatedBy,
     @LastUpdatedOn
 )
-ON CONFLICT (application_name, number)
+ON CONFLICT (tenant_id, application_name, number)
 DO UPDATE SET
     title = EXCLUDED.title,
     download_url = EXCLUDED.download_url,
@@ -162,7 +170,7 @@ DO UPDATE SET
 REURNING sid
 ;";
 
-            internal static readonly string SaveSearchContent = $@"
+            internal static readonly string SaveSearchVector = $@"
 INSERT INTO {TableName}_search (
     sid,
     search_vector
@@ -184,9 +192,9 @@ DO UPDATE SET
 SELECT adr.*
 FROM {TableName} AS adr
 INNER JOIN {TableName}_search AS search
-    ON adr.sid = search.sid
-WHERE adr.tenant_id = @tenantId
-AND search.search_vector @@ to_tsquery('english', @searchPattern)
+    ON search.sid = adr.sid
+WHERE search.search_vector @@ to_tsquery('english', @searchPattern)
+AND adr.tenant_id = @tenantId
 ;";
         }
     }

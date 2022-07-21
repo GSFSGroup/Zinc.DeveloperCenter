@@ -33,7 +33,11 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         /// <inheritdoc/>
         protected override async Task<bool> ExistsInternal(string key)
         {
-            var args = new { ApplicationName = key };
+            var keyParts = key.Split('/');
+            var tenantId = keyParts[0];
+            var applicationName = keyParts[1];
+
+            var args = new { TenantId = tenantId, ApplicationName = applicationName };
 
             return await connection.ExecuteScalarAsync<bool>(Sql.Exists, args).ConfigureAwait(false);
         }
