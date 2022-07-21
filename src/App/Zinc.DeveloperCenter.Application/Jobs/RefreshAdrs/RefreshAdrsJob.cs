@@ -16,7 +16,8 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
         public RefreshAdrsJob(string tenantId, Guid correlationId)
             : base(tenantId, correlationId)
         {
-            // We will handle our own transactions.
+            // This can be a long running transaction (not 45 min, but just in case).
+            TransactionIsolation = System.Transactions.IsolationLevel.ReadUncommitted;
             TransactionTimeout = TimeSpan.FromMinutes(45);
         }
 

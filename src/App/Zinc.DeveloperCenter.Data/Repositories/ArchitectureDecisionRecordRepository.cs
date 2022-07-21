@@ -92,7 +92,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             if (aggregate.Content?.Length > 0)
             {
                 await connection.ExecuteAsync(
-                    Sql.SaveSearch,
+                    Sql.SaveSearchContent,
                     new { Sid = sid, Content = aggregate.Content }).ConfigureAwait(false);
             }
 
@@ -140,7 +140,7 @@ INSERT INTO {TableName} (
     @HtmlUrl,
     @LastUpdated
 )
-ON CONFLICT ON CONSTRAINT {TableName}_key
+ON CONFLICT (application_name, number)
 DO UPDATE SET
     title = EXCLUDED.title,
     download_url = EXCLUDED.download_url,
@@ -149,17 +149,30 @@ DO UPDATE SET
 REURNING sid
 ;";
 
-            internal static readonly string SaveSearch = $@"
+            internal static readonly string SaveSearchContent = $@"
 INSERT INTO {TableName}_search (
     sid,
     content_search
 ) VALUES (
     @Sid,
-    to_tsvector(@Content)
+    to_tsvector('english', @Content)
 )
-ON CONFLICT ON CONSTRAINT (sid)
+ON CONFLICT (sid)
 DO UPDATE SET
-    content_search = to_tsvector(@Content)
+    content_search = to_tsvector('english', @Content)
+;";
+
+            /* The current search implementation is rather simple, but Postgres allows for much more
+             * complicated searches, including phrase searches and fuzzy searches. The following post
+             * has a good overview of Postgres full text searching:
+             * https://hevodata.com/blog/postgresql-full-text-search-setup/
+             * */
+            internal static readonly string SearchArchitectureDecisionRecords = $@"
+SELECT adr.*
+FROM {TableName} AS adr
+INNER JOIN {TableName}_search AS search
+    ON adr.sid = search.sid
+WHERE search.content_search @@ to_tsquery('english', @searchPattern)
 ;";
         }
     }

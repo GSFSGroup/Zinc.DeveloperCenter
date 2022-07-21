@@ -109,7 +109,7 @@ INSERT INTO {TableName} (
     @ApplicationDisplayName,
     @ApplicationElement
 )
-ON CONFLICT ON CONSTRAINT {TableName}_key
+ON CONFLICT (application_name)
 DO UPDATE SET
     application_display_name = EXCLUDED.application_display_name,
     application_element = EXCLUDED.application_element

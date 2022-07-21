@@ -18,7 +18,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR title.
         /// </summary>
-        public string? TitleDisplay => GetTitleDisplay();
+        public string? TitleDisplay => Title!.Replace('-', ' ');
 
         /// <summary>
         /// Gets the ADR number.
@@ -28,7 +28,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public string NumberDisplay => GetNumberDisplay();
+        public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
 
         /// <summary>
         /// Gets the ADR last updated date.
@@ -44,24 +44,5 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// Gets the url used to view the ADR on GitHub.
         /// </summary>
         public string? HtmlUrl { get; set; }
-
-        private string? GetTitleDisplay()
-        {
-            try
-            {
-                int indexSecondDash = Title!.IndexOf('-', Title!.IndexOf('-') + 1);
-
-                return Title!.Substring(indexSecondDash, Title!.IndexOf('.') - indexSecondDash).Replace('-', ' ');
-            }
-            catch
-            {
-                return Title!;
-            }
-        }
-
-        private string GetNumberDisplay()
-        {
-            return string.Format($"adr-{0}", Number.ToString("0000"));
-        }
     }
 }
