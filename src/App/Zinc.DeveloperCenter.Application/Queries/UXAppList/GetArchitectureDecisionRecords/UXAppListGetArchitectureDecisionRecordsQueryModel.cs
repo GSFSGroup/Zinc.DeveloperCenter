@@ -1,3 +1,5 @@
+using System;
+
 namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
 {
     /// <summary>
@@ -31,9 +33,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
 
         /// <summary>
+        /// Gets who last updated the ADR.
+        /// </summary>
+        public string? LastUpdatedBy { get; set; }
+
+        /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public string? LastUpdated { get; set; }
+        public DateTime? LastUpdatedOn { get; set; }
 
         /// <summary>
         /// Gets the ADR download url.

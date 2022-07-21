@@ -70,7 +70,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             // architecture_decision_record_viewcount table
             Create
                 .Table(viewCountTableName).InSchema(schemaName)
-                .WithColumn($"{adrTableName}_sid").AsInt32().NotNullable()
+                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{viewCountTableName}_pkey")
                 .WithColumn("view_count").AsInt32().NotNullable().WithDefaultValue(0)
                 ;
         }
@@ -95,7 +95,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             Create
                 .UniqueConstraint($"{favoriteTableName}_key")
                 .OnTable(favoriteTableName).WithSchema(schemaName)
-                .Columns("user_id", $"{adrTableName}_sid");
+                .Columns($"{adrTableName}_sid", "user_id");
         }
 
         private void CreateForeignKeys()
@@ -109,7 +109,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
 
             // architecture_decision_record_search to architecture_decision_record foreign key
             Create
-                .ForeignKey("sid_fkey")
+                .ForeignKey($"{searchTableName}_sid_fkey")
                 .FromTable(searchTableName).InSchema(schemaName).ForeignColumn("sid")
                 .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("sid")
                 ;
@@ -122,28 +122,22 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
 
             // architecture_decision_record_viewcount to architecture_decision_record foreign key
             Create
-                .ForeignKey($"{adrTableName}_sid_fkey")
-                .FromTable(viewCountTableName).InSchema(schemaName).ForeignColumn($"{adrTableName}_sid")
+                .ForeignKey($"{viewCountTableName}_sid_fkey")
+                .FromTable(viewCountTableName).InSchema(schemaName).ForeignColumn("sid")
                 .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("sid");
         }
 
         private void CreateIndexes()
         {
             // architecture_decision_record foreign key index
-            Create.Index($"{adrTableName}_tenant_id_application_name_idx")
+            Create.Index($"{adrTableName}_tenant_id_application_name_fkey_idx")
                 .OnTable(adrTableName).InSchema(schemaName)
                 .OnColumn("tenant_id").Ascending()
                 .OnColumn("application_name").Ascending()
                 ;
 
-            Create
-                .Index($"{adrTableName}_sid_idx")
-                .OnTable(viewCountTableName).InSchema(schemaName)
-                .OnColumn($"{adrTableName}_sid").Ascending()
-                ;
-
             // architecture_decision_record_search full text index
-            Execute.Sql($"CREATE INDEX {searchTableName}_search_idx ON {schemaName}.{searchTableName} USING GIN (search_vector);");
+            Execute.Sql($"CREATE INDEX {searchTableName}_search_vector_idx ON {schemaName}.{searchTableName} USING GIN (search_vector);");
         }
     }
 }
