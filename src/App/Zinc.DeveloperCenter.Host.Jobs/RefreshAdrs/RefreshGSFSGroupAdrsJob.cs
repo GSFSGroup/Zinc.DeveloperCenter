@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using RedLine.Domain;
+using Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs;
 using Zinc.DeveloperCenter.Host.Jobs.Configuration;
 using Zinc.DeveloperCenter.Host.Jobs.HealthChecks;
 
@@ -48,7 +49,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
         {
             try
             {
-                var activity = new RefreshGSFSGroupAdrsJob(tenantId, correlationId);
+                var activity = new RefreshAdrsJob(tenantId, correlationId);
 
                 await mediator.Send(activity).ConfigureAwait(false);
 
