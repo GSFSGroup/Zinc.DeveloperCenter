@@ -53,14 +53,14 @@ namespace Zinc.DeveloperCenter.Host.Jobs
         private void WithJobs(IServiceCollectionQuartzConfigurator quartz)
         {
             OutboxJob.ConfigureJob(quartz, Configuration);
-            RefreshGSFSGroupAdrsJob.ConfigureJob(quartz, Configuration);
+            RefreshGsfsGroupAdrsJob.ConfigureJob(quartz, Configuration);
             /* Add future jobs here */
         }
 
         private void WithCustomHealthChecks(IHealthChecksBuilder healthChecks)
         {
             OutboxJob.ConfigureHealthCheck(healthChecks, Configuration);
-            RefreshGSFSGroupAdrsJob.ConfigureHealthCheck(healthChecks, Configuration);
+            RefreshGsfsGroupAdrsJob.ConfigureHealthCheck(healthChecks, Configuration);
             /* Add future job health checks here */
         }
     }

@@ -16,13 +16,13 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
     /// A Quartz job used to refresh the database with ADR details stored in the GSFSGroup GitHub repository.
     /// </summary>
     [DisallowConcurrentExecution]
-    internal class RefreshGSFSGroupAdrsJob : IJob
+    internal class RefreshGsfsGroupAdrsJob : IJob
     {
-        internal static readonly string SectionName = $"Jobs:{nameof(RefreshGSFSGroupAdrsJob)}";
+        internal static readonly string SectionName = $"Jobs:{nameof(RefreshGsfsGroupAdrsJob)}";
         private readonly IMediator mediator;
         private readonly string tenantId = "GSFSGroup";
         private readonly Guid correlationId;
-        private readonly ILogger<RefreshGSFSGroupAdrsJob> logger;
+        private readonly ILogger<RefreshGsfsGroupAdrsJob> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -30,10 +30,10 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
         /// <param name="mediator">The <see cref="IMediator"/> used to send the <see cref="RefreshAdrsJob"/>.</param>
         /// <param name="correlationId">The <see cref="ICorrelationId"/> for the request.</param>
         /// <param name="logger">A diagnostic logger.</param>
-        public RefreshGSFSGroupAdrsJob(
+        public RefreshGsfsGroupAdrsJob(
             IMediator mediator,
             ICorrelationId correlationId,
-            ILogger<RefreshGSFSGroupAdrsJob> logger)
+            ILogger<RefreshGsfsGroupAdrsJob> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId.Value;
@@ -53,7 +53,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
 
                 await mediator.Send(activity).ConfigureAwait(false);
 
-                JobHealthCheck<RefreshGSFSGroupAdrsJob>.Heartbeat();
+                JobHealthCheck<RefreshGsfsGroupAdrsJob>.Heartbeat();
             }
             catch (Exception e)
             {
@@ -89,14 +89,14 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
                 return;
             }
 
-            quartz.ScheduleJob<RefreshGSFSGroupAdrsJob>(
+            quartz.ScheduleJob<RefreshGsfsGroupAdrsJob>(
                 trigger => trigger
-                    .WithIdentity($"{nameof(RefreshGSFSGroupAdrsJob)}Trigger")
+                    .WithIdentity($"{nameof(RefreshGsfsGroupAdrsJob)}Trigger")
                     .StartAt(DateTimeOffset.UtcNow.AddSeconds(15))
                     .WithCronSchedule(jobConfig.CronSchedule)
-                    .WithDescription($"A cron-based trigger for the {nameof(RefreshGSFSGroupAdrsJob)}."),
+                    .WithDescription($"A cron-based trigger for the {nameof(RefreshGsfsGroupAdrsJob)}."),
                 job => job
-                    .WithIdentity(nameof(RefreshGSFSGroupAdrsJob))
+                    .WithIdentity(nameof(RefreshGsfsGroupAdrsJob))
                     .WithDescription("The job used to refresh the database with ADR details stored in the GSFSGroup GitHub repository."));
         }
 
@@ -117,8 +117,8 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
             }
 
             healthChecks.AddAsyncCheck(
-                typeof(RefreshGSFSGroupAdrsJob).FullName ?? throw new NullReferenceException(),
-                () => new JobHealthCheck<RefreshGSFSGroupAdrsJob>(
+                typeof(RefreshGsfsGroupAdrsJob).FullName ?? throw new NullReferenceException(),
+                () => new JobHealthCheck<RefreshGsfsGroupAdrsJob>(
                     jobConfig.DegradedThreshold,
                     jobConfig.UnhealthyThreshold).CheckAsync());
         }
