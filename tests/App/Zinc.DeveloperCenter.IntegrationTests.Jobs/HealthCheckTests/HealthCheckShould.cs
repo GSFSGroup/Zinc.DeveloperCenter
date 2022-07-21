@@ -35,6 +35,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Jobs.HealthCheckTests
             // 6. Database
             // 7. RabbitMq connection
             // 8. Overall Status
+            // 9. RefreshGsfsGroupAdrsJob
 
             Regex.Matches(resultText, "Healthy").Count.Should().Be(8);
         }
