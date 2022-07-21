@@ -74,7 +74,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             var results = new List<(string ApplicationName, bool WasUpdated)>(256);
 
-            var repositories = await gitHubApi.GetRepositories().ConfigureAwait(false);
+            var repositories = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
 
             foreach (var applicationName in repositories.Select(x => x.ApplicationName))
             {
@@ -105,7 +105,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId, applicationName);
 
             var totalUpdates = 0;
-            var apiResults = await gitHubApi.GetArchitectureDecisionRecords(applicationName).ConfigureAwait(false);
+            var apiResults = await gitHubApi.GetArchitectureDecisionRecords(tenantId, applicationName).ConfigureAwait(false);
 
             foreach (var apiResult in apiResults)
             {
@@ -115,7 +115,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
                 if (adr == null)
                 {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
+                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(tenantId, apiResult.DownloadUrl!).ConfigureAwait(false);
 
                     adr = new ArchitectureDecisionRecord(
                         tenantId,
@@ -133,7 +133,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 }
                 else if (adr.LastUpdatedOn != apiResult.LastUpdatedOn)
                 {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(apiResult.DownloadUrl!).ConfigureAwait(false);
+                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(tenantId, apiResult.DownloadUrl!).ConfigureAwait(false);
 
                     adr.UpdateContent(content);
                     adr.UpdateDownloadUrl(apiResult.DownloadUrl!);
