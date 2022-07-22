@@ -41,7 +41,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Jobs.HealthCheckTests
             // 9. RefreshGsfsGroupAdrsJob
 
             var jobCount = typeof(Host.Jobs.AssemblyMarker).Assembly.GetTypes()
-                .Count(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableFrom(typeof(IJob)));
+                .Count(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableTo(typeof(IJob)));
 
             Regex.Matches(resultText, "Healthy").Count.Should().Be(7 + jobCount);
         }
