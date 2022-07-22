@@ -29,7 +29,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubRepo
                 .GetGitHubRepoData()
                 .ConfigureAwait(false);
 
-            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
+            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.ApplicationDisplayName).ToList();
 
             return new PageableResult<GitHubRepoModel>(sortedRepoList);
         }

@@ -92,23 +92,23 @@ namespace Zinc.DeveloperCenter.Application.Services
             foreach (var repoRecord in results.Select(x => x.Name))
             {
                 var nameParts = repoRecord.Split('.');
-                var element = nameParts[0];
-                var neatName = string.Join(".", nameParts.Skip(1));
+                var applicationElement = nameParts[0];
+                var applicationDisplayName = string.Join(".", nameParts.Skip(1));
 
                 // a few repos do not contain periods,
-                // and their neatName will be stored as their element.
+                // and their applicationDisplayName will be stored as their element.
                 // this swaps the two strings for such repos.
-                if (string.IsNullOrEmpty(neatName))
+                if (string.IsNullOrEmpty(applicationDisplayName))
                 {
-                    neatName = repoRecord;
-                    element = string.Empty;
+                    applicationDisplayName = repoRecord;
+                    applicationElement = string.Empty;
                 }
 
                 var repo = new GitHubRepoModel
                 {
-                    DotName = repoRecord,
-                    NeatName = neatName,
-                    Element = element,
+                    ApplicationName = repoRecord,
+                    ApplicationDisplayName = applicationDisplayName,
+                    ApplicationElement = applicationElement,
                 };
 
                 repoList.Add(repo);
@@ -120,17 +120,17 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Adrs for a specific Repo in the GSFS group.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
-        public async Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string repoDotName)
+        public async Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string applicationName)
         {
             // getting adr data from GitHub
             var config = gitHubServiceConfig.Value;
-            var pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/docs/App?per_page=60";
+            var pathUrl = $"/repos/GSFSGroup/{applicationName}/contents/docs/App?per_page=60";
 
-            if (config.AdrDirectoryUrls.ContainsKey(repoDotName))
+            if (config.AdrDirectoryUrls.ContainsKey(applicationName))
             {
-                pathUrl = $"/repos/GSFSGroup/{repoDotName}/contents/{config.AdrDirectoryUrls[repoDotName]}?per_page=60";
+                pathUrl = $"/repos/GSFSGroup/{applicationName}/contents/{config.AdrDirectoryUrls[applicationName]}?per_page=60";
             }
 
             var uriBuilder = new UriBuilder($"{config.BaseUrl}{pathUrl}");
@@ -184,15 +184,15 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the time at which a specific Adr was last updated.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns> A string of the date on which the Adr was most recently updated.</returns>
-        public async Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
+        public async Task<DateTime> GetAdrLastUpdatedData(string applicationName, string adrTitle)
         {
             var config = gitHubServiceConfig.Value;
-            var pathUrl = $"/repos/GSFSGroup/{repoDotName}/commits?path={config.AdrDirectoryUrls[repoDotName]}/{adrTitle}&page=1&per_page=1";
+            var pathUrl = $"/repos/GSFSGroup/{applicationName}/commits?path={config.AdrDirectoryUrls[applicationName]}/{adrTitle}&page=1&per_page=1";
 
-            if (!config.AdrDirectoryUrls.ContainsKey(repoDotName))
+            if (!config.AdrDirectoryUrls.ContainsKey(applicationName))
             {
                 return new DateTime(2015, 12, 25);
             }

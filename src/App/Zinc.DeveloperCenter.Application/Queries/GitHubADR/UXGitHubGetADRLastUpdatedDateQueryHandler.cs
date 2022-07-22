@@ -23,7 +23,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
             logger.LogDebug("Invoke api Proxy to get Adr update times from GitHub.");
 
             var record = await gitHubService
-                .GetAdrLastUpdatedData(request.RepoDotName, request.AdrTitle)
+                .GetAdrLastUpdatedData(request.ApplicationName, request.AdrTitle)
                 .ConfigureAwait(false);
 
             return record;

@@ -45,7 +45,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         /// <summary>
         /// Gets the list of ADRs in a GSFS GitHub group repo.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns>The collection of grantable activities for the user.</returns>
         /// <response code="200">The grantable activities were returned.</response>
@@ -60,15 +60,15 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         [ProducesResponseType(typeof(string), 403)]
         [ProducesResponseType(typeof(string), 500)]
         [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("update-dates/{repoDotName}/{adrTitle}")]
-        public async Task<IActionResult> GitHubUdpateLastUpdatedDates(string repoDotName, string adrTitle)
+        [HttpGet("update-dates/{applicationName}/{adrTitle}")]
+        public async Task<IActionResult> GitHubUdpateLastUpdatedDates(string applicationName, string adrTitle)
         {
             return await this.Execute(logger, async () =>
             {
                 var request = new UXGitHubGetAdrLastUpdatedDateQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    repoDotName,
+                    applicationName,
                     adrTitle);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
@@ -80,7 +80,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         /// <summary>
         /// Gets the list of ADRs in a GSFS GitHub group repo.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="sortedOn"> One of three options to sort Adr list: last updated date, number, title.</param>
         /// <param name="sortAsc"> Denotes whether to sort ascending or descending.</param>
         /// <returns>The collection of grantable activities for the user.</returns>
@@ -96,15 +96,15 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.GitHub_API
         [ProducesResponseType(typeof(string), 403)]
         [ProducesResponseType(typeof(string), 500)]
         [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("{repoDotName}/details/sorted-on/{sortedOn}/sort-asc/{sortAsc}")]
-        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string repoDotName, string sortedOn, bool sortAsc)
+        [HttpGet("{applicationName}/details/sorted-on/{sortedOn}/sort-asc/{sortAsc}")]
+        public async Task<IActionResult> GitHubGetSpecificAdrSummaries(string applicationName, string sortedOn, bool sortAsc)
         {
             return await this.Execute(logger, async () =>
             {
                 var request = new UXGitHubGetADRsForRepoQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    repoDotName,
+                    applicationName,
                     sortedOn,
                     sortAsc);
 

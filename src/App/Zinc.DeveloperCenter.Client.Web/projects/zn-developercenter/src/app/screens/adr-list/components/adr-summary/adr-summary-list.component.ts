@@ -13,7 +13,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
 })
 export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
-    public repoDotName!: string;
+    public applicationName!: string;
 
     @Input()
     public sortedOn = 'number';
@@ -48,7 +48,7 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
 
     private getAdrsForCurrentRepo(): void {
         if (this.expanded) {
-            this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
+            this.adrService.listAdrs(this.applicationName, this.sortedOn, this.sortAsc)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe(adrs => {
                     this.adrs = adrs;
@@ -67,7 +67,7 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
 
     public updateLastUpdatedDates(): void {
         this.adrs.items.forEach(adr => {
-            this.adrService.updateDates(this.repoDotName, adr.adrTitle)
+            this.adrService.updateDates(this.applicationName, adr.adrTitle)
                 .subscribe(_lastUpdatedDate => {
                     adr.lastUpdatedDate = _lastUpdatedDate;
                     adr.lastUpdatedDateString = new Date(_lastUpdatedDate).toLocaleDateString(undefined, {

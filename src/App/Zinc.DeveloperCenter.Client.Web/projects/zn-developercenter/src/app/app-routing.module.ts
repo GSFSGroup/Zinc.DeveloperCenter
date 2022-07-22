@@ -89,7 +89,7 @@ export const routes: Routes = [
                 children: [
                     { path: '', component: RepoListComponent},
                     {
-                        path: 'adr-render/:adrTitle/:adrNumberString/:repoDotName/download-url/:downloadUrl/html-url/:htmlUrl',
+                        path: 'adr-render/:adrTitle/:adrNumberString/:applicationName/download-url/:downloadUrl/html-url/:htmlUrl',
                         data: {
                             breadcrumb: {
                                 title: 'ADR Render',

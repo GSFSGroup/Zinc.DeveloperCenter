@@ -13,12 +13,12 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Path to ADR in GitHub repo.</param>
-        public UXGitHubGetAdrLastUpdatedDateQuery(string tenantId, Guid correlationId, string repoDotName, string adrTitle)
+        public UXGitHubGetAdrLastUpdatedDateQuery(string tenantId, Guid correlationId, string applicationName, string adrTitle)
             : base(tenantId, correlationId)
         {
-            this.RepoDotName = repoDotName;
+            this.ApplicationName = applicationName;
             this.AdrTitle = adrTitle;
         }
 
@@ -31,7 +31,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
         /// <summary>
         /// Full name of repo.
         /// </summary>
-        public string RepoDotName { get; }
+        public string ApplicationName { get; }
 
         /// <summary>
         /// Full title of Adr. ex: adr-0001-full-adr-name.md.

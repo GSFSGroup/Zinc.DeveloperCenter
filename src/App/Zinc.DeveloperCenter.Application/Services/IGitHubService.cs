@@ -27,16 +27,16 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Adrs for a specific Repo in the GSFS group.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of Adrs from a specific GSFS group repo.</returns>
-        Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string repoDotName);
+        Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string applicationName);
 
         /// <summary>
         /// Retrieves the time at which a specific Adr was last updated.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns> A string of the date on which the Adr was most recently updated.</returns>
-        Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle);
+        Task<DateTime> GetAdrLastUpdatedData(string applicationName, string adrTitle);
     }
 }

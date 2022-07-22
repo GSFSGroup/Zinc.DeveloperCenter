@@ -93,15 +93,15 @@ namespace Zinc.DeveloperCenter.Application.Services
 
                 var repo = new GitHubRepoModel
                 {
-                    DotName = repoRecord,
-                    NeatName = neatName,
-                    Element = element,
+                    ApplicationName = repoRecord,
+                    ApplicationDisplayName = neatName,
+                    ApplicationElement = element,
                 };
 
                 repoList.Add(repo);
             }
 
-            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.NeatName).ToList();
+            List<GitHubRepoModel> sortedRepoList = repoList.OrderBy(o => o.ApplicationDisplayName).ToList();
 
             return sortedRepoList;
         }
@@ -109,10 +109,10 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the time at which a specific Adr was last updated.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <param name="adrTitle"> Full title of Adr. ex: adr-0001-full-adr-name.md.</param>
         /// <returns> A string of the date on which the Adr was most recently updated.</returns>
-        public async Task<DateTime> GetAdrLastUpdatedData(string repoDotName, string adrTitle)
+        public async Task<DateTime> GetAdrLastUpdatedData(string applicationName, string adrTitle)
         {
             var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetLastUpdatedDateResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
@@ -140,9 +140,9 @@ namespace Zinc.DeveloperCenter.Application.Services
         /// <summary>
         /// Retrieves the list of Repos for the GSFS GitHub group.
         /// </summary>
-        /// <param name="repoDotName"> Full name of repo for Adr. ex: Platinum.Products.</param>
+        /// <param name="applicationName"> Full name of repo for Adr. ex: Platinum.Products.</param>
         /// <returns> A List of GitHub Repo Records.</returns>
-        public async Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string repoDotName)
+        public async Task<List<GitHubAdrSummaryModel>> GetGitHubAdrData(string applicationName)
         {
             var resource = $"{typeof(FakeGitHubService).Namespace}.GitHubApiGetAdrsResponse.json";
             await using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);

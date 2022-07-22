@@ -6,7 +6,7 @@
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items" (click)="adrLink.click()">
         <div class="item-summary item-content">
             <a id="adr-{{adr.adrTitle}}"
-                routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/{{repoDotName}}/download-url/{{encodeUrl(adr.downloadUrl)}}/html-url/{{encodeUrl(adr.htmlUrl)}}"
+                routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/{{applicationName}}/download-url/{{encodeUrl(adr.downloadUrl)}}/html-url/{{encodeUrl(adr.htmlUrl)}}"
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
                 {{adr.neatTitle}}

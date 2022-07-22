@@ -27,7 +27,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
             logger.LogDebug("Invoke api Proxy to get GitHub adrs");
 
             var adrList = await gitHubService
-                .GetGitHubAdrData(request.RepoDotName)
+                .GetGitHubAdrData(request.ApplicationName)
                 .ConfigureAwait(false);
 
             List<GitHubAdrSummaryModel> sortedAdrList;

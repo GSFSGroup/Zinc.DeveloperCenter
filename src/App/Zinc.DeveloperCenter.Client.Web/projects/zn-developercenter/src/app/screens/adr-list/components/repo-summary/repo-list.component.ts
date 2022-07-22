@@ -45,15 +45,15 @@ export class RepoListComponent implements OnInit, OnDestroy {
         this.repoService.listRepos()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(repos => {
-                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.dotName] = false);
+                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.applicationName] = false);
                 this.repos = repos;
                 this.loadingService.hide();
                 this.fetchedRepos = true;
             });
     }
 
-    public repoToggle(repoDotName: string, openedState: boolean) {
-        this.expanded[repoDotName] = openedState;
+    public repoToggle(applicationName: string, openedState: boolean) {
+        this.expanded[applicationName] = openedState;
     }
 
     public toggleSideBarClicked() {
