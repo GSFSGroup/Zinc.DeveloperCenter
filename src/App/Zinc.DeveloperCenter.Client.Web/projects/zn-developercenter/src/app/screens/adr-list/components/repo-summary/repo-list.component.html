@@ -118,7 +118,7 @@
         </div>
         
         <div>
-            <ul class="adr-list fill-container scrollable-y" id="adr-list">
+            <ul class="adr-list fill-container scrollable-y margin-right-36" id="adr-list">
                 <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
                     <mat-expansion-panel [expanded]="expanded[repo.dotName]" (opened)="repoToggle(repo.dotName, true)"
                         (closed)="repoToggle(repo.dotName, false)">

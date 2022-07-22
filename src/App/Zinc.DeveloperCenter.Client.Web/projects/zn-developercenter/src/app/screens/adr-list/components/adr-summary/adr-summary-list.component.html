@@ -2,7 +2,7 @@
     <span>There are no ADRs in this repository.</span>
 </div>
 
-<ul class="item-list padding-all-24" id="adr-summary-list" *ngIf="adrs?.items?.length">
+<ul class="item-list padding-all-24 margin-right-36" id="adr-summary-list" *ngIf="adrs?.items?.length">
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items" (click)="adrLink.click()">
         <div class="item-summary item-content">
             <a id="adr-{{adr.adrTitle}}"
@@ -10,7 +10,7 @@
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
                 {{adr.neatTitle}}
-                <button>
+                <button class="float-right" type="button" mat-icon-button>
                     <mat-icon *ngIf="!adr.favorited">star_border</mat-icon>
                     <mat-icon *ngIf="adr.favorited">star</mat-icon>
                 </button>
