@@ -13,70 +13,30 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
-        /// <param name="number">The ADR number.</param>
-        /// <param name="title">The ADR title.</param>
-        /// <param name="downloadUrl">The ADR content url.</param>
-        /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
+        /// <param name="filePath">The ADR file path in GitHub.</param>
         /// <param name="lastUpdatedBy">The user who last updated the ADR.</param>
-        /// <param name="lastUpdatedOn">The ADR last updated date.</param>
+        /// <param name="lastUpdatedOn">The date when the ADR was last updated.</param>
         /// <param name="content">The raw ADR markdown content.</param>
         public ArchitectureDecisionRecord(
             string tenantId,
             string applicationName,
-            int number,
-            string title,
-            string downloadUrl,
-            string htmlUrl,
+            string filePath,
             string? lastUpdatedBy,
             DateTime? lastUpdatedOn,
             string? content)
         {
+            if (lastUpdatedOn != null && lastUpdatedOn.Value.Kind == DateTimeKind.Unspecified)
+            {
+                lastUpdatedOn = new DateTime(lastUpdatedOn.Value.Ticks, DateTimeKind.Utc);
+            }
+
             TenantId = tenantId;
             ApplicationName = applicationName;
-            Title = title;
-            Number = number;
+            FilePath = filePath;
             LastUpdatedBy = lastUpdatedBy;
             LastUpdatedOn = lastUpdatedOn;
-            DownloadUrl = downloadUrl;
-            HtmlUrl = htmlUrl;
-
-            if (content?.Length > 0)
-            {
-                Content = content;
-            }
+            Content = content;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the class.
-        /// </summary>
-        /// <param name="tenantId">The tenant identifier.</param>
-        /// <param name="applicationName">The application name.</param>
-        /// <param name="number">The ADR number.</param>
-        /// <param name="title">The ADR title.</param>
-        /// <param name="downloadUrl">The ADR content url.</param>
-        /// <param name="htmlUrl">The URL used to view the ADR on GitHub.</param>
-        /// <param name="lastUpdatedBy">The user who last updated the ADR.</param>
-        /// <param name="lastUpdatedOn">The ADR last updated date.</param>
-        public ArchitectureDecisionRecord(
-            string tenantId,
-            string applicationName,
-            int number,
-            string title,
-            string downloadUrl,
-            string htmlUrl,
-            string? lastUpdatedBy,
-            DateTime? lastUpdatedOn)
-            : this(
-                  tenantId,
-                  applicationName,
-                  number,
-                  title,
-                  downloadUrl,
-                  htmlUrl,
-                  lastUpdatedBy,
-                  lastUpdatedOn,
-                  content: null)
-        { }
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -85,19 +45,49 @@ namespace Zinc.DeveloperCenter.Domain.Model
         { }
 
         /// <summary>
+        /// Gets the unique identifier.
+        /// </summary>
+        public Guid Id { get; protected set; } = Guid.NewGuid();
+
+        /// <summary>
+        /// Gets the tenant identifier.
+        /// </summary>
+        public string TenantId { get; protected set; } = string.Empty;
+
+        /// <summary>
         /// Gets the application name where the ADR is defined.
         /// </summary>
-        public string? ApplicationName { get; protected set; }
+        public string ApplicationName { get; protected set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the file path in GitHub.
+        /// </summary>
+        public string FilePath { get; protected set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the file name.
+        /// </summary>
+        public string FileName => System.IO.Path.GetFileName(FilePath);
 
         /// <summary>
         /// Gets the ADR title.
         /// </summary>
-        public string? Title { get; protected set; }
+        public string Title => System.IO.Path.GetFileNameWithoutExtension(FilePath);
+
+        /// <summary>
+        /// Gets the ADR title display name.
+        /// </summary>
+        public string TitleDisplay => Title.Replace('-', ' ');
 
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public int Number { get; protected set; }
+        public int Number => int.Parse(FileName.Split('-')[1]);
+
+        /// <summary>
+        /// Gets the ADR number display format (adr-0001).
+        /// </summary>
+        public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
 
         /// <summary>
         /// Gets the user who last updated the ADR.
@@ -114,50 +104,20 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// </summary>
         public string? Content { get; protected set; }
 
-        /// <summary>
-        /// Gets the ADR download url.
-        /// </summary>
-        public string? DownloadUrl { get; protected set; }
-
-        /// <summary>
-        /// Gets the url used to view the ADR on GitHub.
-        /// </summary>
-        public string? HtmlUrl { get; protected set; }
-
         /// <inheritdoc/>
-        public override string Key => $"{TenantId}/{ApplicationName}/{Number}";
-
-        /// <summary>
-        /// Gets the tenant identifier.
-        /// </summary>
-        public string? TenantId { get; protected set; }
-
-        /// <summary>
-        /// Updates the ADR title.
-        /// </summary>
-        /// <param name="newTitle">The new title.</param>
-        public void UpdateTitle(string newTitle)
-        {
-            if (string.IsNullOrWhiteSpace(newTitle))
-            {
-                throw new ArgumentException($"The {nameof(newTitle)} argument is required.", nameof(newTitle));
-            }
-
-            if (Title != newTitle)
-            {
-                Title = newTitle;
-            }
-        }
+        public override string Key => $"{TenantId}/{ApplicationName}/{FilePath}";
 
         /// <summary>
         /// Updates the ADR last updated date.
         /// </summary>
-        /// <param name="lastUpdated">The last updated date.</param>
-        public void UpdateLastUpdated(DateTime? lastUpdated)
+        /// <param name="updatedBy">The user who last updated the ADR.</param>
+        /// <param name="updatedOn">The date the ADR was last updated.</param>
+        public void UpdateLastUpdated(string updatedBy, DateTime updatedOn)
         {
-            if (LastUpdatedOn != lastUpdated)
+            if (LastUpdatedBy != updatedBy && LastUpdatedOn != updatedOn)
             {
-                LastUpdatedOn = lastUpdated;
+                LastUpdatedBy = updatedBy;
+                LastUpdatedOn = updatedOn;
             }
         }
 
@@ -167,46 +127,12 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <param name="content">The raw markdown content.</param>
         public void UpdateContent(string content)
         {
-            if (string.IsNullOrWhiteSpace(content))
+            if (content.Length == 0)
             {
                 throw new ArgumentException($"The {nameof(content)} argument is required.", nameof(content));
             }
 
             Content = content;
-        }
-
-        /// <summary>
-        /// Updates the ADR content url.
-        /// </summary>
-        /// <param name="downloadUrl">The content url.</param>
-        public void UpdateDownloadUrl(string downloadUrl)
-        {
-            if (string.IsNullOrWhiteSpace(downloadUrl))
-            {
-                throw new ArgumentException($"The {nameof(downloadUrl)} argument is required.", nameof(downloadUrl));
-            }
-
-            if (DownloadUrl != downloadUrl)
-            {
-                DownloadUrl = downloadUrl;
-            }
-        }
-
-        /// <summary>
-        /// Updates the ADR content url.
-        /// </summary>
-        /// <param name="htmlUrl">The content url.</param>
-        public void UpdateHtmlUrl(string htmlUrl)
-        {
-            if (string.IsNullOrWhiteSpace(htmlUrl))
-            {
-                throw new ArgumentException($"The {nameof(htmlUrl)} argument is required.", nameof(htmlUrl));
-            }
-
-            if (HtmlUrl != htmlUrl)
-            {
-                HtmlUrl = htmlUrl;
-            }
         }
     }
 }

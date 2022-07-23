@@ -61,15 +61,16 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
                  * The Quartz documentation recommends NOT throwing exceptions from jobs, because the job will
                  * just get executed again immediately, and will likely throw the same exception. So, following
                  * their best practice guidelines, we swallow the exception and let the job execute at its next
-                 * scheduled time. Note also that the JobHealthCheck<OutboxJob>.Heartbeat() call will not be made,
-                 * so we will know the job is not executing when our health check alarm bells start going off.
+                 * scheduled time. Note also that the JobHealthCheck.Heartbeat() call will not be made,so we will
+                 * know the job is not executing when our health check alarm bells start going off.
                  * */
                 logger.LogError(
                     e,
-                    "{Error} executing {Job}: {Message}",
+                    "{Error} executing {Job}: {Message}\n{Stack}",
                     e.GetType().Name,
                     GetType().FullName,
-                    e.Message);
+                    e.Message,
+                    e.StackTrace);
             }
         }
 

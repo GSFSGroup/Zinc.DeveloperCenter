@@ -8,6 +8,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
     public class UXAppListGetArchitectureDecisionRecordsQueryModel
     {
         /// <summary>
+        /// Gets the id of the ADR.
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
         /// Gets the application name where the ADR is defined.
         /// </summary>
         public string? ApplicationName { get; set; }
@@ -20,7 +25,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR title.
         /// </summary>
-        public string? TitleDisplay => Title!.Replace('-', ' ');
+        public string? TitleDisplay { get; set; }
 
         /// <summary>
         /// Gets the ADR number.
@@ -30,7 +35,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
+        public string? NumberDisplay { get; set; }
 
         /// <summary>
         /// Gets who last updated the ADR.
@@ -41,15 +46,5 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// Gets the ADR last updated date.
         /// </summary>
         public DateTime? LastUpdatedOn { get; set; }
-
-        /// <summary>
-        /// Gets the ADR download url.
-        /// </summary>
-        public string? DownloadUrl { get; set; }
-
-        /// <summary>
-        /// Gets the url used to view the ADR on GitHub.
-        /// </summary>
-        public string? HtmlUrl { get; set; }
     }
 }

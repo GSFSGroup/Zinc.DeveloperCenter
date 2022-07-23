@@ -34,43 +34,42 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             Create
                 .Table(applicationTableName).InSchema(schemaName)
                 .WithColumn("tenant_id").AsAnsiString().NotNullable()
-                .WithColumn("application_name").AsAnsiString().NotNullable()
-                .WithColumn("application_display_name").AsAnsiString().NotNullable()
-                .WithColumn("application_element").AsAnsiString().Nullable().WithDefaultValue(string.Empty)
+                .WithColumn("name").AsAnsiString().NotNullable()
+                .WithColumn("display_name").AsAnsiString().NotNullable()
+                .WithColumn("url").AsString().NotNullable().WithDefaultValue(string.Empty)
+                .WithColumn("element").AsAnsiString().Nullable().WithDefaultValue(string.Empty)
+                .WithColumn("description").AsString().Nullable().WithDefaultValue(string.Empty)
                 ;
 
             // architecture_decision_record table
             Create
                 .Table(adrTableName).InSchema(schemaName)
-                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{adrTableName}_pkey").Identity()
+                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{adrTableName}_pkey").WithDefault(SystemMethods.NewGuid)
                 .WithColumn("tenant_id").AsAnsiString().NotNullable()
                 .WithColumn("application_name").AsAnsiString().NotNullable()
-                .WithColumn("number").AsInt32().NotNullable()
-                .WithColumn("title").AsAnsiString().NotNullable()
-                .WithColumn("download_url").AsAnsiString().NotNullable()
-                .WithColumn("html_url").AsAnsiString().NotNullable()
+                .WithColumn("file_path").AsAnsiString().NotNullable()
                 .WithColumn("last_updated_by").AsAnsiString().Nullable()
-                .WithColumn("last_updated_on").AsDate().Nullable()
+                .WithColumn("last_updated_on").AsDateTime().Nullable()
                 ;
 
             // architecture_decision_record_search table
             Create
                 .Table(searchTableName).InSchema(schemaName)
-                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{searchTableName}_pkey")
+                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{searchTableName}_pkey")
                 .WithColumn("search_vector").AsCustom("tsvector").NotNullable()
                 ;
 
             // architecture_decision_record_favorite table
             Create
                 .Table(favoriteTableName).InSchema(schemaName)
-                .WithColumn($"{adrTableName}_sid").AsInt32().NotNullable()
+                .WithColumn($"{adrTableName}_id").AsGuid().NotNullable()
                 .WithColumn("user_id").AsAnsiString().NotNullable()
                 ;
 
             // architecture_decision_record_viewcount table
             Create
                 .Table(viewCountTableName).InSchema(schemaName)
-                .WithColumn("sid").AsInt32().NotNullable().PrimaryKey($"{viewCountTableName}_pkey")
+                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{viewCountTableName}_pkey")
                 .WithColumn("view_count").AsInt32().NotNullable().WithDefaultValue(0)
                 ;
         }
@@ -81,61 +80,54 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             Create
                 .PrimaryKey($"{applicationTableName}_key")
                 .OnTable(applicationTableName).WithSchema(schemaName)
-                .Columns("tenant_id", "application_name")
+                .Columns("tenant_id", "name")
                 ;
 
             // architecture_decision_record key
             Create
                 .UniqueConstraint($"{adrTableName}_key")
                 .OnTable(adrTableName).WithSchema(schemaName)
-                .Columns("tenant_id", "application_name", "number")
+                .Columns("tenant_id", "application_name", "file_path")
                 ;
 
             // architecture_decision_record_favorite key
             Create
                 .UniqueConstraint($"{favoriteTableName}_key")
                 .OnTable(favoriteTableName).WithSchema(schemaName)
-                .Columns($"{adrTableName}_sid", "user_id");
+                .Columns($"{adrTableName}_id", "user_id");
         }
 
         private void CreateForeignKeys()
         {
             // architecture_decision_record to application foreign key
             Create
-                .ForeignKey($"{adrTableName}_tenant_id_application_name_fkey")
+                .ForeignKey($"{applicationTableName}_tenant_id_application_name_fkey")
                 .FromTable(adrTableName).InSchema(schemaName).ForeignColumns("tenant_id", "application_name")
-                .ToTable(applicationTableName).InSchema(schemaName).PrimaryColumns("tenant_id", "application_name")
+                .ToTable(applicationTableName).InSchema(schemaName).PrimaryColumns("tenant_id", "name")
                 ;
 
             // architecture_decision_record_search to architecture_decision_record foreign key
             Create
-                .ForeignKey($"{searchTableName}_sid_fkey")
-                .FromTable(searchTableName).InSchema(schemaName).ForeignColumn("sid")
-                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("sid")
+                .ForeignKey($"{searchTableName}_id_fkey")
+                .FromTable(searchTableName).InSchema(schemaName).ForeignColumn("id")
+                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("id")
                 ;
 
             // architecture_decision_record_favorite to architecture_decision_record foreign key
             Create
-                .ForeignKey($"{adrTableName}_sid_fkey")
-                .FromTable(favoriteTableName).InSchema(schemaName).ForeignColumn($"{adrTableName}_sid")
-                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("sid");
+                .ForeignKey($"{favoriteTableName}_{adrTableName}_id_fkey")
+                .FromTable(favoriteTableName).InSchema(schemaName).ForeignColumn($"{adrTableName}_id")
+                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("id");
 
             // architecture_decision_record_viewcount to architecture_decision_record foreign key
             Create
-                .ForeignKey($"{viewCountTableName}_sid_fkey")
-                .FromTable(viewCountTableName).InSchema(schemaName).ForeignColumn("sid")
-                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("sid");
+                .ForeignKey($"{viewCountTableName}_id_fkey")
+                .FromTable(viewCountTableName).InSchema(schemaName).ForeignColumn("id")
+                .ToTable(adrTableName).InSchema(schemaName).PrimaryColumn("id");
         }
 
         private void CreateIndexes()
         {
-            // architecture_decision_record foreign key index
-            Create.Index($"{adrTableName}_tenant_id_application_name_fkey_idx")
-                .OnTable(adrTableName).InSchema(schemaName)
-                .OnColumn("tenant_id").Ascending()
-                .OnColumn("application_name").Ascending()
-                ;
-
             // architecture_decision_record_search full text index
             Execute.Sql($"CREATE INDEX {searchTableName}_search_vector_idx ON {schemaName}.{searchTableName} USING GIN (search_vector);");
         }

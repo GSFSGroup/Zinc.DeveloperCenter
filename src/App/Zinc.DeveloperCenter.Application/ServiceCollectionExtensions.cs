@@ -1,3 +1,5 @@
+using System;
+using System.Net.Http.Headers;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +8,7 @@ using Zinc.DeveloperCenter.Application.Services;
 using Zinc.DeveloperCenter.Application.Services.GitHub;
 using Zinc.DeveloperCenter.Data.Repositories;
 using Zinc.DeveloperCenter.Domain.Repositories;
-using Zinc.DeveloperCenter.Domain.Services.GitHub;
+using Zinc.DeveloperCenter.Domain.Model.GitHub;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -15,6 +17,8 @@ namespace Zinc.DeveloperCenter.Application
     /// </summary>
     public static class ServiceCollectionExtensions
     {
+        private static readonly string GitHubApiBaseAddress = "https://api.github.com";
+
         /// <summary>
         /// Adds the application services to the container.
         /// </summary>
@@ -31,8 +35,8 @@ namespace Zinc.DeveloperCenter.Application
                 .AddApiServices(configuration)
                 .AddScoped<IApplicationRepository, ApplicationRepository>()
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
-                .AddScoped<IGitHubApiService, GitHubApiService>()
                 ;
+
             return services;
         }
 
@@ -45,6 +49,15 @@ namespace Zinc.DeveloperCenter.Application
         public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
         {
             // GitHub
+            services
+                .Configure<GitHubApiConfig>(configuration.GetSection(GitHubApiConfig.SectionName))
+                .AddHttpClient<IGitHubApiService, GitHubApiService>(client =>
+                {
+                    client.BaseAddress = new Uri(GitHubApiBaseAddress);
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("RedLine", "1.0"));
+                });
+
             var gitHubServiceConfig = configuration
                 .GetSection(GitHubServiceConfig.SectionName)
                 .Get<GitHubServiceConfig>();

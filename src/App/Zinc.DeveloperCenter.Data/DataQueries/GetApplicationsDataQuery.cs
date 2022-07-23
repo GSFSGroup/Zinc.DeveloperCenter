@@ -16,7 +16,7 @@ namespace Zinc.DeveloperCenter.Data.DataQueries
         public GetApplicationsDataQuery(string tenantId)
         {
             Command = ApplicationRepository.Sql.ReadAll;
-            Params = new { tenantId };
+            Params = new { TenantId = tenantId };
         }
     }
 }

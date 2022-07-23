@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
@@ -12,14 +11,10 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
     internal class UXAppListGetApplicationsQueryHandler : IRequestHandler<UXAppListGetApplicationsQuery, PageableResult<UXAppListGetApplicationsQueryModel>>
     {
         private readonly IApplicationRepository repository;
-        private readonly IMapper mapper;
 
-        public UXAppListGetApplicationsQueryHandler(
-            IApplicationRepository repository,
-            IMapper mapper)
+        public UXAppListGetApplicationsQueryHandler(IApplicationRepository repository)
         {
             this.repository = repository;
-            this.mapper = mapper;
         }
 
         public async Task<PageableResult<UXAppListGetApplicationsQueryModel>> Handle(UXAppListGetApplicationsQuery request, CancellationToken cancellationToken)
@@ -28,7 +23,14 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items
-                .Select(x => mapper.Map<UXAppListGetApplicationsQueryModel>(x));
+                .Select(x => new UXAppListGetApplicationsQueryModel
+                {
+                    ApplicationDescription = x.Description,
+                    ApplicationDisplayName = x.DisplayName,
+                    ApplicationElement = x.Element,
+                    ApplicationName = x.Name,
+                    ApplicationUrl = x.Url,
+                });
 
             return new PageableResult<UXAppListGetApplicationsQueryModel>(items);
         }

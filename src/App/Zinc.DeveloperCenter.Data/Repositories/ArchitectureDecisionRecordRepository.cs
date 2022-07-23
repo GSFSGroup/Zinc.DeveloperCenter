@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ using RedLine.Data.Repositories;
 using RedLine.Domain;
 using RedLine.Domain.Model;
 using RedLine.Domain.Repositories;
-using Zinc.DeveloperCenter.Domain.Model;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Model;
 
 namespace Zinc.DeveloperCenter.Data.Repositories
 {
@@ -36,13 +37,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             var keyParts = key.Split('/');
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
-            var number = int.Parse(keyParts[2]);
+            var filePath = keyParts[2];
 
             var args = new
             {
                 tenantId,
                 applicationName,
-                number,
+                filePath,
             };
 
             return await connection.ExecuteScalarAsync<bool>(Sql.Exists, args).ConfigureAwait(false);
@@ -62,13 +63,13 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             var keyParts = key.Split('/');
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
-            var number = int.Parse(keyParts[2]);
+            var filePath = keyParts[2];
 
             var args = new
             {
                 tenantId,
                 applicationName,
-                number,
+                filePath,
             };
 
             var result = (await connection.QueryAsync<ArchitectureDecisionRecord>(Sql.Read, args)
@@ -92,21 +93,18 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             {
                 aggregate.TenantId,
                 aggregate.ApplicationName,
-                aggregate.Number,
-                aggregate.Title,
-                aggregate.DownloadUrl,
-                aggregate.HtmlUrl,
+                aggregate.FilePath,
                 aggregate.LastUpdatedBy,
                 aggregate.LastUpdatedOn,
             };
 
-            var sid = await connection.ExecuteScalarAsync<int>(Sql.Save, args).ConfigureAwait(false);
+            var id = await connection.ExecuteScalarAsync<Guid>(Sql.Save, args).ConfigureAwait(false);
 
             if (aggregate.Content?.Length > 0)
             {
                 await connection.ExecuteAsync(
                     Sql.SaveSearchVector,
-                    new { Sid = sid, Content = aggregate.Content }).ConfigureAwait(false);
+                    new { Id = id, Content = aggregate.Content }).ConfigureAwait(false);
             }
 
             return 1;
@@ -122,7 +120,7 @@ SELECT EXISTS (
     SELECT 1 FROM {TableName}
     WHERE tenant_id = @tenantId
     AND   application_name = @applicationName
-    AND   number = @number
+    AND   file_path = @filePath
 );";
 
             internal static readonly string Read = $@"
@@ -130,7 +128,7 @@ SELECT *
 FROM {TableName}
 WHERE tenant_id = @tenantId
 AND   application_name = @applicationName
-AND   number = @number
+AND   file_path = @filePath
 ;";
 
             internal static readonly string ReadAllForApplication = $@"
@@ -142,43 +140,36 @@ AND   application_name = @applicationName
 
             internal static readonly string Save = $@"
 INSERT INTO {TableName} (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on,
 ) VALUES (
+    @Id,
     @TenantId,
     @ApplicationName,
-    @Number,
-    @Title,
-    @DownloadUrl,
-    @HtmlUrl,
+    @FilePath,
     @LastUpdatedBy,
     @LastUpdatedOn
 )
-ON CONFLICT (tenant_id, application_name, number)
+ON CONFLICT (tenant_id, application_name, file_path)
 DO UPDATE SET
-    title = EXCLUDED.title,
-    download_url = EXCLUDED.download_url,
-    html_url = EXCLUDED.html_url,
     last_updated_by = EXCLUDED.last_updated_by,
     last_updated_on = EXCLUDED.last_updated_on
-REURNING sid
+REURNING id
 ;";
 
             internal static readonly string SaveSearchVector = $@"
 INSERT INTO {TableName}_search (
-    sid,
+    id,
     search_vector
 ) VALUES (
-    @Sid,
+    @Id,
     to_tsvector('english', @Content)
 )
-ON CONFLICT (sid)
+ON CONFLICT (id)
 DO UPDATE SET
     search_vector = to_tsvector('english', @Content)
 ;";
@@ -192,9 +183,8 @@ DO UPDATE SET
 SELECT adr.*
 FROM {TableName} AS adr
 INNER JOIN {TableName}_search AS search
-    ON search.sid = adr.sid
+    ON search.id = adr.id AND adr.tenant_id = @tenantId
 WHERE search.search_vector @@ to_tsquery('english', @searchPattern)
-AND adr.tenant_id = @tenantId
 ;";
         }
     }

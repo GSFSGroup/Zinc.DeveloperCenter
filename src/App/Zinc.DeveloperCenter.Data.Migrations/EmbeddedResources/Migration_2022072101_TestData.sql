@@ -1,123 +1,111 @@
 INSERT INTO developercenter.application (
     tenant_id,
-    application_name,
-    application_display_name,
-    application_element
+    name,
+    display_name,
+    url,
+    element,
+    description
 ) VALUES (
     'GSFSGroup',
-    'Zinc.SampleApplicationOne',
-    'Sample Application One',
-    'Zinc'
+    'Zinc.Templates',
+    'Templates',
+    'https://github.com/GSFSGroup/Zinc.Templates',
+    'Zinc',
+    'Contains dotnet templates for new projects.'
 );
 
 INSERT INTO developercenter.application (
     tenant_id,
-    application_name,
-    application_display_name,
-    application_element
+    name,
+    display_name,
+    url,
+    element,
+    description
 ) VALUES (
     'GSFSGroup',
-    'Zinc.SampleApplicationTwo',
-    'Sample Application Two',
-    'Zinc'
+    'Molybdenum.Earnings',
+    'Earnings',
+    'https://github.com/GSFSGroup/Molybdenum.Earnings',
+    'Zinc',
+    'A service to calculate earnings based on curves for insurance and insurance-like financial products.'
 );
 
 INSERT INTO developercenter.architecture_decision_record (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on
 ) VALUES (
+    '9f1840ec-03de-43ee-bcde-270596eb0f82',
     'GSFSGroup',
-    'Zinc.SampleApplicationOne',
-    1,
-    'adr-0001-record-architecture-decisions',
-    'https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md?ref=master',
-    'https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md',
-    'system',
+    'Zinc.Templates',
+    'dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md',
+    'Homer Simpson',
     '5/21/2018'
 );
 
 INSERT INTO developercenter.architecture_decision_record (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on
 ) VALUES (
+    '241dfb9a-3231-4a1b-9bf4-b1b7035970fc',
     'GSFSGroup',
-    'Zinc.SampleApplicationOne',
-    2,
-    'adr-0002-organize-solution-into-layers',
-    'https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md?ref=master',
-    'https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md',
-    'system',
+    'Zinc.Templates',
+    'dotnet-5.0/docs/RedLine/adr-0002-organize-solution-into-layers.md',
+    'Bart Simpson',
     '6/19/2019'
 );
 
 INSERT INTO developercenter.architecture_decision_record (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on
 ) VALUES (
+    '3f59ec32-7c6e-49ad-822b-1159e33fba37',
     'GSFSGroup',
-    'Zinc.SampleApplicationOne',
-    3,
-    'adr-0003-implement-outbox-on-web-requests',
-    'https://api.github.com/repos/GSFSGroup/Zinc.Templates/contents/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md?ref=master',
-    'https://github.com/GSFSGroup/Zinc.Templates/blob/master/dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md',
-    'system',
+    'Zinc.Templates',
+    'dotnet-5.0/docs/RedLine/adr-0003-implement-outbox-on-web-requests.md',
+    'Lisa Simpson',
     '7/4/2020'
 );
 
 INSERT INTO developercenter.architecture_decision_record (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on
 ) VALUES (
+    '718cbd4e-4828-418c-8ed5-30a87e5be9b7',
     'GSFSGroup',
-    'Zinc.SampleApplicationTwo',
-    1,
-    'adr-0001-event-sourcing',
-    'https://https://api.github.com/repos/GSFSGroup/Molybdenum.Earnings/contents/docs/App/adr-0001-event-sourcing.md?ref=main',
-    'https://github.com/GSFSGroup/Molybdenum.Earnings/blob/main/docs/App/adr-0001-event-sourcing.md',
-    'system',
+    'Molybdenum.Earnings',
+    'docs/App/adr-0001-event-sourcing.md',
+    'Moe Szyslak',
     '1/21/2022'
 );
 
 INSERT INTO developercenter.architecture_decision_record (
+    id,
     tenant_id,
     application_name,
-    number,
-    title,
-    download_url,
-    html_url,
+    file_path,
     last_updated_by,
     last_updated_on
 ) VALUES (
+    '55db5b8f-a425-4271-9ae9-6262c9fabf40',
     'GSFSGroup',
-    'Zinc.SampleApplicationTwo',
-    2,
-    'adr-0002-select-an-infinite-scroll-library',
-    'https://https://api.github.com/repos/GSFSGroup/Molybdenum.Earnings/contents/docs/App/adr-0002-select-an-infinite-scroll-library.md?ref=main',
-    'https://github.com/GSFSGroup/Molybdenum.Earnings/blob/main/docs/App/adr-0002-select-an-infinite-scroll-library.md',
-    'system',
+    'Molybdenum.Earnings',
+    'docs/App/adr-0002-select-an-infinite-scroll-library.md',
+    'Barney Gumble',
     '2/13/2022'
 );

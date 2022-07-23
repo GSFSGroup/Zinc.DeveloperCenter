@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
@@ -15,14 +14,10 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
     internal class UXAppListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAppListGetArchitectureDecisionRecordsQuery, PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
-        private readonly IMapper mapper;
 
-        public UXAppListGetArchitectureDecisionRecordsQueryHandler(
-            IArchitectureDecisionRecordRepository repository,
-            IMapper mapper)
+        public UXAppListGetArchitectureDecisionRecordsQueryHandler(IArchitectureDecisionRecordRepository repository)
         {
             this.repository = repository;
-            this.mapper = mapper;
         }
 
         public async Task<PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
@@ -31,7 +26,17 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items
-                .Select(x => mapper.Map<UXAppListGetArchitectureDecisionRecordsQueryModel>(x));
+                .Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
+                {
+                    ApplicationName = x.ApplicationName,
+                    LastUpdatedBy = x.LastUpdatedBy,
+                    LastUpdatedOn = x.LastUpdatedOn,
+                    Id = x.Id,
+                    Number = x.Number,
+                    NumberDisplay = x.NumberDisplay,
+                    Title = x.Title,
+                    TitleDisplay = x.TitleDisplay,
+                });
 
             return new PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>(items);
         }

@@ -37,7 +37,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
 
-            var args = new { TenantId = tenantId, ApplicationName = applicationName };
+            var args = new { TenantId = tenantId, Name = applicationName };
 
             return await connection.ExecuteScalarAsync<bool>(Sql.Exists, args).ConfigureAwait(false);
         }
@@ -49,7 +49,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
 
-            var args = new { TenantId = tenantId, ApplicationName = applicationName };
+            var args = new { TenantId = tenantId, Name = applicationName };
 
             return (await connection.QueryAsync<Application>(Sql.Read, args).ConfigureAwait(false))
                 .SingleOrDefault()!;
@@ -75,10 +75,12 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         {
             var args = new
             {
-                TenantId = aggregate.TenantId,
-                ApplicationName = aggregate.ApplicationName,
-                ApplicationDisplayName = aggregate.ApplicationDisplayName,
-                ApplicationElement = aggregate.ApplicationElement,
+                aggregate.TenantId,
+                aggregate.Name,
+                aggregate.DisplayName,
+                aggregate.Url,
+                aggregate.Element,
+                aggregate.Description,
             };
 
             return await connection.ExecuteAsync(Sql.Save, args).ConfigureAwait(false);
@@ -94,7 +96,7 @@ SELECT EXISTS (
     SELECT 1
     FROM {TableName}
     WHERE tenant_id = @TenantId
-    AND application_name = @ApplicationName
+    AND name = @Name
 );
 ";
 
@@ -102,7 +104,7 @@ SELECT EXISTS (
 SELECT *
 FROM {TableName}
 WHERE tenant_id = @TenantId
-AND application_name = @ApplicationName
+AND name = @Name
 ;";
 
             internal static readonly string ReadAll = $@"
@@ -114,20 +116,26 @@ WHERE tenant_id = @TenantId
             internal static readonly string Save = $@"
 INSERT INTO {TableName} (
     tenant_id,
-    application_name,
-    application_display_name,
-    application_element
+    name,
+    display_name,
+    url,
+    element,
+    description
 ) VALUES (
     @TenantId,
-    @ApplicationName,
-    @ApplicationDisplayName,
-    @ApplicationElement
+    @Name,
+    @DisplayName,
+    @Url,
+    @Element,
+    @Description
 )
-ON CONFLICT ON CONSTRAINT {TableName}_key
+ON CONFLICT (tenant_id, name)
 DO UPDATE SET
-    application_display_name = @ApplicationDisplayName,
-    application_element = @ApplicationElement
-;    
+    display_name = EXCLUDED.display_name,
+    url = EXCLUDED.url,
+    element = EXCLUDED.element,
+    description = EXCLUDED.description
+;
 ";
         }
     }
