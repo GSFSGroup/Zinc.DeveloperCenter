@@ -50,7 +50,7 @@ namespace Zinc.DeveloperCenter.Application
         {
             // GitHub
             services
-                .Configure<GitHubApiConfig>(configuration.GetSection(GitHubApiConfig.SectionName))
+                .AddScoped(_ => configuration.GetSection(GitHubApiConfig.SectionName).Get<GitHubApiConfig>())
                 .AddHttpClient<IGitHubApiService, GitHubApiService>(client =>
                 {
                     client.BaseAddress = new Uri(GitHubApiBaseAddress);

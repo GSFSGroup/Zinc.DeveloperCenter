@@ -26,9 +26,9 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         /// </summary>
         /// <param name="config">The service configuration settings.</param>
         /// <param name="httpClient">The <see cref="HttpClient"/> used to interact with the GitHub api.</param>
-        public GitHubApiService(IOptions<GitHubApiConfig> config, HttpClient httpClient)
+        public GitHubApiService(GitHubApiConfig config, HttpClient httpClient)
         {
-            this.config = config.Value;
+            this.config = config;
             this.httpClient = httpClient;
         }
 
