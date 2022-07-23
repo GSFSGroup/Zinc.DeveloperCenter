@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel.Client;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Zinc.DeveloperCenter.Application.Exceptions;
 using Zinc.DeveloperCenter.Domain;
