@@ -291,8 +291,6 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "By design.")]
         private sealed class FileSearchResultModel
         {
-            public int total_count;
-            public bool incomplete_results;
             public List<ItemModel>? items = new List<ItemModel>();
 
             internal sealed class ItemModel

@@ -7,8 +7,8 @@ using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
 using Zinc.DeveloperCenter.Application.Services.GitHub;
 using Zinc.DeveloperCenter.Data.Repositories;
-using Zinc.DeveloperCenter.Domain.Repositories;
 using Zinc.DeveloperCenter.Domain.Model.GitHub;
+using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.Application
 {
