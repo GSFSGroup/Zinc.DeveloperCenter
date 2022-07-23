@@ -13,9 +13,17 @@ namespace Zinc.DeveloperCenter.Domain.Model.GitHub
         public static readonly string SectionName = "GitHubApi";
 
         /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        public GitHubApiConfig()
+        {
+            Tenants = new List<TenantConfig>();
+        }
+
+        /// <summary>
         /// Gets the collection of configured tenants.
         /// </summary>
-        public List<TenantConfig> Tenants { get; set; } = new List<TenantConfig>();
+        public List<TenantConfig> Tenants { get; set; }
 
         /// <summary>
         /// Represents a configured tenant.
