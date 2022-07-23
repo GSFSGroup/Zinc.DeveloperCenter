@@ -140,14 +140,12 @@ AND   application_name = @applicationName
 
             internal static readonly string Save = $@"
 INSERT INTO {TableName} (
-    id,
     tenant_id,
     application_name,
     file_path,
     last_updated_by,
     last_updated_on,
 ) VALUES (
-    @Id,
     @TenantId,
     @ApplicationName,
     @FilePath,
