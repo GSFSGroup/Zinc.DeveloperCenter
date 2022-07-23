@@ -8,8 +8,8 @@ using RedLine.Data.Repositories;
 using RedLine.Domain;
 using RedLine.Domain.Model;
 using RedLine.Domain.Repositories;
-using Zinc.DeveloperCenter.Domain.Repositories;
 using Zinc.DeveloperCenter.Domain.Model;
+using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.Data.Repositories
 {
