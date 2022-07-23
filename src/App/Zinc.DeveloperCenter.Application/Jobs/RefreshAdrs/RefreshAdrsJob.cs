@@ -17,7 +17,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             : base(tenantId, correlationId)
         {
             TransactionIsolation = System.Transactions.IsolationLevel.ReadUncommitted;
-            TransactionTimeout = TimeSpan.FromMinutes(45); // This can be a long running transaction (not 45 min, but just in case).
+            TransactionTimeout = TimeSpan.FromMinutes(30); // This can be a long running transaction (not 30 min, but just in case).
         }
 
         /// <inheritdoc/>

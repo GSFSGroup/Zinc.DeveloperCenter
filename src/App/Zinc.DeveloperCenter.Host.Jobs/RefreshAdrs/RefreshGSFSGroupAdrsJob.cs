@@ -66,11 +66,10 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
                  * */
                 logger.LogError(
                     e,
-                    "{Error} executing {Job}: {Message}\n{Stack}",
+                    "{Error} executing {Job}: {Message}",
                     e.GetType().Name,
                     GetType().FullName,
-                    e.Message,
-                    e.StackTrace);
+                    e.Message);
             }
         }
 
