@@ -62,7 +62,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             // architecture_decision_record_favorite table
             Create
                 .Table(favoriteTableName).InSchema(schemaName)
-                .WithColumn($"{adrTableName}_id").AsGuid().NotNullable()
+                .WithColumn($"{adrTableName}_id").AsInt32().NotNullable()
                 .WithColumn("user_id").AsAnsiString().NotNullable()
                 ;
 
