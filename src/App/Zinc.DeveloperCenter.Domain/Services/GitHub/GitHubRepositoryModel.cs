@@ -10,7 +10,7 @@ namespace Zinc.DeveloperCenter.Domain.Model.GitHub
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
-        /// <param name="applicationUrl">The application url;</param>
+        /// <param name="applicationUrl">The application url.</param>
         /// <param name="applicationDescription">The application description.</param>
         public GitHubRepositoryModel(
             string tenantId,
