@@ -45,11 +45,6 @@ namespace Zinc.DeveloperCenter.Domain.Model
         { }
 
         /// <summary>
-        /// Gets the unique identifier.
-        /// </summary>
-        public Guid Id { get; protected set; } = Guid.NewGuid();
-
-        /// <summary>
         /// Gets the tenant identifier.
         /// </summary>
         public string TenantId { get; protected set; } = string.Empty;

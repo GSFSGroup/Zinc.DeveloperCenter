@@ -8,11 +8,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
     public class UXAppListGetArchitectureDecisionRecordsQueryModel
     {
         /// <summary>
-        /// Gets the id of the ADR.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Gets the application name where the ADR is defined.
         /// </summary>
         public string? ApplicationName { get; set; }

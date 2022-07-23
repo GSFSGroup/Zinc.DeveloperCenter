@@ -41,14 +41,11 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
              * Migration_2022072101_TestData_adr_05.md
              * */
 
-            var ids = new List<Guid>
-            {
-                new Guid("9f1840ec-03de-43ee-bcde-270596eb0f82"),
-                new Guid("241dfb9a-3231-4a1b-9bf4-b1b7035970fc"),
-                new Guid("3f59ec32-7c6e-49ad-822b-1159e33fba37"),
-                new Guid("718cbd4e-4828-418c-8ed5-30a87e5be9b7"),
-                new Guid("55db5b8f-a425-4271-9ae9-6262c9fabf40"),
-            };
+            var ids = connection.Query<int>(
+                $"SELECT id FROM {schemaName}.{adrTableName} ORDER BY id",
+                null,
+                transaction)
+                .AsList();
 
             for (int i = 0; i < 5; i++)
             {
@@ -56,7 +53,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
 
                 connection.Execute(
                     $"INSERT INTO {schemaName}.{searchTableName} (id, search_vector) VALUES (@id, to_tsvector('english', @content))",
-                    new { sid = ids[i], content = content },
+                    new { id = ids[i], content = content },
                     transaction);
             }
         }

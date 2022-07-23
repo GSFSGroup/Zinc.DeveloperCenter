@@ -31,7 +31,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
                     ApplicationName = x.ApplicationName,
                     LastUpdatedBy = x.LastUpdatedBy,
                     LastUpdatedOn = x.LastUpdatedOn,
-                    Id = x.Id,
                     Number = x.Number,
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,

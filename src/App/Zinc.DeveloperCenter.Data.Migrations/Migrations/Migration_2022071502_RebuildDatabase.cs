@@ -44,7 +44,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             // architecture_decision_record table
             Create
                 .Table(adrTableName).InSchema(schemaName)
-                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{adrTableName}_pkey").WithDefault(SystemMethods.NewGuid)
+                .WithColumn("id").AsInt32().NotNullable().PrimaryKey($"{adrTableName}_pkey").Identity()
                 .WithColumn("tenant_id").AsAnsiString().NotNullable()
                 .WithColumn("application_name").AsAnsiString().NotNullable()
                 .WithColumn("file_path").AsAnsiString().NotNullable()
@@ -55,7 +55,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             // architecture_decision_record_search table
             Create
                 .Table(searchTableName).InSchema(schemaName)
-                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{searchTableName}_pkey")
+                .WithColumn("id").AsInt32().NotNullable().PrimaryKey($"{searchTableName}_pkey")
                 .WithColumn("search_vector").AsCustom("tsvector").NotNullable()
                 ;
 
@@ -69,7 +69,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
             // architecture_decision_record_viewcount table
             Create
                 .Table(viewCountTableName).InSchema(schemaName)
-                .WithColumn("id").AsGuid().NotNullable().PrimaryKey($"{viewCountTableName}_pkey")
+                .WithColumn("id").AsInt32().NotNullable().PrimaryKey($"{viewCountTableName}_pkey")
                 .WithColumn("view_count").AsInt32().NotNullable().WithDefaultValue(0)
                 ;
         }

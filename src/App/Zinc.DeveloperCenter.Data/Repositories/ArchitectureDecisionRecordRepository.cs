@@ -98,7 +98,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
                 aggregate.LastUpdatedOn,
             };
 
-            var id = await connection.ExecuteScalarAsync<Guid>(Sql.Save, args).ConfigureAwait(false);
+            var id = await connection.ExecuteScalarAsync<int>(Sql.Save, args).ConfigureAwait(false);
 
             if (aggregate.Content?.Length > 0)
             {
