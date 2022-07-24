@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -96,7 +97,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                     wasUpdated = true;
                 }
 
-                results.Add((ApplicationName: repository.ApplicationElement!, WasUpdated: wasUpdated));
+                results.Add((ApplicationName: repository.ApplicationName, WasUpdated: wasUpdated));
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), tenantId, timer.Elapsed.ToString());
@@ -108,7 +109,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId, applicationName);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName));
 
             var totalUpdates = 0;
             var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId, applicationName).ConfigureAwait(false);
@@ -136,6 +137,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                         content);
 
                     await adrRepository.Save(adr).ConfigureAwait(false);
+
                     totalUpdates++;
                 }
                 else if (adr.LastUpdatedOn != apiResult.LastUpdatedOn && apiResult.LastUpdatedOn.HasValue)
@@ -156,7 +158,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 }
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, applicationName, timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());
 
             return totalUpdates;
         }

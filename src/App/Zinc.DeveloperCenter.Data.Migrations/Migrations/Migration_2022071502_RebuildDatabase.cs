@@ -49,7 +49,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 .WithColumn("application_name").AsAnsiString().NotNullable()
                 .WithColumn("file_path").AsAnsiString().NotNullable()
                 .WithColumn("last_updated_by").AsAnsiString().Nullable()
-                .WithColumn("last_updated_on").AsDateTime().Nullable()
+                .WithColumn("last_updated_on").AsDateTimeOffset().Nullable()
                 ;
 
             // architecture_decision_record_search table

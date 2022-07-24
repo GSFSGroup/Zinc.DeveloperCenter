@@ -185,7 +185,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             return results;
         }
 
-        private async Task<(string? LastUpdatedBy, DateTime? LastUpdatedOn)> GetLastUpdatedDetails(
+        private async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(
             GitHubApiConfig.TenantConfig tenantConfig,
             string repositoryName,
             string filePath)
@@ -284,9 +284,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             return message;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "By design.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "By design.")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:Field names should not contain underscore", Justification = "By design.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "By design.")]
         private sealed class FileSearchResultModel
         {
@@ -318,7 +316,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             internal sealed class CommitterModel
             {
                 public string? name = null;
-                public DateTime? date = null;
+                public DateTimeOffset? date = null;
             }
         }
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,17 +71,16 @@ namespace Zinc.DeveloperCenter.Data.Repositories
                 filePath,
             };
 
-            var result = (await connection.QueryAsync<ArchitectureDecisionRecord>(Sql.Read, args)
+            return (await connection.QueryAsync<ArchitectureDecisionRecord>(Sql.Read, args)
                 .ConfigureAwait(false))
-                .SingleOrDefault();
-
-            return result!;
+                .SingleOrDefault()!;
         }
 
         /// <inheritdoc/>
         protected override async Task<ArchitectureDecisionRecord> ReadInternal(IDbAggregateQuery<ArchitectureDecisionRecord> qry)
         {
-            return (await connection.QueryAsync<ArchitectureDecisionRecord>(qry.Command, qry.Params).ConfigureAwait(false))
+            return (await connection.QueryAsync<ArchitectureDecisionRecord>(qry.Command, qry.Params)
+                .ConfigureAwait(false))
                 .SingleOrDefault()!;
         }
 

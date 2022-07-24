@@ -22,14 +22,9 @@ namespace Zinc.DeveloperCenter.Domain.Model
             string applicationName,
             string filePath,
             string? lastUpdatedBy,
-            DateTime? lastUpdatedOn,
+            DateTimeOffset? lastUpdatedOn,
             string? content)
         {
-            if (lastUpdatedOn != null && lastUpdatedOn.Value.Kind == DateTimeKind.Unspecified)
-            {
-                lastUpdatedOn = new DateTime(lastUpdatedOn.Value.Ticks, DateTimeKind.Utc);
-            }
-
             TenantId = tenantId;
             ApplicationName = applicationName;
             FilePath = filePath;
@@ -92,7 +87,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public DateTime? LastUpdatedOn { get; protected set; }
+        public DateTimeOffset? LastUpdatedOn { get; protected set; }
 
         /// <summary>
         /// Gets the ADR raw markdown content.
@@ -107,7 +102,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// </summary>
         /// <param name="updatedBy">The user who last updated the ADR.</param>
         /// <param name="updatedOn">The date the ADR was last updated.</param>
-        public void UpdateLastUpdated(string updatedBy, DateTime updatedOn)
+        public void UpdateLastUpdated(string updatedBy, DateTimeOffset updatedOn)
         {
             if (LastUpdatedBy != updatedBy && LastUpdatedOn != updatedOn)
             {

@@ -64,7 +64,7 @@ namespace Zinc.DeveloperCenter.Domain.Model.GitHub
         /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public DateTime? LastUpdatedOn { get; set; }
+        public DateTimeOffset? LastUpdatedOn { get; set; }
 
         /// <summary>
         /// Gets the ADR download url.
