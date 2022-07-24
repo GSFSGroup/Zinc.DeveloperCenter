@@ -273,8 +273,6 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             if (acceptHeaders != null && acceptHeaders.Length > 0)
             {
-                message.Headers.Accept.Clear();
-
                 foreach (var header in acceptHeaders)
                 {
                     message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
