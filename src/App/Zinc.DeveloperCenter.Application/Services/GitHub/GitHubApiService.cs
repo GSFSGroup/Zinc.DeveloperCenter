@@ -108,6 +108,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
 
+            if (results.Count == 0)
+            {
+                var repositoryFullName = string.IsNullOrEmpty(tenantConfig.OrgName)
+                    ? $"{tenantConfig.TenantId}/{repositoryName}"
+                    : $"{tenantConfig.OrgName}/{repositoryName}";
+
+                logger.LogWarning("Failed to find any ADRs for {Repository}.", repositoryFullName);
+            }
+
             foreach (var result in results)
             {
                 var lastUpdatedDetails = await GetLastUpdatedDetails(tenantConfig, repositoryName, result.FilePath).ConfigureAwait(false);
@@ -151,8 +160,19 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 while (repos.Count == 0 || retries < 3)
                 {
                     // Sometimes these api calls fail to return results, so retry 3 times before giving up.
+                    if (results.Count == 0)
+                    {
+                        logger.LogWarning("Failed to find any repositories for {Org}. Retrying...", tenantConfig.OrgName ?? tenantConfig.TenantId);
+                    }
+
                     retries++;
+
                     repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+                }
+
+                if (repos.Count == 0)
+                {
+                    logger.LogWarning("Failed to find any repositories for {Org}. Retries have been exhausted.", tenantConfig.OrgName ?? tenantConfig.TenantId);
                 }
 
                 results.AddRange(repos);
@@ -260,6 +280,8 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 {
                     return (model.committer.name, model.committer.date);
                 }
+
+                logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
             }
 
             return default;
