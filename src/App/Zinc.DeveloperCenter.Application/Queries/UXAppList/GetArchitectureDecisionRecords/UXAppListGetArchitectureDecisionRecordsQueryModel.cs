@@ -40,6 +40,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <summary>
         /// Gets the ADR last updated date.
         /// </summary>
-        public DateTime? LastUpdatedOn { get; set; }
+        public DateTimeOffset? LastUpdatedOn { get; set; }
     }
 }
