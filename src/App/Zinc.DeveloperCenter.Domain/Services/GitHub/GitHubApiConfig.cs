@@ -30,6 +30,8 @@ namespace Zinc.DeveloperCenter.Domain.Model.GitHub
         /// </summary>
         public class TenantConfig
         {
+            private string accessToken = string.Empty;
+
             /// <summary>
             /// Initializes a new instance of the class.
             /// </summary>
@@ -53,17 +55,16 @@ namespace Zinc.DeveloperCenter.Domain.Model.GitHub
             /// <summary>
             /// Token to allow access to private repos.
             /// </summary>
-            public string AccessToken { get; set; }
+            public string AccessToken
+            {
+                get => System.Environment.ExpandEnvironmentVariables(this.accessToken);
+                set => this.accessToken = value;
+            }
 
             /// <summary>
             /// If true, the tenant will not be processed.
             /// </summary>
             public bool Disabled { get; set; }
-
-            /// <summary>
-            /// If true, a fake <see cref="IGitHubApiService"/> will be used (useful for local testing).
-            /// </summary>
-            public bool UseFakeService { get; set; }
         }
     }
 }

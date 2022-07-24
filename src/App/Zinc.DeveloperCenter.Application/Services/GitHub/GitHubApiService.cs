@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IdentityModel.Client;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zinc.DeveloperCenter.Application.Exceptions;
 using Zinc.DeveloperCenter.Domain;
@@ -19,16 +20,22 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
     {
         private readonly GitHubApiConfig config;
         private readonly HttpClient httpClient;
+        private readonly ILogger<GitHubApiService> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="config">The service configuration settings.</param>
         /// <param name="httpClient">The <see cref="HttpClient"/> used to interact with the GitHub api.</param>
-        public GitHubApiService(GitHubApiConfig config, HttpClient httpClient)
+        /// <param name="logger">A diagnostic logger.</param>
+        public GitHubApiService(
+            GitHubApiConfig config,
+            HttpClient httpClient,
+            ILogger<GitHubApiService> logger)
         {
             this.config = config;
             this.httpClient = httpClient;
+            this.logger = logger;
         }
 
         /// <inheritdoc/>
@@ -48,7 +55,8 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             if (tenantConfig.Disabled)
             {
-                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", $"The GitHub Api for tenant {tenantId} is disabled.");
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                return string.Empty;
             }
 
             if (fileFormat == FileFormat.Unknown)
@@ -94,7 +102,8 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             if (tenantConfig.Disabled)
             {
-                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", $"The GitHub Api for tenant {tenantId} is disabled.");
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
@@ -123,13 +132,33 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
                 if (model != null && model.items != null && model.items.Count > 0)
                 {
-                    foreach (var item in model.items)
+                    // This seems not to be necessary, but just in case
+                    var items = model.items
+                        .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
+                        .ToList();
+
+                    if (repositoryName != "Zinc.Templates")
                     {
-                        results.Add(new GitHubArchitectureDecisionRecordModel(
-                            tenantConfig.TenantId,
-                            repositoryName,
-                            item.name!,
-                            item.path!));
+                        // Skip the RedLine template ADRs in applications
+                        foreach (var item in items.Where(x => !x.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase)))
+                        {
+                            results.Add(new GitHubArchitectureDecisionRecordModel(
+                                tenantConfig.TenantId,
+                                repositoryName,
+                                item.name!,
+                                item.path!));
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in items)
+                        {
+                            results.Add(new GitHubArchitectureDecisionRecordModel(
+                                tenantConfig.TenantId,
+                                repositoryName,
+                                item.name!,
+                                item.path!));
+                        }
                     }
                 }
             }
@@ -160,7 +189,8 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             if (tenantConfig.Disabled)
             {
-                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", $"The GitHub Api for tenant {tenantId} is disabled.");
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                return Enumerable.Empty<GitHubRepositoryModel>();
             }
 
             var results = new List<GitHubRepositoryModel>(256);
