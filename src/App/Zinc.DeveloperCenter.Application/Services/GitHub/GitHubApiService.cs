@@ -106,62 +106,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
-                ? tenantConfig.TenantId
-                : tenantConfig.OrgName;
-
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}";
-
-            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
-
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
-            {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var model = JsonConvert.DeserializeObject<FileSearchResultModel>(content) ?? new FileSearchResultModel();
-
-                if (model != null && model.items != null && model.items.Count > 0)
-                {
-                    // This seems not to be necessary, but just in case
-                    var items = model.items
-                        .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
-                        .ToList();
-
-                    if (repositoryName != "Zinc.Templates")
-                    {
-                        // Skip the RedLine template ADRs in applications
-                        foreach (var item in items.Where(x => !x.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase)))
-                        {
-                            results.Add(new GitHubArchitectureDecisionRecordModel(
-                                tenantConfig.TenantId,
-                                repositoryName,
-                                item.name!,
-                                item.path!));
-                        }
-                    }
-                    else
-                    {
-                        foreach (var item in items)
-                        {
-                            results.Add(new GitHubArchitectureDecisionRecordModel(
-                                tenantConfig.TenantId,
-                                repositoryName,
-                                item.name!,
-                                item.path!));
-                        }
-                    }
-                }
-            }
+            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
 
             foreach (var result in results)
             {
@@ -200,7 +145,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             while (true)
             {
+                var retries = 0;
                 var repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+
+                while (repos.Count == 0 || retries < 3)
+                {
+                    // Sometimes these api calls fail to return results, so retry 3 times before giving up.
+                    retries++;
+                    repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+                }
 
                 results.AddRange(repos);
 
@@ -210,6 +163,58 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 }
 
                 page++;
+            }
+
+            return results;
+        }
+
+        private async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(GitHubApiConfig.TenantConfig tenantConfig, string repositoryName)
+        {
+            var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
+                ? tenantConfig.TenantId
+                : tenantConfig.OrgName;
+
+            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}";
+
+            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
+
+            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ServiceCallException(
+                        (int)response.StatusCode,
+                        response.ReasonPhrase ?? response.StatusCode.ToString(),
+                        GetType().Name,
+                        httpClient.BaseAddress?.Host ?? "api.github.com",
+                        null);
+                }
+
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                var model = JsonConvert.DeserializeObject<FileSearchResultModel>(content) ?? new FileSearchResultModel();
+
+                // The check for .md or .markdown seems to be unnecessary, but just in case
+                var items = model.items?
+                    .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
+                    .ToList() ?? new List<FileSearchResultModel.ItemModel>();
+
+                if (repositoryName != "Zinc.Templates" && items.Any())
+                {
+                    // Filters out RedLine template ADRs for applications
+                    items = items
+                        .Where(x => !x.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+
+                foreach (var item in items)
+                {
+                    results.Add(new GitHubArchitectureDecisionRecordModel(
+                        tenantConfig.TenantId,
+                        repositoryName,
+                        item.name!,
+                        item.path!));
+                }
             }
 
             return results;
