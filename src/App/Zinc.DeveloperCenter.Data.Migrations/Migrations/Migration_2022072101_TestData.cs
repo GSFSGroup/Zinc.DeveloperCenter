@@ -47,7 +47,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.Migrations
                 transaction)
                 .AsList();
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < ids.Count; i++)
             {
                 var content = EmbeddedResources.EmbeddedResource.Read($"Migration_2022072101_TestData_adr_0{i + 1}.md");
 
