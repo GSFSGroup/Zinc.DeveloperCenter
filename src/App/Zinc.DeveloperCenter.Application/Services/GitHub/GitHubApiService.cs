@@ -168,13 +168,16 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             return results;
         }
 
-        private async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(GitHubApiConfig.TenantConfig tenantConfig, string repositoryName)
+        private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
+            GitHubApiConfig.TenantConfig tenantConfig,
+            string repositoryName)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}";
+            // NOTE: This url assumes there will never be more than 100 ADRs in a given app
+            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
 
             var results = new List<GitHubArchitectureDecisionRecordModel>(32);
 
