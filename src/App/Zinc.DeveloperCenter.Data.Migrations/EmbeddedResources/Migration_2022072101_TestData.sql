@@ -26,7 +26,7 @@ INSERT INTO developercenter.application (
     'Molybdenum.Earnings',
     'Earnings',
     'https://github.com/GSFSGroup/Molybdenum.Earnings',
-    'Zinc',
+    'Molybdenum',
     'A service to calculate earnings based on curves for insurance and insurance-like financial products.'
 );
 
