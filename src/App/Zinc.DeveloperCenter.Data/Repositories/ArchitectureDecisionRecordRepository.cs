@@ -154,7 +154,7 @@ ON CONFLICT (tenant_id, application_name, file_path)
 DO UPDATE SET
     last_updated_by = EXCLUDED.last_updated_by,
     last_updated_on = EXCLUDED.last_updated_on
-REURNING id
+RETURNING id
 ;";
 
             internal static readonly string SaveSearchVector = $@"
