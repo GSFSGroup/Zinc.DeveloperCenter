@@ -21,7 +21,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         private readonly IMediator mediator;
         private readonly ICorrelationId correlationId;
         private readonly ITenantId tenantId;
-        private readonly ILogger<UXGitHubRepoController> logger;
+        private readonly ILogger<UXAppListController> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
