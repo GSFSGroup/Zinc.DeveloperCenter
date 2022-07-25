@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Alba;
 using FluentAssertions;
@@ -45,9 +46,11 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
 
             result1.Should().NotBeNull();
             result1.Items.Should().HaveCount(1);
+            result1.Items.First().Title.Should().Be("adr-0001-record-architecture-decisions");
 
             result2.Should().NotBeNull();
             result2.Items.Should().HaveCount(1);
+            result2.Items.First().Title.Should().Be("adr-0001-event-sourcing");
         }
 
         private async Task InsertData()
