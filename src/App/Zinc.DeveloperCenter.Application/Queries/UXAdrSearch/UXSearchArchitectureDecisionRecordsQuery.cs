@@ -7,7 +7,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
     /// <summary>
     /// Query used to search for ADRs across all applications.
     /// </summary>
-    public class UXSearchArchitectureDecisionRecordsQuery : QueryBase<PageableResult<UXSearchArchitectureDecisionRecordsQuery>>
+    public class UXSearchArchitectureDecisionRecordsQuery : QueryBase<PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>>
     {
         /// <summary>
         /// Initializes a new instance of the class.
