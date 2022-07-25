@@ -1,7 +1,5 @@
-using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
-using Dapper;
 using MediatR;
 using Zinc.DeveloperCenter.Domain.Model;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
