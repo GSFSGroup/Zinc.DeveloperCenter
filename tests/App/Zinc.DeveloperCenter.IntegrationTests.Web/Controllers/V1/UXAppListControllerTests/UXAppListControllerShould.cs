@@ -5,12 +5,13 @@ using RedLine.Domain.Model;
 using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Application.Queries.UXAppList.GetApplications;
+using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAppListControllerTests
 {
     public class UXAppListControllerShould : WebTestBase
     {
-        private readonly string endpoint = $"/ux/v1/GSFSGroup/applications";
+        private readonly string endpoint = $"/ux/v1/{TenantId}/applications";
 
         public UXAppListControllerShould(WebTestFixture fixture, ITestOutputHelper output)
             : base(fixture, output)
@@ -20,8 +21,8 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAppListCont
         [Fact]
         public async Task ReturnAllApplications()
         {
-            var record = await GetRequiredService<Domain.Repositories.IApplicationRepository>().Read("GSFSGroup/Zinc.Templates").ConfigureAwait(false);
-            Output.WriteLine($"******IS THERE ANY DATA IN THE DATABASE? {record != null}******");
+            // Arrange
+            await InsertData().ConfigureAwait(false);
 
             // Act
             var response = await AuthorizedScenario(_ =>
@@ -34,6 +35,23 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAppListCont
             var result = response.ReadAsJson<PageableResult<UXAppListGetApplicationsQueryModel>>();
             result.Should().NotBeNull();
             result.Items.Should().HaveCount(2);
+        }
+
+        private async Task InsertData()
+        {
+            var repository = GetRequiredService<IApplicationRepository>();
+
+            await repository.Save(new Domain.Model.Application(
+                TenantId,
+                "Zinc.Templates",
+                "https://github.com/GSFSGroup/Zinc.Templates",
+                "A template for new projects... .NET projects to be specific")).ConfigureAwait(false);
+
+            await repository.Save(new Domain.Model.Application(
+                TenantId,
+                "Molybdenum.Earnings",
+                "https://github.com/GSFSGroup/Zinc.Templates",
+                "A service to calculate earnings based on curves for insurance and insurance-like financial products.")).ConfigureAwait(false);
         }
     }
 }

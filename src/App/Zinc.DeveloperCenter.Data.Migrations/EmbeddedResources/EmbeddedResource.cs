@@ -6,7 +6,7 @@ namespace Zinc.DeveloperCenter.Data.Migrations.EmbeddedResources
     /// <summary>
     /// Reads embedded resources.
     /// </summary>
-    internal static class EmbeddedResource
+    public static class EmbeddedResource
     {
         /// <summary>
         /// Reads an embedded seed.
