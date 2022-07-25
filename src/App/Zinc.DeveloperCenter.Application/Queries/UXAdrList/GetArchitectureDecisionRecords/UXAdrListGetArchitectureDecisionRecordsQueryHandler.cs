@@ -6,27 +6,27 @@ using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords
 {
     /// <summary>
-    /// A handler for <see cref="UXAppListGetArchitectureDecisionRecordsQuery"/>.
+    /// A handler for <see cref="UXAdrListGetArchitectureDecisionRecordsQuery"/>.
     /// </summary>
-    internal class UXAppListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAppListGetArchitectureDecisionRecordsQuery, PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>>
+    internal class UXAdrListGetArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXAdrListGetArchitectureDecisionRecordsQuery, PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
 
-        public UXAppListGetArchitectureDecisionRecordsQueryHandler(IArchitectureDecisionRecordRepository repository)
+        public UXAdrListGetArchitectureDecisionRecordsQueryHandler(IArchitectureDecisionRecordRepository repository)
         {
             this.repository = repository;
         }
 
-        public async Task<PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAppListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>> Handle(UXAdrListGetArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
         {
             var dataQuery = new GetArchitectureDecisionRecordsDataQuery(request.TenantId, request.ApplicationName);
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items
-                .Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
+                .Select(x => new UXAdrListGetArchitectureDecisionRecordsQueryModel
                 {
                     ApplicationName = x.ApplicationName,
                     FilePath = x.FilePath,
@@ -39,7 +39,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
                 })
                 .OrderBy(x => x.Number);
 
-            return new PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>(items);
+            return new PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>(items);
         }
     }
 }

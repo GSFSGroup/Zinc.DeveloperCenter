@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using RedLine.Domain;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
-using Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords;
+using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
 using Zinc.DeveloperCenter.Domain.Model.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
@@ -57,7 +57,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="403">The client is forbidden to perform the operation.</response>
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
-        [HttpGet("{applicationName}/{filePath}")]
+        [HttpGet("{applicationName}/{filePath}/content")]
         public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, string filePath, [FromQuery]string? format)
         {
             var fileFormat = FileFormat.Raw;
@@ -95,7 +95,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="403">The client is forbidden to perform the operation.</response>
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
-        [ProducesResponseType(typeof(PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>), 200)]
+        [ProducesResponseType(typeof(PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>), 200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 401)]
         [ProducesResponseType(typeof(string), 403)]
@@ -106,7 +106,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         {
             return await this.Execute(logger, async () =>
             {
-                var request = new UXAppListGetArchitectureDecisionRecordsQuery(
+                var request = new UXAdrListGetArchitectureDecisionRecordsQuery(
                     tenantId.Value,
                     correlationId.Value,
                     applicationName);

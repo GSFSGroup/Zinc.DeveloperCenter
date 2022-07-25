@@ -2,12 +2,12 @@ using System;
 using RedLine.Application.Queries;
 using RedLine.Domain.Model;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords
 {
     /// <summary>
     /// Query to retrieve the ADRs for a given application.
     /// </summary>
-    public class UXAppListGetArchitectureDecisionRecordsQuery : QueryBase<PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>>
+    public class UXAdrListGetArchitectureDecisionRecordsQuery : QueryBase<PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>>
     {
         /// <summary>
         /// Initializes a new instance of the class.
@@ -15,7 +15,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
         /// <param name="applicationName">The application name.</param>
-        public UXAppListGetArchitectureDecisionRecordsQuery(
+        public UXAdrListGetArchitectureDecisionRecordsQuery(
             string tenantId,
             Guid correlationId,
             string applicationName)

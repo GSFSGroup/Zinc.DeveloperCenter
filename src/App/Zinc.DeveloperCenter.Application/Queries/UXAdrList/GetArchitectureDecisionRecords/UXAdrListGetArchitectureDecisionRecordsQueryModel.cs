@@ -1,11 +1,11 @@
 using System;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords
 {
     /// <summary>
-    /// A model for the <see cref="UXAppListGetArchitectureDecisionRecordsQuery"/>.
+    /// A model for the <see cref="UXAdrListGetArchitectureDecisionRecordsQuery"/>.
     /// </summary>
-    public class UXAppListGetArchitectureDecisionRecordsQueryModel
+    public class UXAdrListGetArchitectureDecisionRecordsQueryModel
     {
         /// <summary>
         /// Gets the application name where the ADR is defined.
