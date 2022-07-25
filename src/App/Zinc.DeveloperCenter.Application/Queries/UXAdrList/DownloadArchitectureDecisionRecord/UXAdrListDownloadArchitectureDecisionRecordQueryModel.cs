@@ -1,16 +1,16 @@
 namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord
 {
     /// <summary>
-    /// The model returned by the <see cref="DownloadArchitectureDecisionRecordQuery"/>.
+    /// The model returned by the <see cref="UXAdrListDownloadArchitectureDecisionRecordQuery"/>.
     /// </summary>
-    public class DownloadArchitectureDecisionRecordQueryModel
+    public class UXAdrListDownloadArchitectureDecisionRecordQueryModel
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="fileName">The file name to return to the client.</param>
         /// <param name="content">The file contents as UTF8 string.</param>
-        public DownloadArchitectureDecisionRecordQueryModel(string fileName, byte[] content)
+        public UXAdrListDownloadArchitectureDecisionRecordQueryModel(string fileName, byte[] content)
         {
             FileName = fileName;
             Content = content;

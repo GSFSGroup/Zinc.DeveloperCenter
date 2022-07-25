@@ -71,7 +71,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 
             return await this.Execute(logger, async () =>
             {
-                var request = new DownloadArchitectureDecisionRecordQuery(
+                var request = new UXAdrListDownloadArchitectureDecisionRecordQuery(
                     tenantId.Value,
                     correlationId.Value,
                     applicationName,

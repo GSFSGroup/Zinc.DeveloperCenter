@@ -7,7 +7,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
     /// <summary>
     /// The query used to download the content of an ADR.
     /// </summary>
-    public class DownloadArchitectureDecisionRecordQuery : QueryBase<DownloadArchitectureDecisionRecordQueryModel>
+    public class UXAdrListDownloadArchitectureDecisionRecordQuery : QueryBase<UXAdrListDownloadArchitectureDecisionRecordQueryModel>
     {
         /// <summary>
         /// Initializes a new instance of the class.
@@ -17,7 +17,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         /// <param name="applicationName">The application name.</param>
         /// <param name="filePath">The ADR file path.</param>
         /// <param name="fileFormat">The format to return (raw markdown or html).</param>
-        public DownloadArchitectureDecisionRecordQuery(
+        public UXAdrListDownloadArchitectureDecisionRecordQuery(
             string tenantId,
             Guid correlationId,
             string applicationName,
