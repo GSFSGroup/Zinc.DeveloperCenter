@@ -19,12 +19,12 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
     [ApiExplorerSettings(GroupName = ApplicationContext.ApplicationName)]
     [Produces("application/json")]
     [Route("ux/v{version:apiVersion}/{tenantId}/architecture-decision-records")]
-    public class UXArchitectureDecisionRecordController : Controller
+    public class UXAdrListArchitectureDecisionRecordController : Controller
     {
         private readonly IMediator mediator;
         private readonly ICorrelationId correlationId;
         private readonly ITenantId tenantId;
-        private readonly ILogger<UXArchitectureDecisionRecordController> logger;
+        private readonly ILogger<UXAdrListArchitectureDecisionRecordController> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -33,11 +33,11 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <param name="correlationId">Unique ID for each request.</param>
         /// <param name="tenantId">Identifier for tenant.</param>
         /// <param name="logger">Diagnostic logger.</param>
-        public UXArchitectureDecisionRecordController(
+        public UXAdrListArchitectureDecisionRecordController(
             IMediator mediator,
             ICorrelationId correlationId,
             ITenantId tenantId,
-            ILogger<UXArchitectureDecisionRecordController> logger)
+            ILogger<UXAdrListArchitectureDecisionRecordController> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId;
