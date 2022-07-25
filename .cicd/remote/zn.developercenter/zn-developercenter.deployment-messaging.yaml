@@ -17,8 +17,7 @@ metadata:
     flux.weave.works/automated_msg: test
     flux.weave.works/tag.migrations: regexp:^[a-f0-9]{7,40}$
     flux.weave.works/tag.zn-developercenter-messaging-pod: regexp:^[a-f0-9]{7,40}$
-    # TODO: Uncomment next line when deploying to preprod. It makes sure that new images for zn-developercenter gets deployed automatically.
-    # fluxcd.io/automated: 'true'
+    fluxcd.io/automated: 'true'
 spec:
   replicas: 3
   selector:
@@ -44,21 +43,18 @@ spec:
         kube-monkey/kill-value: '1'
       annotations:
         prometheus.io/scrape: 'true'
-        ad.datadoghq.com/zn-developercenter-messaging-pod.check_names: '[ "prometheus" ]'
+        ad.datadoghq.com/zn-developercenter-messaging-pod.check_names: '[ "prometheus"
+          ]'
         ad.datadoghq.com/zn-developercenter-messaging-pod.init_configs: '[ {} ]'
-        ad.datadoghq.com/zn-developercenter-messaging-pod.instances: '[
-          {
-            "prometheus_url": "http://%%host%%:5000/metrics",
-            "namespace": "redline",
-            "metrics": [ "*" ]
-          }
-        ]'
-        ad.datadoghq.com/zn-developercenter-messaging-pod.logs: '[ { "source": "zn-developercenter-messaging", "service":
-          "zn-developercenter-messaging"} ]'
+        ad.datadoghq.com/zn-developercenter-messaging-pod.instances: '[ { "prometheus_url":
+          "http://%%host%%:5000/metrics", "namespace": "redline", "metrics": [ "*"
+          ] } ]'
+        ad.datadoghq.com/zn-developercenter-messaging-pod.logs: '[ { "source": "zn-developercenter-messaging",
+          "service": "zn-developercenter-messaging"} ]'
     spec:
       initContainers:
       - name: migrations
-        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        image: quay.io/gsfsgroup/zn-developercenter:e6ae459
         env:
         - name: POSTGRES_CERT
           value: "/aws-certs/us-east-1-bundle.pem"
@@ -95,7 +91,7 @@ spec:
           readOnly: true
       containers:
       - name: zn-developercenter-messaging-pod
-        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        image: quay.io/gsfsgroup/zn-developercenter:e6ae459
         ports:
         - name: http
           containerPort: 5000
@@ -115,7 +111,7 @@ spec:
         - name: "ASPNETCORE_Kestrel__Certificates__Default__Password"
           valueFrom:
             secretKeyRef:
-              name: zn-developercenter-messaging-svc-cert-private
+              name: zn-developercenter-svc-cert-private
               key: password
         - name: "ApplicationContext__ServiceAccountPrivateKeyPath"
           value: "/certs-shared/redline.pfx"
@@ -184,20 +180,20 @@ spec:
             memory: "300Mi"
             cpu: "500m"
       imagePullSecrets:
-      - name: quay-registry-pull-secret
+      - name: internal-registry-pull-secret
       volumes:
       - name: authn-public-key
         configMap:
           name: kr-authentication-svc-cert-public
       - name: cluster-ca-cert-bundle
-        configMap:
-          name: hawking-dimebox-io-ca-bundle
+        secret:
+          secretName: internal-ca-bundle
       - name: aws-ca-cert-bundle
         configMap:
           name: aws-ca-cert-bundle
       - name: https
         secret:
-          secretName: zn-developercenter-messaging-svc-cert-private
+          secretName: zn-developercenter-svc-cert-private
       - name: shared-auth-cert
         secret:
           secretName: zn-developercenter-svc-cert-private
