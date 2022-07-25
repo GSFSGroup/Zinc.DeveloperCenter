@@ -9,7 +9,7 @@ namespace Zinc.DeveloperCenter.UnitTests
         [Fact]
         public void ReturnDescriptionValue()
         {
-            Domain.Model.GitHub.FileFormat.Raw.ToDescription().Should().Be("application/vnd.github.VERSION.raw");
+            Domain.Services.GitHub.FileFormat.Raw.ToDescription().Should().Be("application/vnd.github.VERSION.raw");
         }
     }
 }
