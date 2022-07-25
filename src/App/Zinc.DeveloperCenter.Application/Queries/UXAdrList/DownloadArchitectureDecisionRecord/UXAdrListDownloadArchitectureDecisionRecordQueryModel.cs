@@ -9,10 +9,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="fileName">The file name to return to the client.</param>
+        /// <param name="mimeType">The file mime type (markdown or html).</param>
         /// <param name="content">The file contents as UTF8 string.</param>
-        public UXAdrListDownloadArchitectureDecisionRecordQueryModel(string fileName, byte[] content)
+        public UXAdrListDownloadArchitectureDecisionRecordQueryModel(
+            string fileName,
+            string mimeType,
+            byte[] content)
         {
             FileName = fileName;
+            MimeType = mimeType;
             Content = content;
         }
 
@@ -20,6 +25,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         /// Gets the file name to return to the client.
         /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// Gets the mime type of the file (text/markdown or text/html).
+        /// </summary>
+        public string MimeType { get; set; }
 
         /// <summary>
         /// Gets the file contents as UTF8 string.

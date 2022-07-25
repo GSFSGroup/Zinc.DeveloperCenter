@@ -30,9 +30,17 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
 
             // Force all file names to end with .md vs .markdown (technical UI reasons)
             var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(request.FilePath)}.md";
+
+            var fileMimeType = request.FileFormat == FileFormat.Raw
+                ? "text/markdown"
+                : "text/html";
+
             var fileContent = System.Text.Encoding.UTF8.GetBytes(content!);
 
-            return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(fileName, fileContent);
+            return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(
+                fileName,
+                fileMimeType,
+                fileContent);
         }
     }
 }

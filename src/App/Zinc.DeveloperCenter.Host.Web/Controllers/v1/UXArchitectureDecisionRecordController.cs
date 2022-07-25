@@ -61,12 +61,10 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, string filePath, [FromQuery]string? format)
         {
             var fileFormat = FileFormat.Raw;
-            var contentType = "text/markdown";
 
             if ("html".Equals(format, System.StringComparison.OrdinalIgnoreCase))
             {
                 fileFormat = FileFormat.Html;
-                contentType = "text/html";
             }
 
             return await this.Execute(logger, async () =>
@@ -80,7 +78,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 
-                return File(response.Content, contentType, response.FileName);
+                return File(response.Content, response.MimeType, response.FileName);
             }).ConfigureAwait(false);
         }
 
