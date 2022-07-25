@@ -21,4 +21,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\App\Zinc.DeveloperCenter.Domain\Zinc.DeveloperCenter.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

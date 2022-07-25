@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Zinc.DeveloperCenter.Domain.Model.GitHub
+namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
     /// An enum that defines the file format to return.

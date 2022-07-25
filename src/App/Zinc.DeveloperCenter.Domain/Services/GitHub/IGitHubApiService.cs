@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Zinc.DeveloperCenter.Domain.Model.GitHub
+namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
     /// The interface that is used to interact with GitHub.

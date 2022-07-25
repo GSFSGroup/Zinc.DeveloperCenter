@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Zinc.DeveloperCenter.Application.Exceptions;
 using Zinc.DeveloperCenter.Domain;
-using Zinc.DeveloperCenter.Domain.Model.GitHub;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Services.GitHub
 {

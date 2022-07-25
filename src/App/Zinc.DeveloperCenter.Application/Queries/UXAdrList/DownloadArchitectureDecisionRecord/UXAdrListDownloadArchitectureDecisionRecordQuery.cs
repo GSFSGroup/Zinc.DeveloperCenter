@@ -1,6 +1,6 @@
 using System;
 using RedLine.Application.Queries;
-using Zinc.DeveloperCenter.Domain.Model.GitHub;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord
 {

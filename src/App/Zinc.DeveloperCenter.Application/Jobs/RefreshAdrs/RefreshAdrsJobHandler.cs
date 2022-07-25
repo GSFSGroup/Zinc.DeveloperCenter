@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RedLine.Application.Jobs;
 using Zinc.DeveloperCenter.Domain.Model;
-using Zinc.DeveloperCenter.Domain.Model.GitHub;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 {

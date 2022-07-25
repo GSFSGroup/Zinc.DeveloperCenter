@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Zinc.DeveloperCenter.Domain.Model;
-using Zinc.DeveloperCenter.Domain.Model.GitHub;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord
 {

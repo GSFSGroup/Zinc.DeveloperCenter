@@ -7,7 +7,7 @@ using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrSearch;
-using Zinc.DeveloperCenter.Domain.Model.GitHub;
+using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 {
@@ -58,8 +58,8 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="403">The client is forbidden to perform the operation.</response>
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
-        [HttpGet("{applicationName}/{filePath}/content")]
-        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, string filePath, [FromQuery]string? format)
+        [HttpGet("{applicationName}/download")]
+        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, [FromQuery]string filePath, [FromQuery]string? format)
         {
             var fileFormat = FileFormat.Raw;
 
