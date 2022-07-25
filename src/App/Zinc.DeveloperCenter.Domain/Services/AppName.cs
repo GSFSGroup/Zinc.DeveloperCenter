@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Zinc.DeveloperCenter.Domain.Model
+namespace Zinc.DeveloperCenter.Domain.Services
 {
     /// <summary>
     /// A helper class used to parse the application name into various components.
