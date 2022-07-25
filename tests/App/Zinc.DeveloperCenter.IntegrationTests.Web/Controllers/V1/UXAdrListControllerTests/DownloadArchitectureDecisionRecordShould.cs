@@ -25,7 +25,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
             // Act
             var response = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/download/Zinc.Templates?file={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
+                _.Get.Url($"{endpoint}/download/Zinc.Templates?path={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
