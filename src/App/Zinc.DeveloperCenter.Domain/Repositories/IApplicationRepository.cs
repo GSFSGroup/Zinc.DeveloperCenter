@@ -4,9 +4,9 @@ using Zinc.DeveloperCenter.Domain.Model;
 namespace Zinc.DeveloperCenter.Domain.Repositories
 {
     /// <summary>
-    /// A repository for <see cref="ArchitectureDecisionRecord"/>.
+    /// A repository for <see cref="Application"/>s.
     /// </summary>
-    public interface IArchitectureDecisionRecordRepository : IRepository<ArchitectureDecisionRecord>
+    public interface IApplicationRepository : IRepository<Application>
     {
     }
 }

@@ -7,6 +7,7 @@ using RedLine.Extensions.Hosting.Jobs;
 using Zinc.DeveloperCenter.Application;
 using Zinc.DeveloperCenter.Data;
 using Zinc.DeveloperCenter.Host.Jobs.Outbox;
+using Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs;
 
 namespace Zinc.DeveloperCenter.Host.Jobs
 {
@@ -52,12 +53,14 @@ namespace Zinc.DeveloperCenter.Host.Jobs
         private void WithJobs(IServiceCollectionQuartzConfigurator quartz)
         {
             OutboxJob.ConfigureJob(quartz, Configuration);
+            RefreshGsfsGroupAdrsJob.ConfigureJob(quartz, Configuration);
             /* Add future jobs here */
         }
 
         private void WithCustomHealthChecks(IHealthChecksBuilder healthChecks)
         {
             OutboxJob.ConfigureHealthCheck(healthChecks, Configuration);
+            RefreshGsfsGroupAdrsJob.ConfigureHealthCheck(healthChecks, Configuration);
             /* Add future job health checks here */
         }
     }

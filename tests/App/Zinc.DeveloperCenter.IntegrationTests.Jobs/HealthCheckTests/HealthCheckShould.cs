@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Quartz;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,16 +29,21 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Jobs.HealthCheckTests
             resultText.Should().NotBeEmpty();
 
             // The status checks should be:
-            // 1. OutboxJob
-            // 2. Working Set Memory should be below 2GB
-            // 3. Process allocated memory should be below 2GB
-            // 4. AuthZ Service
-            // 5. AuthN Certificate
-            // 6. Database
-            // 7. RabbitMq connection
-            // 8. Overall Status
+            // 1. Working Set Memory should be below 2GB
+            // 2. Process allocated memory should be below 2GB
+            // 3. AuthZ Service
+            // 4. AuthN Certificate
+            // 5. Database
+            // 6. RabbitMq connection
+            // 7. Overall Status
+            // Jobs:
+            // 8. OutboxJob
+            // 9. RefreshGsfsGroupAdrsJob
 
-            Regex.Matches(resultText, "Healthy").Count.Should().Be(8);
+            var jobCount = typeof(Host.Jobs.AssemblyMarker).Assembly.GetTypes()
+                .Count(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableTo(typeof(IJob)));
+
+            Regex.Matches(resultText, "Healthy").Count.Should().Be(7 + jobCount);
         }
 
         [Fact]
