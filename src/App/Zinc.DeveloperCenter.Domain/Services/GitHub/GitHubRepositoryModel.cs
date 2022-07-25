@@ -1,4 +1,4 @@
-namespace Zinc.DeveloperCenter.Domain.Model.GitHub
+namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
     /// A model used to hold the repository information.

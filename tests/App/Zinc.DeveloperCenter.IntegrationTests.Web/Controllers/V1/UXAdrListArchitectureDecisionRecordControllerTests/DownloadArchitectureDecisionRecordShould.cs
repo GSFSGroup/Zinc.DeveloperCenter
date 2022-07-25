@@ -1,9 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Alba;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
-using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
 namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
@@ -23,19 +23,19 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
             // Arrange
             await InsertData().ConfigureAwait(false);
 
+            var x = GetRequiredService<Domain.Services.GitHub.GitHubApiConfig>()?.Tenants.FirstOrDefault()?.AccessToken;
+            Output.WriteLine($"***HEY YOUUUUUUUUUUUUUUUUU*** - {x}");
+
             // Act
             var response = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/Zinc.Templates/dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md/content");
+                _.Get.Url($"{endpoint}/Zinc.Templates/download?filePath={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
             // Assert
-            var result = response.ReadAsJson<UXAdrListDownloadArchitectureDecisionRecordQueryModel>();
-            result.Should().NotBeNull();
-            result.FileName.Should().Be("adr-0001-record-architecture-decisions.md");
-            result.MimeType.Should().Be("application/markdown");
-            result.Content.Should().NotBeEmpty();
+            var result = response.ReadAsText();
+            result.Should().NotBeEmpty();
         }
 
         private async Task InsertData()

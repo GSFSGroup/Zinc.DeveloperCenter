@@ -1,4 +1,5 @@
 using RedLine.Domain.Model;
+using Zinc.DeveloperCenter.Domain.Services;
 
 namespace Zinc.DeveloperCenter.Domain.Model
 {

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 
 namespace Zinc.DeveloperCenter.Domain
 {
@@ -16,17 +17,11 @@ namespace Zinc.DeveloperCenter.Domain
         /// <returns>The description as a string.</returns>
         public static string ToDescription(this Enum value)
         {
-            var attribute = value
+            return value
                 .GetType()
-                .GetCustomAttributes(typeof(DescriptionAttribute), false)
-                .FirstOrDefault() as DescriptionAttribute;
-
-            if (attribute != null)
-            {
-                return attribute.Description;
-            }
-
-            return value.ToString();
+                .GetMember(value.ToString())
+                .First()
+                .GetCustomAttribute<DescriptionAttribute>()?.Description ?? value.ToString();
         }
     }
 }
