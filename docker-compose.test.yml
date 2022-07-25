@@ -54,8 +54,8 @@ services:
       - POSTGRES_PASSWORD
       - RABBITMQ_USER
       - RABBITMQ_PASSWORD
-      - GSFSGROUP_GITHUB_API_TOKEN
       - Authentication__SigningCert__Password=${RL_CERT_PUBLICPRIVATE_KEYPAIR_PASSWORD}
+      - GSFSGROUP_GITHUB_API_TOKEN
     depends_on:
       app:
         condition: service_healthy
