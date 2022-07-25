@@ -20,6 +20,9 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAppListCont
         [Fact]
         public async Task ReturnAllApplications()
         {
+            var record = await GetRequiredService<Domain.Repositories.IApplicationRepository>().Read("GSFSGroup/Zinc.Templates").ConfigureAwait(false);
+            Output.WriteLine($"******IS THERE ANY DATA IN THE DATABASE? {record != null}******");
+
             // Act
             var response = await AuthorizedScenario(_ =>
             {
