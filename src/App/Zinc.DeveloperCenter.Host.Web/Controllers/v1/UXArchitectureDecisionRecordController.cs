@@ -6,6 +6,7 @@ using RedLine.Domain;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
+using Zinc.DeveloperCenter.Application.Queries.UXAdrSearch;
 using Zinc.DeveloperCenter.Domain.Model.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
@@ -108,6 +109,39 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
                     tenantId.Value,
                     correlationId.Value,
                     applicationName);
+
+                var response = await mediator.Send(request).ConfigureAwait(false);
+
+                return Ok(response);
+            }).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets the list of ADRs defined in an application (repository).
+        /// </summary>
+        /// <param name="q">The search query, or search pattern to use.</param>
+        /// <returns>The collection of architecture decision records for the application (repository).</returns>
+        /// <response code="200">The request was successful.</response>
+        /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
+        /// <response code="401">The client is not authenticated.</response>
+        /// <response code="403">The client is forbidden to perform the operation.</response>
+        /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
+        /// <response code="501">An operation was not implemented.</response>
+        [ProducesResponseType(typeof(PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>), 200)]
+        [ProducesResponseType(typeof(string), 400)]
+        [ProducesResponseType(typeof(string), 401)]
+        [ProducesResponseType(typeof(string), 403)]
+        [ProducesResponseType(typeof(string), 500)]
+        [ProducesResponseType(typeof(string), 501)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchArchitectureDecisionRecords([FromQuery]string q)
+        {
+            return await this.Execute(logger, async () =>
+            {
+                var request = new UXSearchArchitectureDecisionRecordsQuery(
+                    tenantId.Value,
+                    correlationId.Value,
+                    q);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 
