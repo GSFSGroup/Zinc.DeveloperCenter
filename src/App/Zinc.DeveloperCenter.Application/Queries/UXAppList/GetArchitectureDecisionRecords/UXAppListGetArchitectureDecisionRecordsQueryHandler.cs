@@ -29,13 +29,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
                 .Select(x => new UXAppListGetArchitectureDecisionRecordsQueryModel
                 {
                     ApplicationName = x.ApplicationName,
+                    FilePath = x.FilePath,
                     LastUpdatedBy = x.LastUpdatedBy,
                     LastUpdatedOn = x.LastUpdatedOn,
                     Number = x.Number,
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
-                });
+                })
+                .OrderBy(x => x.Number);
 
             return new PageableResult<UXAppListGetArchitectureDecisionRecordsQueryModel>(items);
         }

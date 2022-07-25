@@ -33,6 +33,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDeci
         public string? NumberDisplay { get; set; }
 
         /// <summary>
+        /// Gets the path to the ADR in the repository.
+        /// </summary>
+        public string? FilePath { get; set; }
+
+        /// <summary>
         /// Gets who last updated the ADR.
         /// </summary>
         public string? LastUpdatedBy { get; set; }

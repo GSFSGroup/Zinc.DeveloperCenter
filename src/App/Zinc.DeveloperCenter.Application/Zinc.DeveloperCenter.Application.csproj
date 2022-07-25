@@ -31,6 +31,7 @@
     <Folder Include="Commands\" />
     <Folder Include="Messages\" />
     <Folder Include="Notifications\" />
+    <Folder Include="Queries\UXAdrList\DownloadArchitectureDecisionRecord\" />
   </ItemGroup>
 
 </Project>
