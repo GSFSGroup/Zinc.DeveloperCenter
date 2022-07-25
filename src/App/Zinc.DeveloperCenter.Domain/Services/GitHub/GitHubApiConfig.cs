@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Zinc.DeveloperCenter.Domain.Model.GitHub
+namespace Zinc.DeveloperCenter.Domain.Services.GitHub
 {
     /// <summary>
     /// The configuration settings needed by the <see cref="IGitHubApiService"/>.
