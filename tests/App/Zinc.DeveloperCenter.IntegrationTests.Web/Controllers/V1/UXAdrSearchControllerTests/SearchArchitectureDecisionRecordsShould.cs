@@ -8,11 +8,11 @@ using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrSearch;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrSearchControllerTests
 {
     public class SearchArchitectureDecisionRecordsShould : WebTestBase
     {
-        private readonly string endpoint = $"/ux/v1/{TenantId}/architecture-decision-records";
+        private readonly string endpoint = $"/ux/v1/{TenantId}/architecture-decision-records/search";
 
         public SearchArchitectureDecisionRecordsShould(WebTestFixture fixture, ITestOutputHelper output)
             : base(fixture, output)

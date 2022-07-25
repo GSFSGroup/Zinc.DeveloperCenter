@@ -5,7 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
 {
     public class DownloadArchitectureDecisionRecordShould : WebTestBase
     {
@@ -25,7 +25,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
             // Act
             var response = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/Zinc.Templates/download?filePath={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
+                _.Get.Url($"{endpoint}/download/Zinc.Templates?file={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 

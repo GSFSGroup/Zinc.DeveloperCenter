@@ -1,5 +1,7 @@
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using Zinc.DeveloperCenter.Domain.Model;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
@@ -36,6 +38,15 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
                 : "text/html";
 
             var fileContent = System.Text.Encoding.UTF8.GetBytes(content!);
+
+            /* TODO
+            await connection.ExecuteAsync(
+                @"UPDATE developercenter.architecture_decision_record_viewcount
+                  SET view_count = view_count + 1
+                  WHERE id = (SELECT id FROM developercenter.architecture_decision_record
+                              WHERE tenant_id = @TenantId AND application_name = @ApplicationName AND file_path = @FilePath)",
+                new { request.TenantId, request.ApplicationName, request.FilePath }).ConfigureAwait(false)
+             * */
 
             return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(
                 fileName,
