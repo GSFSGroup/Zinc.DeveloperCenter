@@ -142,7 +142,7 @@ INSERT INTO {TableName} (
     application_name,
     file_path,
     last_updated_by,
-    last_updated_on,
+    last_updated_on
 ) VALUES (
     @TenantId,
     @ApplicationName,
