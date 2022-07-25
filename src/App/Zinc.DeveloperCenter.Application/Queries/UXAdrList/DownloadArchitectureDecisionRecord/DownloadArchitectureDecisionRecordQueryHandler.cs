@@ -6,7 +6,7 @@ using Zinc.DeveloperCenter.Domain.Model.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord
 {
-    internal class DownloadArchitectureDecisionRecordQueryHandler : IRequestHandler<DownloadArchitectureDecisionRecordQuery, string>
+    internal class DownloadArchitectureDecisionRecordQueryHandler : IRequestHandler<DownloadArchitectureDecisionRecordQuery, DownloadArchitectureDecisionRecordQueryModel>
     {
         private readonly IGitHubApiService gitHubApi;
 
@@ -15,7 +15,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
             this.gitHubApi = gitHubApi;
         }
 
-        public async Task<string> Handle(DownloadArchitectureDecisionRecordQuery request, CancellationToken cancellationToken)
+        public async Task<DownloadArchitectureDecisionRecordQueryModel> Handle(DownloadArchitectureDecisionRecordQuery request, CancellationToken cancellationToken)
         {
             var content = await gitHubApi.DownloadArchitectureDecisionRecord(
                 request.TenantId,
@@ -28,7 +28,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
                 throw new RedLine.Data.Exceptions.ResourceNotFoundException(nameof(ArchitectureDecisionRecord), string.Join('/', request.TenantId, request.ApplicationName, request.FilePath));
             }
 
-            return content;
+            // Force all file names to end with .md vs .markdown (technical UI reasons)
+            var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(request.FilePath)}.md";
+            var fileContent = System.Text.Encoding.UTF8.GetBytes(content);
+
+            return new DownloadArchitectureDecisionRecordQueryModel(fileName, fileContent);
         }
     }
 }

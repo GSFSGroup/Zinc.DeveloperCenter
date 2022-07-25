@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RedLine.Domain;
 using RedLine.Domain.Model;
+using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Application.Queries.UXAppList.GetArchitectureDecisionRecords;
+using Zinc.DeveloperCenter.Domain.Model.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 {
@@ -47,6 +49,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// </summary>
         /// <param name="applicationName">The full name of application (repository), e.g. Platinum.Products.</param>
         /// <param name="filePath">The ADR file path in the repository, e.g. docs/App/adr-0001-title.md.</param>
+        /// <param name="format">The format to return - 'raw' or 'html'. The default is 'raw'.</param>
         /// <returns>The collection of architecture decision records for the application (repository).</returns>
         /// <response code="200">The request was successful.</response>
         /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
@@ -55,11 +58,30 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
         [HttpGet("{applicationName}/{filePath}")]
-        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, string filePath)
+        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, string filePath, [FromQuery]string? format)
         {
-            // TODO: check with Cole on whether we want the raw markdown or an html version of it.
-            await Task.CompletedTask.ConfigureAwait(false);
-            throw new System.NotImplementedException();
+            var fileFormat = FileFormat.Raw;
+            var contentType = "text/markdown";
+
+            if ("html".Equals(format, System.StringComparison.OrdinalIgnoreCase))
+            {
+                fileFormat = FileFormat.Html;
+                contentType = "text/html";
+            }
+
+            return await this.Execute(logger, async () =>
+            {
+                var request = new DownloadArchitectureDecisionRecordQuery(
+                    tenantId.Value,
+                    correlationId.Value,
+                    applicationName,
+                    filePath,
+                    fileFormat);
+
+                var response = await mediator.Send(request).ConfigureAwait(false);
+
+                return File(response.Content, contentType, response.FileName);
+            }).ConfigureAwait(false);
         }
 
         /// <summary>
