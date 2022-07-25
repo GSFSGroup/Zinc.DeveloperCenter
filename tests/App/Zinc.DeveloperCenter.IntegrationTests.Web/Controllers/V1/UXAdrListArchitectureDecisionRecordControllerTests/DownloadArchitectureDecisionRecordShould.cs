@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Alba;
 using FluentAssertions;
@@ -21,6 +22,9 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
         {
             // Arrange
             await InsertData().ConfigureAwait(false);
+
+            var x = GetRequiredService<Domain.Services.GitHub.GitHubApiConfig>()?.Tenants.FirstOrDefault()?.AccessToken;
+            Output.WriteLine($"***HEY YOUUUUUUUUUUUUUUUUU*** - {x}");
 
             // Act
             var response = await AuthorizedScenario(_ =>
