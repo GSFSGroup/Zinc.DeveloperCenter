@@ -33,7 +33,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         /// <inheritdoc/>
         protected override async Task<bool> ExistsInternal(string key)
         {
-            var keyParts = key.Split('/');
+            var keyParts = key.Split('/', 2, System.StringSplitOptions.RemoveEmptyEntries);
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
 
@@ -45,7 +45,7 @@ namespace Zinc.DeveloperCenter.Data.Repositories
         /// <inheritdoc/>
         protected override async Task<Application> ReadInternal(string key)
         {
-            var keyParts = key.Split('/');
+            var keyParts = key.Split('/', 2, System.StringSplitOptions.RemoveEmptyEntries);
             var tenantId = keyParts[0];
             var applicationName = keyParts[1];
 
