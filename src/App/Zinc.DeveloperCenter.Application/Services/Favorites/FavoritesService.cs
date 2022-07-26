@@ -63,8 +63,8 @@ INSERT INTO developercenter.architecture_decision_record_favorite (
     ),
     @userId
 )
-ON CONFLICT (architecture_decision_record_id) DO NOTHING;
-";
+ON CONFLICT (architecture_decision_record_id, user_id) DO NOTHING
+;";
 
             public static readonly string RemoveFavorite = @"
 DELETE FROM developercenter.architecture_decision_record_favorite
@@ -76,8 +76,8 @@ WHERE
         AND application_name = @applicationName
         AND file_path = @filePath
     )
-    AND user_id = @userId;
-";
+    AND user_id = @userId
+;";
         }
     }
 }

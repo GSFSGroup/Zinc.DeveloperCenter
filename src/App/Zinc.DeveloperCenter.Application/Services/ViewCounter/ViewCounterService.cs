@@ -30,9 +30,18 @@ namespace Zinc.DeveloperCenter.Application.Services.ViewCounter
         /// <inheritdoc/>
         public async Task<int> UpdateViewCount(string tenantId, string applicationName, string filePath)
         {
-            return await connection.ExecuteScalarAsync<int>(
+            var result = await connection.ExecuteScalarAsync<int>(
                 Sql.UpdateViewCount,
                 new { tenantId, applicationName, filePath }).ConfigureAwait(false);
+
+            if (result == 0)
+            {
+                result = await connection.ExecuteScalarAsync<int>(
+                    Sql.InsertViewCount,
+                    new { tenantId, applicationName, filePath }).ConfigureAwait(false);
+            }
+
+            return result;
         }
 
         private static class Sql
@@ -47,6 +56,24 @@ WHERE id = (
     AND application_name = @applicationName
     AND file_path = @filePath
 );";
+
+            public static readonly string InsertViewCount = @"
+INSERT INTO developercenter.architecture_decision_record_viewcount (
+    id,
+    view_count
+) VALUES (
+    id = (
+        SELECT id
+        FROM developercenter.architecture_decision_record
+        WHERE tenant_id = @tenantId
+        AND application_name = @applicationName
+        AND file_path = @filePath
+    ),
+    view_count = 1
+)
+ON CONFLICT (id) DO
+UPDATE SET developercenter.architecture_decision_record.view_count = developercenter.architecture_decision_record.view_count + 1
+RETURNING developercenter.architecture_decision_record.view_count;";
 
             public static readonly string UpdateViewCount = @"
 UPDATE developercenter.architecture_decision_record_viewcount
