@@ -47,6 +47,11 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
 
             var viewCount = await GetRequiredService<IViewCounterService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
             viewCount.Should().Be(2);
+
+            (await GetRequiredService<IArchitectureDecisionRecordRepository>()
+                .Read(string.Join('/', TenantId, applicationName, filePath))
+                .ConfigureAwait(false))
+                .TotalViews.Should().Be(2);
         }
 
         private async Task InsertData()
