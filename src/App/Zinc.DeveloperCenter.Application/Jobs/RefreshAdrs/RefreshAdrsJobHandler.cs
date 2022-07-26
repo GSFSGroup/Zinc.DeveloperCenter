@@ -52,8 +52,11 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             int totalUpdates = applications.Count(x => x.WasUpdated);
 
+            logger.LogInformation("{Total} applications updated.", totalUpdates);
+
             foreach (var applicationName in applications.Select(x => x.ApplicationName))
             {
+                logger.LogInformation("Updating ADRs for {ApplicationName}.", applicationName);
                 totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
             }
 
