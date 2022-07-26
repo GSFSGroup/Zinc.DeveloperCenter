@@ -68,8 +68,8 @@ INSERT INTO developercenter.architecture_decision_record_viewcount (
         WHERE adr.tenant_id = @tenantId
         AND adr.application_name = @applicationName
         AND adr.file_path = @filePath
-    ) AS id,
-    1 AS view_count
+    ),
+    1
 )
 ON CONFLICT (id) DO
 UPDATE SET view_count = view_count + 1
