@@ -136,10 +136,11 @@ LIMIT @topN
 SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
 FROM {TableName} AS adr
 INNER JOIN {TableName}_favorite AS favs
-    ON favs.{TableName}_id = adr.id AND favs.user_id = @userId
+    ON favs.architecture_decision_record_id = adr.id
 LEFT OUTER JOIN {TableName}_viewcount AS views
     ON views.id = adr.id
 WHERE adr.tenant_id = @tenantId
+AND favs.user_id = @userId
 ;";
 
             internal static readonly string Read = $@"
