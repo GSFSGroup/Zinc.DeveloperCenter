@@ -18,7 +18,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
         }
 
         [Fact]
-        public async Task DownloadAsMarkdown()
+        public async Task DownloadAsMarkdownAndUpdateViewCount()
         {
             // Arrange
             await InsertData().ConfigureAwait(false);
