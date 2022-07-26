@@ -72,8 +72,8 @@ INSERT INTO developercenter.architecture_decision_record_viewcount (
     1
 )
 ON CONFLICT (id) DO
-UPDATE SET view_count = view_count + 1
-RETURNING view_count;";
+UPDATE SET architecture_decision_record_viewcount.view_count = architecture_decision_record_viewcount.view_count + 1
+RETURNING architecture_decision_record_viewcount.view_count;";
 
             public static readonly string UpdateViewCount = @"
 UPDATE developercenter.architecture_decision_record_viewcount
