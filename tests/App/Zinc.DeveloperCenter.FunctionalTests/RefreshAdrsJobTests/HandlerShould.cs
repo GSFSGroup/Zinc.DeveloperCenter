@@ -28,7 +28,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.RefreshAdrsJobTests
                 GetRequiredService<IGitHubApiService>(),
                 GetRequiredService<IApplicationRepository>(),
                 GetRequiredService<IArchitectureDecisionRecordRepository>(),
-                GetRequiredService<ILogger<RefreshAdrsJobHandler>>);
+                GetRequiredService<ILogger<RefreshAdrsJobHandler>>());
 
             var response = await handler.Handle(job, CancellationToken.None).ConfigureAwait(false);
             response.Should().Be(JobResult.OperationSucceeded);
