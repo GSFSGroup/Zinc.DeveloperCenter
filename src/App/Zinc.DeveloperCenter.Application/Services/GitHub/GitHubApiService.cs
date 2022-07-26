@@ -205,6 +205,11 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 if (!response.IsSuccessStatusCode)
                 {
+                    if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        return new List<GitHubArchitectureDecisionRecordModel>();
+                    }
+
                     throw new ServiceCallException(
                         (int)response.StatusCode,
                         response.ReasonPhrase ?? response.StatusCode.ToString(),

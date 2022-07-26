@@ -1,8 +1,10 @@
 #pragma warning disable S1128 // Unused "using" should be removed
 using System;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using RedLine.Application.Jobs;
@@ -25,25 +27,28 @@ namespace Zinc.DeveloperCenter.FunctionalTests.RefreshAdrsJobTests
         [Fact]
         public async Task PopulateTheDatabase()
         {
-            /*
-            var job = new RefreshAdrsJob("GSFSGroup", Guid.NewGuid())
+            var job = new RefreshAdrsJob("GSFSGroup", Guid.NewGuid());
 
             var handler = new RefreshAdrsJobHandler(
                 GetRequiredService<IGitHubApiService>(),
                 GetRequiredService<IApplicationRepository>(),
                 GetRequiredService<IArchitectureDecisionRecordRepository>(),
-                GetRequiredService<ILogger<RefreshAdrsJobHandler>>())
-             * */
+                GetRequiredService<ILogger<RefreshAdrsJobHandler>>());
 
-            await Task.CompletedTask.ConfigureAwait(false);
+            var response = await handler.Handle(job, CancellationToken.None).ConfigureAwait(false);
+            response.Should().Be(JobResult.OperationSucceeded);
 
-            var token = GetRequiredService<GitHubApiConfig>().Tenants?.FirstOrDefault()?.AccessToken;
-            Output.WriteLine("????????????????? " + token);
+            var connection = GetRequiredService<IDbConnection>();
 
-            token.Should().NotBeNullOrEmpty();
+            var totalRepos = await connection
+                .ExecuteScalarAsync<int>("select count(*) from developercenter.application")
+                .ConfigureAwait(false);
+            totalRepos.Should().BeGreaterThan(10);
 
-            // var response = await handler.Handle(job, CancellationToken.None).ConfigureAwait(false)
-            // response.Should().Be(JobResult.OperationSucceeded)
+            var totalAdrs = await connection
+                .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record")
+                .ConfigureAwait(false);
+            totalAdrs.Should().BeGreaterThan(30);
         }
     }
 }
