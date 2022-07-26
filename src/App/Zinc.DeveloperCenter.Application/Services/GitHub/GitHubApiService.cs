@@ -351,7 +351,6 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 foreach (var header in acceptHeaders)
                 {
-                    message.Headers.UserAgent.Add(new ProductInfoHeaderValue("wshorton"));
                     message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
                 }
             }
