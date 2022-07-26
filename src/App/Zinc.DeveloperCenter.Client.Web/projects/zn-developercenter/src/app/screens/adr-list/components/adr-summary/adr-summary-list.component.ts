@@ -43,7 +43,7 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     }
 
     public ngOnChanges(): void {
-        this.getAdrsForCurrentRepo();
+        this.getAppAdrs();
     }
 
     private getAdrsForCurrentRepo(): void {
@@ -62,6 +62,16 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
                         }
                     }
                 });
+        }
+    }
+
+    private getAppAdrs(): void {
+        if (this.expanded) {
+            this.adrService.listAppAdrs(this.applicationName)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(adrs => {
+                    this.adrs = adrs;
+                })
         }
     }
 

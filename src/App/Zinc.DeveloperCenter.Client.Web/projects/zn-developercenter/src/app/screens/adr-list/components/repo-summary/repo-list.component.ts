@@ -32,7 +32,7 @@ export class RepoListComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
-        this.getGSFSGitHubReposInit();
+        this.getGSFSAppsInit();
     }
 
     public ngOnDestroy(): void {
@@ -43,6 +43,18 @@ export class RepoListComponent implements OnInit, OnDestroy {
     public getGSFSGitHubReposInit(): void {
         this.loadingService.show('Loading');
         this.repoService.listRepos()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(repos => {
+                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.applicationName] = false);
+                this.repos = repos;
+                this.loadingService.hide();
+                this.fetchedRepos = true;
+            });
+    }
+
+    public getGSFSAppsInit(): void {
+        this.loadingService.show('Loading');
+        this.repoService.listApps()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(repos => {
                 repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.applicationName] = false);

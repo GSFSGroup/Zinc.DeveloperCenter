@@ -9,16 +9,15 @@
                 routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/{{applicationName}}/download-url/{{encodeUrl(adr.downloadUrl)}}/html-url/{{encodeUrl(adr.htmlUrl)}}"
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
-                {{adr.neatTitle}}
+                {{adr.titleDisplay}}
                 <button class="float-right" type="button" mat-icon-button>
-                    <mat-icon *ngIf="!adr.favorited">star_border</mat-icon>
-                    <mat-icon *ngIf="adr.favorited">star</mat-icon>
+                    <mat-icon>star_border</mat-icon>
                 </button>
             </h3>
             <span class="item-detail margin-bottom-12">
-                {{adr.numberString}}
+                {{adr.numberDisplay}}
                 <br>
-                Last updated on {{adr.lastUpdatedDateString}}
+                Last updated on {{adr.lastUpdatedBy}}
             </span>
             <span style="clear: both"></span>
         </div>

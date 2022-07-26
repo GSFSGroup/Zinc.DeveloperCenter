@@ -12,4 +12,8 @@ export class GitHubRepoService {
     public listRepos(): Observable<Page<RepositoryListComponent>> {
         return this.backend.query<Page<RepositoryListComponent>>('repos');
     }
+
+    public listApps(): Observable<Page<RepositoryListComponent>> {
+        return this.backend.query<Page<RepositoryListComponent>>('applications');
+    }
 }

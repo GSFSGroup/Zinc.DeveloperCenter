@@ -13,6 +13,10 @@ export class GitHubAdrService {
         return this.backend.query<Page<AdrSummary>>(`adrs/${applicationName}/details/sorted-on/${sortedOn}/sort-asc/${sortAsc}`);
     }
 
+    public listAppAdrs(applicationName: string): Observable<Page<AdrSummary>> {
+        return this.backend.query<Page<AdrSummary>>(`architecture-decision-records/${applicationName}`);
+    }
+
     public updateDates(applicationName: string, adrTitle: string): Observable<Date> {
         return this.backend.query<Date>(`adrs/update-dates/${applicationName}/${adrTitle}`);
     }
