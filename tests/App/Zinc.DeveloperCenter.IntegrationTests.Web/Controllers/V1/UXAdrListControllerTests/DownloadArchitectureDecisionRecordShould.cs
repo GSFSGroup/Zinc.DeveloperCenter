@@ -26,18 +26,27 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
             var filePath = "dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md";
 
             // Act
-            var response = await AuthorizedScenario(_ =>
+            var response1 = await AuthorizedScenario(_ =>
+            {
+                _.Get.Url($"{endpoint}/download/{applicationName}?path={System.Web.HttpUtility.UrlEncode(filePath)}");
+                _.StatusCodeShouldBeOk();
+            }).ConfigureAwait(false);
+
+            var response2 = await AuthorizedScenario(_ =>
             {
                 _.Get.Url($"{endpoint}/download/{applicationName}?path={System.Web.HttpUtility.UrlEncode(filePath)}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
             // Assert
-            var result = response.ReadAsText();
-            result.Should().NotBeEmpty();
+            var result1 = response1.ReadAsText();
+            result1.Should().NotBeEmpty();
+
+            var result2 = response2.ReadAsText();
+            result2.Should().NotBeEmpty();
 
             var viewCount = await GetRequiredService<IViewCounterService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
-            viewCount.Should().Be(1);
+            viewCount.Should().Be(2);
         }
 
         private async Task InsertData()
