@@ -6,7 +6,7 @@ using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrFavorites.GetMostViewed
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
 {
     internal class UXGetMostViewedQueryHandler : IRequestHandler<UXGetMostViewedQuery, PageableResult<UXGetMostViewedQueryModel>>
     {

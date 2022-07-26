@@ -2,7 +2,7 @@ using System;
 using RedLine.Application.Queries;
 using RedLine.Domain.Model;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrFavorites.GetMostViewed
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
 {
     /// <summary>
     /// A query used to return the top N most viewed ADRs.
