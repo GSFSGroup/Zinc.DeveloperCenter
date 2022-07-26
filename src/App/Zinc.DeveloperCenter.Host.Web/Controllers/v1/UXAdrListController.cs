@@ -119,7 +119,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <summary>
         /// Gets the list of most viewed ADRs.
         /// </summary>
-        /// <param name="topN">The top N number of most viewed ADRs to return.</param>
+        /// <param name="top">The top N number of most viewed ADRs to return.</param>
         /// <returns>The collection of architecture decision records for the application (repository).</returns>
         /// <response code="200">The request was successful.</response>
         /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
@@ -135,14 +135,14 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         [ProducesResponseType(typeof(string), 501)]
         [HttpGet("most-viewed")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
-        public async Task<IActionResult> GetMostViewedArchitectureDecisionRecords([FromQuery]int topN = 6)
+        public async Task<IActionResult> GetMostViewedArchitectureDecisionRecords([FromQuery]int top = 6)
         {
             return await this.Execute(logger, async () =>
             {
                 var request = new UXGetMostViewedQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    topN);
+                    top);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 
