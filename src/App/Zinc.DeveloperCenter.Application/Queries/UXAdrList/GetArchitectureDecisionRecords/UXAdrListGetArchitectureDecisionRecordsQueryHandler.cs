@@ -36,6 +36,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDeci
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
+                    TotalViews = x.TotalViews,
                 })
                 .OrderBy(x => x.Number);
 

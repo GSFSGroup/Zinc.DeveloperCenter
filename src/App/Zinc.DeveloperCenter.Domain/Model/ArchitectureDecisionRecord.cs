@@ -98,6 +98,11 @@ namespace Zinc.DeveloperCenter.Domain.Model
         public override string Key => $"{TenantId}/{ApplicationName}/{FilePath}";
 
         /// <summary>
+        /// Gets the total views of the ADR.
+        /// </summary>
+        public int TotalViews { get; protected set; }
+
+        /// <summary>
         /// Updates the ADR last updated date.
         /// </summary>
         /// <param name="updatedBy">The user who last updated the ADR.</param>
