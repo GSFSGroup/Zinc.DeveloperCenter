@@ -66,7 +66,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
                 System.DateTimeOffset.UtcNow.AddDays(-30),
                 Data.Migrations.EmbeddedResources.EmbeddedResource.Read("Migration_2022072101_TestData_adr_01.md"))).ConfigureAwait(false);
 
-            var id = await adrRepository.Save(new Domain.Model.ArchitectureDecisionRecord(
+            await adrRepository.Save(new Domain.Model.ArchitectureDecisionRecord(
                 TenantId,
                 "Molybdenum.Earnings",
                 "docs/App/adr-0001-event-sourcing.md",
@@ -75,8 +75,20 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
                 Data.Migrations.EmbeddedResources.EmbeddedResource.Read("Migration_2022072101_TestData_adr_04.md"))).ConfigureAwait(false);
 
             await GetRequiredService<IDbConnection>().ExecuteAsync(
-                "INSERT INTO developercenter.architecture_decision_record_viewcount (id, view_count) VALUES (@id, @viewCount);",
-                new { id = id, viewCount = 2 }).ConfigureAwait(false);
+                @$"
+INSERT INTO developercenter.architecture_decision_record_viewcount (
+    id,
+    view_count
+) VALUES (@
+    (
+     SELECT id FROM developercenter.architecture_decision_record
+     WHERE tenant_id = '{TenantId}'
+     AND application_name = 'Molybdenum.Earnings'
+     AND file_path = 'docs/App/adr-0001-event-sourcing.md'
+    ),
+    @viewCount
+);",
+                new { viewCount = 2 }).ConfigureAwait(false);
         }
     }
 }
