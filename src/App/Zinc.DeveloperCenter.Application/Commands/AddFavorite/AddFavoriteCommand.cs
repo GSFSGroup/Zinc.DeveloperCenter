@@ -1,4 +1,5 @@
 using System;
+using MediatR;
 using RedLine.Application.Commands;
 
 namespace Zinc.DeveloperCenter.Application.Commands.AddFavorite
@@ -6,7 +7,7 @@ namespace Zinc.DeveloperCenter.Application.Commands.AddFavorite
     /// <summary>
     /// A command used to add a favorite for an ADR.
     /// </summary>
-    public class AddFavoriteCommand : CommandBase
+    public class AddFavoriteCommand : CommandBase<Unit>
     {
         /// <summary>
         /// Initializes a new instance of the class.
