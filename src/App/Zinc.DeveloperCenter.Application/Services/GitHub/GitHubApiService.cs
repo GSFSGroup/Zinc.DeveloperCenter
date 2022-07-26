@@ -70,27 +70,9 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/contents/{filePath}";
 
-            var message = CreateMessage(endpoint, tenantConfig.AccessToken, fileFormat.ToDescription());
-
-            using (var response = await httpClient.SendAsync(message).ConfigureAwait(false))
+            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = JsonConvert.DeserializeAnonymousType(
-                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
-                        new { message = (string?)null });
-
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                return content ?? string.Empty;
+                return await ServiceCaller.MakeCall(httpClient, request).ConfigureAwait(false) ?? string.Empty;
             }
         }
 
@@ -205,25 +187,11 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var results = new List<GitHubArchitectureDecisionRecordModel>(32);
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = JsonConvert.DeserializeAnonymousType(
-                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
-                        new { message = (string?)null });
-
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var model = JsonConvert.DeserializeObject<FileSearchResultModel>(content) ?? new FileSearchResultModel();
+                var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, request)
+                    .ConfigureAwait(false)
+                    ?? new FileSearchResultModel();
 
                 // The check for .md or .markdown seems to be unnecessary, but just in case
                 var items = model.items?
@@ -262,30 +230,10 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = JsonConvert.DeserializeAnonymousType(
-                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
-                        new { message = (string?)null });
-
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                if (string.IsNullOrEmpty(content))
-                {
-                    return default;
-                }
-
-                var model = (JsonConvert.DeserializeObject<List<CommitModel>>(content) ?? new List<CommitModel>())
+                var model = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, request)
+                    .ConfigureAwait(false) ?? new List<CommitModel>())
                     .FirstOrDefault();
 
                 if (model != null && model.committer != null)
@@ -315,29 +263,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"orgs/{orgName!}/repos?page={page}&per_page={pageSize}";
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = JsonConvert.DeserializeAnonymousType(
-                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
-                        new { message = (string?)null });
+                var model = await ServiceCaller.MakeCall<List<RepositorySearchModel>>(httpClient, request)
+                    .ConfigureAwait(false)
+                    ?? new List<RepositorySearchModel>();
 
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var results = (JsonConvert.DeserializeObject<List<RepositorySearchModel>>(content) ?? new List<RepositorySearchModel>())
+                return model
                     .Select(model => new GitHubRepositoryModel(tenantConfig.TenantId!, model.name!, model.html_url!, model.description))
                     .ToList();
-
-                return results;
             }
         }
 
@@ -356,6 +290,62 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             }
 
             return message;
+        }
+
+        private static class ServiceCaller
+        {
+            public static async Task<TResponse?> MakeCall<TResponse>(HttpClient httpClient, HttpRequestMessage request)
+            {
+                var content = await MakeCall(httpClient, request).ConfigureAwait(false) ?? "{}";
+                return JsonConvert.DeserializeObject<TResponse>(content);
+            }
+
+            public static async Task<string?> MakeCall(HttpClient httpClient, HttpRequestMessage request)
+            {
+                var totalRetries = 0;
+
+                while (totalRetries < 3)
+                {
+                    using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
+                    {
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var error = JsonConvert.DeserializeAnonymousType(
+                                await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                                new { message = (string?)null });
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                            {
+                                if (error?.message?.Contains("secondary rate limit") ?? false)
+                                {
+                                    if (int.TryParse(response.Headers.GetValues("Retry-After").FirstOrDefault(), out var seconds) && seconds > 0)
+                                    {
+                                        await Task.Delay(TimeSpan.FromSeconds(seconds + 1.25)).ConfigureAwait(false);
+                                        totalRetries++;
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            throw new ServiceCallException(
+                                (int)response.StatusCode,
+                                error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
+                                typeof(GitHubApiService).Name,
+                                httpClient.BaseAddress?.Host ?? "api.github.com",
+                                null);
+                        }
+
+                        return await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}";
+                    }
+                }
+
+                throw new ServiceCallException(
+                    500,
+                    $"All retries have been exhaused to '{request.RequestUri?.LocalPath}'. The call has FAILED.",
+                    typeof(GitHubApiService).Name,
+                    httpClient.BaseAddress?.Host ?? "api.github.com",
+                    null);
+            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "By design.")]
