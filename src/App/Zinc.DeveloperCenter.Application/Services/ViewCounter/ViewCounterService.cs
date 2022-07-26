@@ -50,11 +50,11 @@ namespace Zinc.DeveloperCenter.Application.Services.ViewCounter
 SELECT view_count
 FROM developercenter.architecture_decision_record_viewcount
 WHERE id = (
-    SELECT id
-    FROM developercenter.architecture_decision_record
-    WHERE tenant_id = @tenantId
-    AND application_name = @applicationName
-    AND file_path = @filePath
+    SELECT adr.id
+    FROM developercenter.architecture_decision_record AS adr
+    WHERE adr.tenant_id = @tenantId
+    AND adr.application_name = @applicationName
+    AND adr.file_path = @filePath
 );";
 
             public static readonly string InsertViewCount = @"
@@ -63,11 +63,11 @@ INSERT INTO developercenter.architecture_decision_record_viewcount (
     view_count
 ) VALUES (
     id = (
-        SELECT id
-        FROM developercenter.architecture_decision_record
-        WHERE tenant_id = @tenantId
-        AND application_name = @applicationName
-        AND file_path = @filePath
+        SELECT adr.id
+        FROM developercenter.architecture_decision_record AS adr
+        WHERE adr.tenant_id = @tenantId
+        AND adr.application_name = @applicationName
+        AND adr.file_path = @filePath
     ),
     view_count = 1
 )
@@ -76,16 +76,16 @@ UPDATE SET developercenter.architecture_decision_record.view_count = developerce
 RETURNING developercenter.architecture_decision_record.view_count;";
 
             public static readonly string UpdateViewCount = @"
-UPDATE developercenter.architecture_decision_record_viewcount
-SET view_count = view_count + 1
+UPDATE developercenter.architecture_decision_record_viewcount AS vc
+SET vc.view_count = vc.view_count + 1
 WHERE id = (
-    SELECT id
-    FROM developercenter.architecture_decision_record
-    WHERE tenant_id = @tenantId
-    AND application_name = @applicationName
-    AND file_path = @filePath
+    SELECT adr.id
+    FROM developercenter.architecture_decision_record AS adr
+    WHERE adr.tenant_id = @tenantId
+    AND adr.application_name = @applicationName
+    AND adr.file_path = @filePath
 )
-RETURNING view_count;";
+RETURNING vc.view_count;";
         }
     }
 }
