@@ -8,11 +8,11 @@ namespace Zinc.DeveloperCenter.Host.Web.Models
         /// <summary>
         /// The application name.
         /// </summary>
-        public string ApplicationName { get; set; } = string.Empty
+        public string ApplicationName { get; set; } = string.Empty;
 
         /// <summary>
         /// The ADR GitHub file path.
         /// </summary>
-        public string FilePath { get; set; } = string.Empty
+        public string FilePath { get; set; } = string.Empty;
     }
 }
