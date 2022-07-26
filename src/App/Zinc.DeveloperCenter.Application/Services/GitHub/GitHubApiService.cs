@@ -314,17 +314,11 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                                 await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
                                 new { message = (string?)null });
 
-                            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                            if (IsRecoverableError((response, error?.message), out var waitTime))
                             {
-                                if (error?.message?.Contains("secondary rate limit") ?? false)
-                                {
-                                    if (int.TryParse(response.Headers.GetValues("Retry-After").FirstOrDefault(), out var seconds) && seconds > 0)
-                                    {
-                                        await Task.Delay(TimeSpan.FromSeconds(seconds + 1.25)).ConfigureAwait(false);
-                                        totalRetries++;
-                                        continue;
-                                    }
-                                }
+                                await Task.Delay(waitTime).ConfigureAwait(false);
+                                totalRetries++;
+                                continue;
                             }
 
                             throw new ServiceCallException(
@@ -345,6 +339,25 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     typeof(GitHubApiService).Name,
                     httpClient.BaseAddress?.Host ?? "api.github.com",
                     null);
+            }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1316:Tuple element names should use correct casing", Justification = "By design.")]
+            private static bool IsRecoverableError((HttpResponseMessage response, string? message) error, out TimeSpan waitTime)
+            {
+                waitTime = TimeSpan.Zero;
+
+                if (error.response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    if (error.message?.Contains("secondary rate limit") ?? false)
+                    {
+                        if (int.TryParse(error.response.Headers.GetValues("Retry-After").FirstOrDefault(), out var seconds) && seconds > 0)
+                        {
+                            waitTime = TimeSpan.FromSeconds(seconds + 1.25);
+                        }
+                    }
+                }
+
+                return waitTime != TimeSpan.Zero;
             }
         }
 
