@@ -1,5 +1,4 @@
 using System;
-using MediatR;
 using RedLine.Application.Commands;
 
 namespace Zinc.DeveloperCenter.Application.Commands.RemoveFavorite
@@ -7,7 +6,7 @@ namespace Zinc.DeveloperCenter.Application.Commands.RemoveFavorite
     /// <summary>
     /// A command used to remove a favorite ADR.
     /// </summary>
-    public class RemoveFavoriteCommand : CommandBase<Unit>
+    public class RemoveFavoriteCommand : CommandBase
     {
         /// <summary>
         /// Initializes a new instance of the class.
@@ -16,7 +15,7 @@ namespace Zinc.DeveloperCenter.Application.Commands.RemoveFavorite
         /// <param name="correlationId">The correlation identifier.</param>
         /// <param name="applicationName">The application name.</param>
         /// <param name="filePath">The ADR file path in GitHub.</param>
-        public RemoveFavorite(
+        public RemoveFavoriteCommand(
             string tenantId,
             Guid correlationId,
             string applicationName,
