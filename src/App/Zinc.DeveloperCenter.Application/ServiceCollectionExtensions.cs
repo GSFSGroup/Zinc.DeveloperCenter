@@ -5,10 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
 using Zinc.DeveloperCenter.Application.Services;
+using Zinc.DeveloperCenter.Application.Services.Favorites;
 using Zinc.DeveloperCenter.Application.Services.GitHub;
+using Zinc.DeveloperCenter.Application.Services.ViewCounter;
 using Zinc.DeveloperCenter.Data.Repositories;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Services.Favorites;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
+using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
 
 namespace Zinc.DeveloperCenter.Application
 {
@@ -35,6 +39,8 @@ namespace Zinc.DeveloperCenter.Application
                 .AddApiServices(configuration)
                 .AddScoped<IApplicationRepository, ApplicationRepository>()
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
+                .AddScoped<IViewCounterService, ViewCounterService>()
+                .AddScoped<IFavoritesService, FavoritesService>()
                 ;
 
             return services;
