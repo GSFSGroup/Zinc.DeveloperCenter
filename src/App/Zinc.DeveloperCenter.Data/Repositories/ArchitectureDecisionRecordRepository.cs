@@ -121,17 +121,32 @@ SELECT EXISTS (
     AND   file_path = @filePath
 );";
 
+            internal static readonly string MostViewed = $@"
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
+FROM {TableName} AS adr
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
+WHERE adr.tenant_id = @tenantId
+AND COALESCE(views.view_count, 0) > 0
+ORDER BY COALESCE(views.view_count, 0) DESC
+LIMIT @topN
+;";
+
             internal static readonly string Read = $@"
-SELECT *
-FROM {TableName}
-WHERE tenant_id = @tenantId
-AND   application_name = @applicationName
-AND   file_path = @filePath
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
+FROM {TableName} AS adr
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
+WHERE adr.tenant_id = @tenantId
+AND   adr.application_name = @applicationName
+AND   adr.file_path = @filePath
 ;";
 
             internal static readonly string ReadAllForApplication = $@"
-SELECT *
-FROM {TableName}
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
+FROM {TableName} AS adr
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
 WHERE tenant_id = @tenantId
 AND   application_name = @applicationName
 ;";
@@ -176,10 +191,12 @@ DO UPDATE SET
              * https://hevodata.com/blog/postgresql-full-text-search-setup/
              * */
             internal static readonly string SearchArchitectureDecisionRecords = $@"
-SELECT adr.*
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
 FROM {TableName} AS adr
 INNER JOIN {TableName}_search AS search
     ON search.id = adr.id AND adr.tenant_id = @tenantId
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
 WHERE search.search_vector @@ to_tsquery('english', @searchPattern)
 ;";
         }

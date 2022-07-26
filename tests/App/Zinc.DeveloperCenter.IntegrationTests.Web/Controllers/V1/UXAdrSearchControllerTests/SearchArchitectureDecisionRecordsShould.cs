@@ -8,11 +8,11 @@ using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrSearch;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrSearchControllerTests
 {
     public class SearchArchitectureDecisionRecordsShould : WebTestBase
     {
-        private readonly string endpoint = $"/ux/v1/{TenantId}/architecture-decision-records";
+        private readonly string endpoint = $"/ux/v1/{TenantId}/architecture-decision-records/search";
 
         public SearchArchitectureDecisionRecordsShould(WebTestFixture fixture, ITestOutputHelper output)
             : base(fixture, output)
@@ -30,13 +30,13 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
             // Act
             var response1 = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/search?q={query1}");
+                _.Get.Url($"{endpoint}?q={query1}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
             var response2 = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/search?q={query2}");
+                _.Get.Url($"{endpoint}?q={query2}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 

@@ -6,7 +6,7 @@ using RedLine.Domain;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
-using Zinc.DeveloperCenter.Application.Queries.UXAdrSearch;
+using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
@@ -19,12 +19,12 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
     [ApiExplorerSettings(GroupName = ApplicationContext.ApplicationName)]
     [Produces("application/json")]
     [Route("ux/v{version:apiVersion}/{tenantId}/architecture-decision-records")]
-    public class UXAdrListArchitectureDecisionRecordController : Controller
+    public class UXAdrListController : Controller
     {
         private readonly IMediator mediator;
         private readonly ICorrelationId correlationId;
         private readonly ITenantId tenantId;
-        private readonly ILogger<UXAdrListArchitectureDecisionRecordController> logger;
+        private readonly ILogger<UXAdrListController> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
@@ -33,11 +33,11 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <param name="correlationId">Unique ID for each request.</param>
         /// <param name="tenantId">Identifier for tenant.</param>
         /// <param name="logger">Diagnostic logger.</param>
-        public UXAdrListArchitectureDecisionRecordController(
+        public UXAdrListController(
             IMediator mediator,
             ICorrelationId correlationId,
             ITenantId tenantId,
-            ILogger<UXAdrListArchitectureDecisionRecordController> logger)
+            ILogger<UXAdrListController> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId;
@@ -49,7 +49,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// Downloads a specific ADR defined in an application (repository).
         /// </summary>
         /// <param name="applicationName">The full name of application (repository), e.g. Platinum.Products.</param>
-        /// <param name="filePath">The ADR file path in the repository, e.g. docs/App/adr-0001-title.md.</param>
+        /// <param name="path">The ADR file path in the repository, e.g. docs/App/adr-0001-title.md.</param>
         /// <param name="format">The format to return - 'raw' or 'html'. The default is 'raw'.</param>
         /// <returns>The collection of architecture decision records for the application (repository).</returns>
         /// <response code="200">The request was successful.</response>
@@ -58,8 +58,8 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="403">The client is forbidden to perform the operation.</response>
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
-        [HttpGet("{applicationName}/download")]
-        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, [FromQuery]string filePath, [FromQuery]string? format)
+        [HttpGet("download/{applicationName}")]
+        public async Task<IActionResult> DownloadArchitectureDecisionRecord(string applicationName, [FromQuery]string path, [FromQuery]string? format)
         {
             var fileFormat = FileFormat.Raw;
 
@@ -74,7 +74,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
                     tenantId.Value,
                     correlationId.Value,
                     applicationName,
-                    filePath,
+                    path,
                     fileFormat);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
@@ -117,9 +117,9 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         }
 
         /// <summary>
-        /// Gets the list of ADRs defined in an application (repository).
+        /// Gets the list of most viewed ADRs.
         /// </summary>
-        /// <param name="q">The search query, or search pattern to use.</param>
+        /// <param name="top">The top N number of most viewed ADRs to return.</param>
         /// <returns>The collection of architecture decision records for the application (repository).</returns>
         /// <response code="200">The request was successful.</response>
         /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
@@ -127,21 +127,22 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
         /// <response code="403">The client is forbidden to perform the operation.</response>
         /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
         /// <response code="501">An operation was not implemented.</response>
-        [ProducesResponseType(typeof(PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>), 200)]
+        [ProducesResponseType(typeof(PageableResult<UXGetMostViewedQueryModel>), 200)]
         [ProducesResponseType(typeof(string), 400)]
         [ProducesResponseType(typeof(string), 401)]
         [ProducesResponseType(typeof(string), 403)]
         [ProducesResponseType(typeof(string), 500)]
         [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("search")]
-        public async Task<IActionResult> SearchArchitectureDecisionRecords([FromQuery]string q)
+        [HttpGet("most-viewed")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
+        public async Task<IActionResult> GetMostViewedArchitectureDecisionRecords([FromQuery]int top = 6)
         {
             return await this.Execute(logger, async () =>
             {
-                var request = new UXSearchArchitectureDecisionRecordsQuery(
+                var request = new UXGetMostViewedQuery(
                     tenantId.Value,
                     correlationId.Value,
-                    q);
+                    top);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 

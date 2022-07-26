@@ -37,7 +37,7 @@ The token being used for Developer Center does not have an expiration date. Neve
 
 *   Create a new GitHub access token. The permissions need to be "repo" and "gist".
 
-*   Set the value for the Developer Center access token in AWS parameter store. The value is located at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken. Alternately, add the GSFSGROUP_GITHUB_API_TOKEN environment varable as a k8s secret.
+*   Set the value for the Developer Center access token in AWS parameter store. The value is located at /apps/zn-developercenter/remote/hawking/GitHubApi/AccessToken. Alternately, add the GSFSGROUP_GITHUB_API_TOKEN environment variable as a k8s secret.
 ## <a id='understand-structure'></a>Understand solution structure
 
 When the solution is created, you will notice that the name of some projects in the solution are prefixed with `Zinc.DeveloperCenter`. These projects contain the code that are specific to this microservice. Projects that start with the name `RedLine` are platform-specific and intended to be left alone. You can think of them as generated code that gets replaced. As we improve the functionality provided by the `RedLine` platform, we will replace the code in `RedLine` projects. So, if you add any changes to those projects, they will get overwritten.

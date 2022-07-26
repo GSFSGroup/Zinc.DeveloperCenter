@@ -6,24 +6,26 @@ using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
 {
-    internal class UXSearchArchitectureDecisionRecordsQueryHandler : IRequestHandler<UXSearchArchitectureDecisionRecordsQuery, PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>>
+    internal class UXGetMostViewedQueryHandler : IRequestHandler<UXGetMostViewedQuery, PageableResult<UXGetMostViewedQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
 
-        public UXSearchArchitectureDecisionRecordsQueryHandler(IArchitectureDecisionRecordRepository repository)
+        public UXGetMostViewedQueryHandler(IArchitectureDecisionRecordRepository repository)
         {
             this.repository = repository;
         }
 
-        public async Task<PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>> Handle(UXSearchArchitectureDecisionRecordsQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<UXGetMostViewedQueryModel>> Handle(UXGetMostViewedQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = new SearchArchitectureDecisionRecordsDataQuery(request.TenantId, request.SearchPattern);
+            var dataQuery = new GetMostViewedArchitectureDecisionRecordsDataQuery(
+                request.TenantId,
+                request.TopN);
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items
-                .Select(x => new UXSearchArchitectureDecisionRecordsQueryModel
+                .Select(x => new UXGetMostViewedQueryModel
                 {
                     ApplicationName = x.ApplicationName,
                     FilePath = x.FilePath,
@@ -34,10 +36,9 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
                     TotalViews = x.TotalViews,
-                })
-                .OrderBy(x => x.Number);
+                });
 
-            return new PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>(items);
+            return new PageableResult<UXGetMostViewedQueryModel>(items);
         }
     }
 }

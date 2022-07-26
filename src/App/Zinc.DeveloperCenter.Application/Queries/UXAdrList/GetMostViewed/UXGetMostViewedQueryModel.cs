@@ -1,11 +1,11 @@
 using System;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
+namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
 {
     /// <summary>
-    /// The model return from the <see cref="UXSearchArchitectureDecisionRecordsQuery"/>.
+    /// A model for the <see cref="UXGetMostViewedQuery"/>.
     /// </summary>
-    public class UXSearchArchitectureDecisionRecordsQueryModel
+    public class UXGetMostViewedQueryModel
     {
         /// <summary>
         /// Gets the application name where the ADR is defined.
@@ -48,7 +48,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
         public DateTimeOffset? LastUpdatedOn { get; set; }
 
         /// <summary>
-        /// Gets the total views of the ADR.
+        /// Gets the total views for the ADR.
         /// </summary>
         public int TotalViews { get; set; }
     }

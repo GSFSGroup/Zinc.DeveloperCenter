@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
 {
     public class GetArchitectureDecisionRecordsShould : WebTestBase
     {

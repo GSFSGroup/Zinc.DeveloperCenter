@@ -1,12 +1,12 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Alba;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArchitectureDecisionRecordControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
 {
     public class DownloadArchitectureDecisionRecordShould : WebTestBase
     {
@@ -18,24 +18,40 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListArch
         }
 
         [Fact]
-        public async Task DownloadAsMarkdown()
+        public async Task DownloadAsMarkdownAndUpdateViewCount()
         {
             // Arrange
             await InsertData().ConfigureAwait(false);
-
-            var x = GetRequiredService<Domain.Services.GitHub.GitHubApiConfig>()?.Tenants.FirstOrDefault()?.AccessToken;
-            Output.WriteLine($"***HEY YOUUUUUUUUUUUUUUUUU*** - {x}");
+            var applicationName = "Zinc.Templates";
+            var filePath = "dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md";
 
             // Act
-            var response = await AuthorizedScenario(_ =>
+            var response1 = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/Zinc.Templates/download?filePath={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
+                _.Get.Url($"{endpoint}/download/{applicationName}?path={System.Web.HttpUtility.UrlEncode(filePath)}");
+                _.StatusCodeShouldBeOk();
+            }).ConfigureAwait(false);
+
+            var response2 = await AuthorizedScenario(_ =>
+            {
+                _.Get.Url($"{endpoint}/download/{applicationName}?path={System.Web.HttpUtility.UrlEncode(filePath)}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
             // Assert
-            var result = response.ReadAsText();
-            result.Should().NotBeEmpty();
+            var result1 = response1.ReadAsText();
+            result1.Should().NotBeEmpty();
+
+            var result2 = response2.ReadAsText();
+            result2.Should().NotBeEmpty();
+
+            var viewCount = await GetRequiredService<IViewCounterService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
+            viewCount.Should().Be(2);
+
+            (await GetRequiredService<IArchitectureDecisionRecordRepository>()
+                .Read(string.Join('/', TenantId, applicationName, filePath))
+                .ConfigureAwait(false))
+                .TotalViews.Should().Be(2);
         }
 
         private async Task InsertData()
