@@ -76,9 +76,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 if (!response.IsSuccessStatusCode)
                 {
+                    var error = JsonConvert.DeserializeAnonymousType(
+                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                        new { message = (string?)null });
+
                     throw new ServiceCallException(
                         (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
+                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
                         GetType().Name,
                         httpClient.BaseAddress?.Host ?? "api.github.com",
                         null);
@@ -205,14 +209,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
-                    {
-                        return new List<GitHubArchitectureDecisionRecordModel>();
-                    }
+                    var error = JsonConvert.DeserializeAnonymousType(
+                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                        new { message = (string?)null });
 
                     throw new ServiceCallException(
                         (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
+                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
                         GetType().Name,
                         httpClient.BaseAddress?.Host ?? "api.github.com",
                         null);
@@ -263,9 +266,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 if (!response.IsSuccessStatusCode)
                 {
+                    var error = JsonConvert.DeserializeAnonymousType(
+                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                        new { message = (string?)null });
+
                     throw new ServiceCallException(
                         (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
+                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
                         GetType().Name,
                         httpClient.BaseAddress?.Host ?? "api.github.com",
                         null);
@@ -312,9 +319,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 if (!response.IsSuccessStatusCode)
                 {
+                    var error = JsonConvert.DeserializeAnonymousType(
+                        await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                        new { message = (string?)null });
+
                     throw new ServiceCallException(
                         (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
+                        error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
                         GetType().Name,
                         httpClient.BaseAddress?.Host ?? "api.github.com",
                         null);
@@ -340,6 +351,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 foreach (var header in acceptHeaders)
                 {
+                    message.Headers.UserAgent.Add(new ProductInfoHeaderValue("wshorton"));
                     message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
                 }
             }

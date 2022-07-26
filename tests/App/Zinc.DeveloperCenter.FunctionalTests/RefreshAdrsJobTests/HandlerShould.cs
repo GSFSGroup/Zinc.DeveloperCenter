@@ -43,12 +43,12 @@ namespace Zinc.DeveloperCenter.FunctionalTests.RefreshAdrsJobTests
             var totalRepos = await connection
                 .ExecuteScalarAsync<int>("select count(*) from developercenter.application")
                 .ConfigureAwait(false);
-            totalRepos.Should().BeGreaterThan(10);
+            totalRepos.Should().BeGreaterThan(50);
 
             var totalAdrs = await connection
                 .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record")
                 .ConfigureAwait(false);
-            totalAdrs.Should().BeGreaterThan(30);
+            totalAdrs.Should().BeGreaterThan(20);
         }
     }
 }
