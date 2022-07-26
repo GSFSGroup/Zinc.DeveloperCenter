@@ -350,7 +350,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 {
                     if (error.message?.Contains("secondary rate limit") ?? false)
                     {
-                        if (int.TryParse(error.response.Headers.GetValues("Retry-After").FirstOrDefault(), out var seconds) && seconds > 0)
+                        if (int.TryParse(error.response.Headers.RetryAfter?.ToString(), out var seconds) && seconds > 0)
                         {
                             waitTime = TimeSpan.FromSeconds(seconds + 1.25);
                         }
