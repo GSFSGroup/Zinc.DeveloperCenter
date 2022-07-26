@@ -125,9 +125,8 @@ SELECT EXISTS (
 SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
 FROM {TableName} AS adr
 LEFT OUTER JOIN {TableName}_viewcount AS views
-    ON views.id = adr.id
-WHERE adr.tenant_id = @tenantId
-AND COALESCE(views.view_count, 0) > 0
+    ON views.id = adr.id AND adr.tenant_id = @tenantId
+WHERE COALESCE(views.view_count, 0) > 0
 ORDER BY COALESCE(views.view_count, 0) DESC
 LIMIT @topN
 ;";
