@@ -127,8 +127,8 @@ FROM {TableName} AS adr
 LEFT OUTER JOIN {TableName}_viewcount AS views
     ON views.id = adr.id
 WHERE adr.tenant_id = @tenantId
-AND total_views > 0
-ORDER BY total_views DESC
+AND COALESCE(views.view_count, 0) > 0
+ORDER BY COALESCE(views.view_count, 0) DESC
 LIMIT @topN
 ;";
 
