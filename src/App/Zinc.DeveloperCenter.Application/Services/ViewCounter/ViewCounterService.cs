@@ -62,22 +62,22 @@ INSERT INTO developercenter.architecture_decision_record_viewcount (
     id,
     view_count
 ) VALUES (
-    id = (
+    (
         SELECT adr.id
         FROM developercenter.architecture_decision_record AS adr
         WHERE adr.tenant_id = @tenantId
         AND adr.application_name = @applicationName
         AND adr.file_path = @filePath
-    ),
-    view_count = 1
+    ) AS id,
+    1 AS view_count
 )
 ON CONFLICT (id) DO
 UPDATE SET developercenter.architecture_decision_record.view_count = developercenter.architecture_decision_record.view_count + 1
 RETURNING developercenter.architecture_decision_record.view_count;";
 
             public static readonly string UpdateViewCount = @"
-UPDATE developercenter.architecture_decision_record_viewcount AS vc
-SET vc.view_count = vc.view_count + 1
+UPDATE developercenter.architecture_decision_record_viewcount
+SET view_count = view_count + 1
 WHERE id = (
     SELECT adr.id
     FROM developercenter.architecture_decision_record AS adr
@@ -85,7 +85,8 @@ WHERE id = (
     AND adr.application_name = @applicationName
     AND adr.file_path = @filePath
 )
-RETURNING vc.view_count;";
+RETURNING view_count
+;";
         }
     }
 }
