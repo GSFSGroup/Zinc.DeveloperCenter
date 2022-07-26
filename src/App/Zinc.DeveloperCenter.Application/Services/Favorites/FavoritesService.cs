@@ -54,7 +54,7 @@ INSERT INTO developercenter.architecture_decision_record_favorite (
     architecture_decision_record_id,
     user_id
 ) VALUES (
-    architecture_decision_record_id = (
+    (
         SELECT id
         FROM developercenter.architecture_decision_record
         WHERE tenant_id = @tenantId

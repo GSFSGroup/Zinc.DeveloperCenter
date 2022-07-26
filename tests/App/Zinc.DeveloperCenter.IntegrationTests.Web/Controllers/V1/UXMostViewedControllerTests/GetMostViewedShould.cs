@@ -7,16 +7,16 @@ using FluentAssertions;
 using RedLine.Domain.Model;
 using Xunit;
 using Xunit.Abstractions;
-using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed;
+using Zinc.DeveloperCenter.Application.Queries.UXMostUsed.GetMostViewed;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
+namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXMostViewedControllerTests
 {
-    public class GetMostViewedArchitectureDecisionRecordsShould : WebTestBase
+    public class GetMostViewedShould : WebTestBase
     {
         private readonly string endpoint = $"/ux/v1/{TenantId}/architecture-decision-records/most-viewed";
 
-        public GetMostViewedArchitectureDecisionRecordsShould(WebTestFixture fixture, ITestOutputHelper output)
+        public GetMostViewedShould(WebTestFixture fixture, ITestOutputHelper output)
             : base(fixture, output)
         { }
 

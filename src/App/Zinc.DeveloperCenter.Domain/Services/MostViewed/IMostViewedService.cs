@@ -1,11 +1,11 @@
 using System.Threading.Tasks;
 
-namespace Zinc.DeveloperCenter.Domain.Services.ViewCounter
+namespace Zinc.DeveloperCenter.Domain.Services.MostViewed
 {
     /// <summary>
     /// A service used to update an ADR view counter.
     /// </summary>
-    public interface IViewCounterService
+    public interface IMostViewedService
     {
         /// <summary>
         /// Gets the view count for an ADR.

@@ -132,6 +132,16 @@ ORDER BY COALESCE(views.view_count, 0) DESC
 LIMIT @topN
 ;";
 
+            internal static readonly string MyFavorites = $@"
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
+FROM {TableName} AS adr
+INNER JOIN {TableName}_favorite AS favs
+    ON favs.{TableName}_id = adr.id AND favs.user_id = @userId
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
+WHERE adr.tenant_id = @tenantId
+;";
+
             internal static readonly string Read = $@"
 SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
 FROM {TableName} AS adr

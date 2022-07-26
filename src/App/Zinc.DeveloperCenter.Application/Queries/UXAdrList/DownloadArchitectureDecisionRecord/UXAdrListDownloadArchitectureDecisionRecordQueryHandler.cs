@@ -5,23 +5,23 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Zinc.DeveloperCenter.Domain.Model;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
-using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
+using Zinc.DeveloperCenter.Domain.Services.MostViewed;
 
 namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord
 {
     internal class UXAdrListDownloadArchitectureDecisionRecordQueryHandler : IRequestHandler<UXAdrListDownloadArchitectureDecisionRecordQuery, UXAdrListDownloadArchitectureDecisionRecordQueryModel>
     {
         private readonly IGitHubApiService gitHubApi;
-        private readonly IViewCounterService viewCounterService;
+        private readonly IMostViewedService mostViewedService;
         private readonly ILogger<UXAdrListDownloadArchitectureDecisionRecordQueryHandler> logger;
 
         public UXAdrListDownloadArchitectureDecisionRecordQueryHandler(
             IGitHubApiService gitHubApi,
-            IViewCounterService viewCounterService,
+            IMostViewedService mostViewedService,
             ILogger<UXAdrListDownloadArchitectureDecisionRecordQueryHandler> logger)
         {
             this.gitHubApi = gitHubApi;
-            this.viewCounterService = viewCounterService;
+            this.mostViewedService = mostViewedService;
             this.logger = logger;
         }
 
@@ -49,7 +49,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
 
             try
             {
-                await viewCounterService.UpdateViewCount(request.TenantId, request.ApplicationName, request.FilePath)
+                await mostViewedService.UpdateViewCount(request.TenantId, request.ApplicationName, request.FilePath)
                     .ConfigureAwait(false);
             }
             catch (Exception e)
