@@ -4,7 +4,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Domain.Repositories;
-using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
+using Zinc.DeveloperCenter.Domain.Services.MostViewed;
 
 namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
 {
@@ -45,7 +45,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
             var result2 = response2.ReadAsText();
             result2.Should().NotBeEmpty();
 
-            var viewCount = await GetRequiredService<IViewCounterService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
+            var viewCount = await GetRequiredService<IMostViewedService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
             viewCount.Should().Be(2);
 
             (await GetRequiredService<IArchitectureDecisionRecordRepository>()

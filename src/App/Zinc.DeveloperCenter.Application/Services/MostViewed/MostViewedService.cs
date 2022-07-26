@@ -1,12 +1,12 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
+using Zinc.DeveloperCenter.Domain.Services.MostViewed;
 
-namespace Zinc.DeveloperCenter.Application.Services.ViewCounter
+namespace Zinc.DeveloperCenter.Application.Services.MostViewed
 {
     /// <inheritdoc/>
-    public class ViewCounterService : IViewCounterService
+    public class MostViewedService : IMostViewedService
     {
         private readonly IDbConnection connection;
 
@@ -14,7 +14,7 @@ namespace Zinc.DeveloperCenter.Application.Services.ViewCounter
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="connection">The database connection.</param>
-        public ViewCounterService(IDbConnection connection)
+        public MostViewedService(IDbConnection connection)
         {
             this.connection = connection;
         }

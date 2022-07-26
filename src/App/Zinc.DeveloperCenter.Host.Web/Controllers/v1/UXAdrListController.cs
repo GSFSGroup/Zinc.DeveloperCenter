@@ -6,7 +6,6 @@ using RedLine.Domain;
 using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectureDecisionRecord;
 using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDecisionRecords;
-using Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
@@ -109,40 +108,6 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
                     tenantId.Value,
                     correlationId.Value,
                     applicationName);
-
-                var response = await mediator.Send(request).ConfigureAwait(false);
-
-                return Ok(response);
-            }).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Gets the list of most viewed ADRs.
-        /// </summary>
-        /// <param name="top">The top N number of most viewed ADRs to return.</param>
-        /// <returns>The collection of architecture decision records for the application (repository).</returns>
-        /// <response code="200">The request was successful.</response>
-        /// <response code="400">A parameter was missing or invalid. The response will contain the error message.</response>
-        /// <response code="401">The client is not authenticated.</response>
-        /// <response code="403">The client is forbidden to perform the operation.</response>
-        /// <response code="500">An unhandled error occurred. The response will contain the error message.</response>
-        /// <response code="501">An operation was not implemented.</response>
-        [ProducesResponseType(typeof(PageableResult<UXGetMostViewedQueryModel>), 200)]
-        [ProducesResponseType(typeof(string), 400)]
-        [ProducesResponseType(typeof(string), 401)]
-        [ProducesResponseType(typeof(string), 403)]
-        [ProducesResponseType(typeof(string), 500)]
-        [ProducesResponseType(typeof(string), 501)]
-        [HttpGet("most-viewed")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2360:Optional parameters should not be used", Justification = "By design.")]
-        public async Task<IActionResult> GetMostViewedArchitectureDecisionRecords([FromQuery]int top = 6)
-        {
-            return await this.Execute(logger, async () =>
-            {
-                var request = new UXGetMostViewedQuery(
-                    tenantId.Value,
-                    correlationId.Value,
-                    top);
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 

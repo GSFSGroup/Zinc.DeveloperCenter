@@ -6,26 +6,26 @@ using RedLine.Domain.Model;
 using Zinc.DeveloperCenter.Data.DataQueries;
 using Zinc.DeveloperCenter.Domain.Repositories;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
+namespace Zinc.DeveloperCenter.Application.Queries.UXFavorites
 {
-    internal class UXGetMostViewedQueryHandler : IRequestHandler<UXGetMostViewedQuery, PageableResult<UXGetMostViewedQueryModel>>
+    internal class UXGetFavoritesQueryHandler : IRequestHandler<UXGetFavoritesQuery, PageableResult<UXGetFavoritesQueryModel>>
     {
         private readonly IArchitectureDecisionRecordRepository repository;
 
-        public UXGetMostViewedQueryHandler(IArchitectureDecisionRecordRepository repository)
+        public UXGetFavoritesQueryHandler(IArchitectureDecisionRecordRepository repository)
         {
             this.repository = repository;
         }
 
-        public async Task<PageableResult<UXGetMostViewedQueryModel>> Handle(UXGetMostViewedQuery request, CancellationToken cancellationToken)
+        public async Task<PageableResult<UXGetFavoritesQueryModel>> Handle(UXGetFavoritesQuery request, CancellationToken cancellationToken)
         {
-            var dataQuery = new GetMostViewedArchitectureDecisionRecordsDataQuery(
+            var dataQuery = new GetFavoriteArchitectureDecisionRecordsDataQuery(
                 request.TenantId,
-                request.TopN);
+                request.UserId);
 
             var items = (await repository.Query(dataQuery).ConfigureAwait(false))
                 .Items
-                .Select(x => new UXGetMostViewedQueryModel
+                .Select(x => new UXGetFavoritesQueryModel
                 {
                     ApplicationName = x.ApplicationName,
                     FilePath = x.FilePath,
@@ -38,7 +38,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
                     TotalViews = x.TotalViews,
                 });
 
-            return new PageableResult<UXGetMostViewedQueryModel>(items);
+            return new PageableResult<UXGetFavoritesQueryModel>(items);
         }
     }
 }

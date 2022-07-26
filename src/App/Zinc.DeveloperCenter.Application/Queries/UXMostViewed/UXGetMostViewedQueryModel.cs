@@ -1,6 +1,6 @@
 using System;
 
-namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetMostViewed
+namespace Zinc.DeveloperCenter.Application.Queries.UXMostUsed.GetMostViewed
 {
     /// <summary>
     /// A model for the <see cref="UXGetMostViewedQuery"/>.
