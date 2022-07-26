@@ -4,6 +4,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Domain.Repositories;
+using Zinc.DeveloperCenter.Domain.Services.ViewCounter;
 
 namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListControllerTests
 {
@@ -21,17 +22,22 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
         {
             // Arrange
             await InsertData().ConfigureAwait(false);
+            var applicationName = "Zinc.Templates";
+            var filePath = "dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md";
 
             // Act
             var response = await AuthorizedScenario(_ =>
             {
-                _.Get.Url($"{endpoint}/download/Zinc.Templates?path={System.Web.HttpUtility.UrlEncode("dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md")}");
+                _.Get.Url($"{endpoint}/download/{applicationName}?path={System.Web.HttpUtility.UrlEncode(filePath)}");
                 _.StatusCodeShouldBeOk();
             }).ConfigureAwait(false);
 
             // Assert
             var result = response.ReadAsText();
             result.Should().NotBeEmpty();
+
+            var viewCount = await GetRequiredService<IViewCounterService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
+            viewCount.Should().Be(1);
         }
 
         private async Task InsertData()
