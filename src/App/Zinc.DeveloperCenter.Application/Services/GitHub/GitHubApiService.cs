@@ -78,7 +78,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return default;
             }
 
-            return new(content, contentUrl);
+            return (Content: content, ContentUrl: contentUrl);
         }
 
         /// <inheritdoc/>
@@ -242,15 +242,12 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=3&sort=committer-date&order=desc";
+            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
 
-            var model = await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+            var commit = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
                 .ConfigureAwait(false)
-                ?? new List<CommitModel>();
-
-            var commit = model.Any()
-                ? model.FirstOrDefault(x => x.committer != null && x.committer.name != "GitHub")
-                : null;
+                ?? new List<CommitModel>())
+                .FirstOrDefault();
 
             if (commit == null || commit.committer == null)
             {
@@ -258,7 +255,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return default;
             }
 
-            return (commit.committer.name, commit.committer.date);
+            return (LastUpdatedBy: commit.committer.name, LastUpdatedOn: commit.committer.date);
         }
 
         private async Task<List<GitHubRepositoryModel>> GetRepositories(
@@ -303,7 +300,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                                 await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
                                 new { message = (string?)null });
 
-                            if (IsRecoverableError((response, error?.message), out var waitTime))
+                            if (IsRecoverableError((response: response, message: error?.message), out var waitTime))
                             {
                                 await Task.Delay(waitTime).ConfigureAwait(false);
                                 totalRetries++;
