@@ -63,7 +63,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
                 fileName,
                 fileMimeType,
                 contentModel.Content,
-                contentModel.ContentUrl);
+                contentModel.ContentUrl!);
         }
     }
 }
