@@ -118,47 +118,29 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             {
                 var key = string.Join('/', tenantId, apiResult.ApplicationName, apiResult.FilePath);
 
-                var adr = await adrRepository.Read(key).ConfigureAwait(false);
-
-                if (adr == null)
-                {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                var adr = await adrRepository.Read(key).ConfigureAwait(false)
+                    ?? new ArchitectureDecisionRecord(
                         tenantId,
                         apiResult.ApplicationName,
                         apiResult.FilePath,
-                        FileFormat.Raw).ConfigureAwait(false);
+                        null,
+                        null,
+                        null);
 
-                    adr = new ArchitectureDecisionRecord(
-                        tenantId,
-                        apiResult.ApplicationName,
-                        apiResult.FilePath,
-                        apiResult.LastUpdatedBy,
-                        apiResult.LastUpdatedOn,
-                        content);
+                var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                    tenantId,
+                    apiResult.ApplicationName,
+                    apiResult.FilePath,
+                    FileFormat.Raw).ConfigureAwait(false);
 
-                    await adrRepository.Save(adr).ConfigureAwait(false);
+                adr.UpdateContent(content);
 
-                    totalUpdates++;
-                }
-                else if (adr.LastUpdatedOn != apiResult.LastUpdatedOn && apiResult.LastUpdatedOn.HasValue)
-                {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(
-                        tenantId,
-                        apiResult.ApplicationName,
-                        apiResult.FilePath,
-                        FileFormat.Raw).ConfigureAwait(false);
+                await adrRepository.Save(adr).ConfigureAwait(false);
 
-                    adr.UpdateContent(content);
-
-                    adr.UpdateLastUpdated(apiResult.LastUpdatedBy!, apiResult.LastUpdatedOn.Value);
-
-                    await adrRepository.Save(adr).ConfigureAwait(false);
-
-                    totalUpdates++;
-                }
+                totalUpdates++;
 
                 // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());

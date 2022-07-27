@@ -74,6 +74,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         /// <inheritdoc/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "By design.")]
         public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName)
         {
             var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
@@ -100,6 +101,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 logger.LogWarning("Failed to find any ADRs for {Org}.", orgName);
             }
 
+            /* THIS CODE IS TOO SLOW TO USE
             foreach (var result in results)
             {
                 var lastUpdatedDetails = await GetLastUpdatedDetails(tenantConfig, repositoryName, result.FilePath).ConfigureAwait(false);
@@ -113,8 +115,28 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 // GitHub doesn't like rapid-fire requests
                 await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
             }
+             * */
 
             return results;
+        }
+
+        /// <inheritdoc/>
+        public async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(string tenantId, string repositoryName, string filePath)
+        {
+            var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
+
+            if (tenantConfig == null)
+            {
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]");
+            }
+
+            if (tenantConfig.Disabled)
+            {
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                return default;
+            }
+
+            return await GetLastUpdatedDetails(tenantConfig, repositoryName, filePath).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
