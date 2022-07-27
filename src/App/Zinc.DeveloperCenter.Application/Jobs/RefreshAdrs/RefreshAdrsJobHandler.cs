@@ -104,10 +104,22 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             var totalUpdates = 0;
 
-            var models = await FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
+            var models = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, "Zinc.Templates")
+                .ConfigureAwait(false))
+                .ToHashSet();
+
+            // GitHub doesn't like rapid-fire requests
+            await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+            var remainingModels = await FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
+
+            models.UnionWith(remainingModels);
 
             foreach (var model in models)
             {
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
                 var key = string.Join('/', tenantId, model.ApplicationName, model.FilePath);
 
                 var adr = await adrRepository.Read(key).ConfigureAwait(false)
@@ -130,9 +142,6 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 await adrRepository.Save(adr).ConfigureAwait(false);
 
                 totalUpdates++;
-
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());
@@ -157,8 +166,15 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
                 page++;
 
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                if (apiResults.Count == pageSize)
+                {
+                    // GitHub doesn't like rapid-fire requests
+                    await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                }
+                else if (apiResults.Count < pageSize)
+                {
+                    break;
+                }
 
                 apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, page, pageSize)
                     .ConfigureAwait(false))

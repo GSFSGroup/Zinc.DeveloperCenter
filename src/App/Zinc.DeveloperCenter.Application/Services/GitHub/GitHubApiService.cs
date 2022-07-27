@@ -97,6 +97,29 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         /// <inheritdoc/>
+        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName)
+        {
+            var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
+
+            if (tenantConfig == null)
+            {
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]");
+            }
+
+            if (tenantConfig.Disabled)
+            {
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", "Disabled");
+            }
+
+            return await FindArchitectureDecisionRecords(
+                tenantConfig,
+                repositoryName,
+                1,
+                100).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc/>
         public async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(string tenantId, string repositoryName, string filePath)
         {
             var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
@@ -144,8 +167,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
                 page++;
 
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                if (repos.Count == pageSize)
+                {
+                    // GitHub doesn't like rapid-fire requests
+                    await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                }
+                else if (repos.Count < pageSize)
+                {
+                    break;
+                }
 
                 repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
             }
