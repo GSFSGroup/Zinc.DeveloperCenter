@@ -113,9 +113,9 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 page++;
 
                 // GitHub doesn't like rapid-fire requests
-                if ((page % 3) == 0)
+                if ((page % 2) == 0)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
                 }
 
                 adrs = await FindArchitectureDecisionRecords(
@@ -383,7 +383,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         }
                         else
                         {
-                            waitTime = TimeSpan.FromSeconds(5);
+                            waitTime = TimeSpan.FromSeconds(15);
                         }
                     }
                 }
