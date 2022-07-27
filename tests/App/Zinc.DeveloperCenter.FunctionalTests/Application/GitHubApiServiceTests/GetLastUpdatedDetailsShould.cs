@@ -22,7 +22,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.GitHubApiServiceTests
                 "Zinc.Templates",
                 "dotnet-5.0/docs/RedLine/adr-0001-record-architecture-decisions.md").ConfigureAwait(false);
 
-            lastUpdatedDetails.LastUpdatedBy.Should().NotBeNull();
+            lastUpdatedDetails.LastUpdatedBy.Should().NotBeEmpty();
             lastUpdatedDetails.LastUpdatedOn.Should().NotBeNull();
         }
     }

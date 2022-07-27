@@ -242,20 +242,20 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={System.Web.HttpUtility.UrlEncode(filePath)}&page=1&per_page=1&sort=committer-date&order=desc";
+            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
 
-            var commit = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+            var result = (await ServiceCaller.MakeCall<List<CommitSearchModel>>(httpClient, endpoint, tenantConfig.AccessToken)
                 .ConfigureAwait(false)
-                ?? new List<CommitModel>())
+                ?? new List<CommitSearchModel>())
                 .FirstOrDefault();
 
-            if (commit == null || commit.committer == null)
+            if (result == null || result.commit == null || result.commit.committer == null)
             {
                 logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
                 return default;
             }
 
-            return (LastUpdatedBy: commit.committer.name, LastUpdatedOn: commit.committer.date);
+            return (LastUpdatedBy: result.commit.committer.name, LastUpdatedOn: result.commit.committer.date);
         }
 
         private async Task<List<GitHubRepositoryModel>> GetRepositories(
@@ -411,9 +411,14 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "By design.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "By design.")]
-        private sealed class CommitModel
+        private sealed class CommitSearchModel
         {
-            public CommitterModel? committer = null;
+            public CommitModel? commit = null;
+
+            internal sealed class CommitModel
+            {
+                public CommitterModel? committer = null;
+            }
 
             internal sealed class CommitterModel
             {
