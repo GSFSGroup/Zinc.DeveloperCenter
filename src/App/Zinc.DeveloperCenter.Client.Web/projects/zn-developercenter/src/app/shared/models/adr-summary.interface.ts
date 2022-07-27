@@ -7,7 +7,7 @@ export interface AdrSummary {
     adrNumber: number;
     numberString: string;
     downloadUrl: string;
-    htmlUrl: string;
+    contentUrl: string;
 
     applicationName: string;
     title: string;

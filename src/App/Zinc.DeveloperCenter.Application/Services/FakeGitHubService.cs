@@ -184,7 +184,7 @@ namespace Zinc.DeveloperCenter.Application.Services
                         Number = Convert.ToInt16(nameParts[1]),
                         NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
                         DownloadUrl = adrRecord.DownloadUrl,
-                        HtmlUrl = adrRecord.HtmlUrl,
+                        ContentUrl = adrRecord.ContentUrl,
                     };
 
                     adrsToReturn.Add(adr);

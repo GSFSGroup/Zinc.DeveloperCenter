@@ -16,7 +16,7 @@ export class AdrDisplayComponent implements OnInit {
     public adrNumberString!: string;
     public applicationName!: string;
     public filePath!: string;
-    public htmlUrl!: string;
+    public contentUrl!: string;
 
     public adrContent!: string;
 
@@ -46,7 +46,7 @@ export class AdrDisplayComponent implements OnInit {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(content => {
                 this.adrContent = content.content;
-                this.htmlUrl = content.htmlUrl;
+                this.contentUrl = content.contentUrl;
             });
     }
 
