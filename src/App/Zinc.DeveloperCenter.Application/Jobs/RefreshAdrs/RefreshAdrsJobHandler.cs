@@ -156,6 +156,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
                     totalUpdates++;
                 }
+
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());

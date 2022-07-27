@@ -89,29 +89,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(256);
-
-            var page = 1;
-            var pageSize = 100;
-
-            while (true)
-            {
-                var adrs = await FindArchitectureDecisionRecords(tenantConfig, page, pageSize).ConfigureAwait(false);
-
-                if (adrs.Count == 0)
-                {
-                    break;
-                }
-
-                results.AddRange(adrs);
-
-                if (adrs.Count < pageSize)
-                {
-                    break;
-                }
-
-                page++;
-            }
+            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
 
             if (results.Count == 0)
             {
@@ -132,7 +110,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     result.LastUpdatedOn = lastUpdatedDetails.LastUpdatedOn;
                 }
 
-                // GitHub doesn't like rapid file requests
+                // GitHub doesn't like rapid-fire requests
                 await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
             }
 
@@ -198,17 +176,16 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
             GitHubApiConfig.TenantConfig tenantConfig,
-            int page,
-            int pageSize)
+            string repositoryName)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}";
+            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(256);
+            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
 
             var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
                  .ConfigureAwait(false)
@@ -221,7 +198,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             foreach (var item in items)
             {
-                if (item.repository?.name != "Zinc.Templates" && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
+                if (!repositoryName.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase) && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
                 {
                     continue; // Skip RedLine ADRs in non-template repositories
                 }
@@ -370,10 +347,6 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         if (int.TryParse(error.response.Headers.RetryAfter?.ToString(), out var seconds) && seconds > 0)
                         {
                             waitTime = TimeSpan.FromSeconds(seconds + 1.25);
-                        }
-                        else
-                        {
-                            waitTime = TimeSpan.FromSeconds(45);
                         }
                     }
                 }
