@@ -134,6 +134,9 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     result.LastUpdatedBy = lastUpdatedDetails.LastUpdatedBy;
                     result.LastUpdatedOn = lastUpdatedDetails.LastUpdatedOn;
                 }
+
+                // GitHub doesn't like rapid file requests
+                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
             }
 
             return results;
@@ -314,18 +317,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         private static class ServiceCaller
         {
-            public static async Task<TResponse?> MakeCall<TResponse>(HttpClient httpClient, HttpRequestMessage request)
-            {
-                var content = await MakeCall(httpClient, request).ConfigureAwait(false) ?? "{}";
-                return JsonConvert.DeserializeObject<TResponse>(content);
-            }
-
-            public static async Task<string?> MakeCall(HttpClient httpClient, HttpRequestMessage request)
+            public static async Task<string?> MakeCall(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
             {
                 var totalRetries = 0;
 
                 while (totalRetries < 3)
                 {
+                    using var request = CreateMessage(endpoint, accessToken, acceptHeaders);
                     using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
                     {
                         if (!response.IsSuccessStatusCode)
@@ -355,10 +353,33 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
                 throw new ServiceCallException(
                     500,
-                    $"All retries have been exhaused to '{request.RequestUri?.LocalPath}'. The call has FAILED.",
+                    $"All retries have been exhaused to '{endpoint}'. The call has FAILED.",
                     typeof(GitHubApiService).Name,
                     httpClient.BaseAddress?.Host ?? "api.github.com",
                     null);
+            }
+
+            public static async Task<TResponse?> MakeCall<TResponse?>(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
+            {
+                var content = await MakeCall(httpClient, endpoint, accessToken, acceptHeaders).ConfigureAwait(false) ?? "{}";
+                return JsonConvert.DeserializeObject<TResponse>(content);
+            }
+
+            private static HttpRequestMessage CreateMessage(string endpoint, string accessToken, params string[] acceptHeaders)
+            {
+                var message = new HttpRequestMessage(HttpMethod.Get, endpoint);
+
+                message.SetBearerToken(accessToken);
+
+                if (acceptHeaders != null && acceptHeaders.Length > 0)
+                {
+                    foreach (var header in acceptHeaders)
+                    {
+                        message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
+                    }
+                }
+
+                return message;
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1316:Tuple element names should use correct casing", Justification = "By design.")]
