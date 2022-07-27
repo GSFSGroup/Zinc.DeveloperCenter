@@ -184,37 +184,26 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             var page = 1;
             var pageSize = 100; // 100 is the max
 
-            while (true)
+            var repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+
+            while (repos.Count > 0)
             {
-                var retries = 0;
-                var repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
-
-                while (repos.Count == 0 || retries < 3)
-                {
-                    // Sometimes these api calls fail to return results, so retry 3 times before giving up.
-                    if (results.Count == 0)
-                    {
-                        logger.LogWarning("Failed to find any repositories for {Org}. Retrying...", tenantConfig.OrgName ?? tenantConfig.TenantId);
-                    }
-
-                    retries++;
-
-                    repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
-                }
-
-                if (repos.Count == 0)
-                {
-                    logger.LogWarning("Failed to find any repositories for {Org}. Retries have been exhausted.", tenantConfig.OrgName ?? tenantConfig.TenantId);
-                }
-
                 results.AddRange(repos);
 
-                if (repos.Count < pageSize)
+                page++;
+
+                // GitHub doesn't like rapid-fire requests
+                if ((page % 3) == 0)
                 {
-                    break;
+                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
                 }
 
-                page++;
+                repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+            }
+
+            if (results.Count == 0)
+            {
+                logger.LogWarning("Failed to find any repositories for {Org}.", tenantConfig.OrgName ?? tenantConfig.TenantId);
             }
 
             return results;
