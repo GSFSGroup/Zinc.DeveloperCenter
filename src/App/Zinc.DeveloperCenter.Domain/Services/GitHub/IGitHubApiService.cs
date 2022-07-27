@@ -10,14 +10,14 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     public interface IGitHubApiService
     {
         /// <summary>
-        /// Downloads a file.
+        /// Downloads am ADR.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="repositoryName">The name of the repository.</param>
         /// <param name="filePath">The GitHub file path.</param>
         /// <param name="fileFormat">The <see cref="FileFormat"/> to return.</param>
-        /// <returns>The raw contents of the file to download.</returns>
-        Task<string> DownloadArchitectureDecisionRecord(
+        /// <returns>The contents and html url of the ADR.</returns>
+        Task<(string? Content, string? ContentUrl)> DownloadArchitectureDecisionRecord(
             string tenantId,
             string repositoryName,
             string filePath,

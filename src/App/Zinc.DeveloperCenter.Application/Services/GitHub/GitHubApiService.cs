@@ -40,7 +40,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S4457:Parameter validation in \"async\"/\"await\" methods should be wrapped", Justification = "Go F_ yourself.")]
-        public async Task<string> DownloadArchitectureDecisionRecord(
+        public async Task<(string? Content, string? ContentUrl)> DownloadArchitectureDecisionRecord(
             string tenantId,
             string repositoryName,
             string filePath,
@@ -70,7 +70,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/contents/{filePath}";
 
-            return await ServiceCaller.MakeCall(httpClient, endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()).ConfigureAwait(false) ?? string.Empty;
+            var content = await ServiceCaller.MakeCall(httpClient, endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()).ConfigureAwait(false) ?? string.Empty;
+            var contentUrl = $"https://github.com/{orgName}/{repositoryName}/blob/HEAD/{filePath}";
+
+            if (content!.Length == 0)
+            {
+                return default;
+            }
+
+            return new(content, contentUrl);
         }
 
         /// <inheritdoc/>
@@ -234,14 +242,14 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=2&sort=committer-date&order=desc";
+            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=3&sort=committer-date&order=desc";
 
             var model = await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
                 .ConfigureAwait(false)
                 ?? new List<CommitModel>();
 
             var commit = model.Any()
-                ? model.FirstOrDefault(x => x.committer!.name! != "GitHub") ?? model.First()
+                ? model.FirstOrDefault(x => x.committer != null && x.committer.name != "GitHub")
                 : null;
 
             if (commit == null || commit.committer == null)

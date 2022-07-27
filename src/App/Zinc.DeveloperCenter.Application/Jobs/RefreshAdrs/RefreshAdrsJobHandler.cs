@@ -131,17 +131,18 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                         null,
                         null);
 
-                var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                var contentModel = await gitHubApi.DownloadArchitectureDecisionRecord(
                     tenantId,
                     model.ApplicationName,
                     model.FilePath,
                     FileFormat.Raw).ConfigureAwait(false);
 
-                adr.UpdateContent(content);
-
-                await adrRepository.Save(adr).ConfigureAwait(false);
-
-                totalUpdates++;
+                if (!string.IsNullOrEmpty(contentModel.Content))
+                {
+                    adr.UpdateContent(contentModel.Content);
+                    await adrRepository.Save(adr).ConfigureAwait(false);
+                    totalUpdates++;
+                }
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());
@@ -175,6 +176,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 {
                     break;
                 }
+
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
                 apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, page, pageSize)
                     .ConfigureAwait(false))

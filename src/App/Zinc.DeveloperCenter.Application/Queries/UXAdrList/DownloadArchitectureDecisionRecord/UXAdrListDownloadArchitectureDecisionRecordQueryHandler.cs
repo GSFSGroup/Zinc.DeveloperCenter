@@ -27,20 +27,18 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
 
         public async Task<UXAdrListDownloadArchitectureDecisionRecordQueryModel> Handle(UXAdrListDownloadArchitectureDecisionRecordQuery request, CancellationToken cancellationToken)
         {
-            var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+            var contentModel = await gitHubApi.DownloadArchitectureDecisionRecord(
                 request.TenantId,
                 request.ApplicationName,
                 request.FilePath,
                 request.FileFormat).ConfigureAwait(false);
 
-            if (content?.Length == 0)
+            if (string.IsNullOrEmpty(contentModel.Content))
             {
                 throw new RedLine.Data.Exceptions.ResourceNotFoundException(nameof(ArchitectureDecisionRecord), string.Join('/', request.TenantId, request.ApplicationName, request.FilePath));
             }
 
-            // Force all file names to end with .md vs .markdown (technical UI reasons)
-            var fileName = $"{System.IO.Path.GetFileNameWithoutExtension(request.FilePath)}.md";
-
+            var fileName = System.IO.Path.GetFileName(request.FilePath);
             var fileMimeType = request.FileFormat == FileFormat.Raw
                 ? "text/markdown"
                 : "text/html";
@@ -64,7 +62,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
             return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(
                 fileName,
                 fileMimeType,
-                content!);
+                contentModel.Content,
+                contentModel.ContentUrl);
         }
     }
 }
