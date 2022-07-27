@@ -62,7 +62,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR title.
         /// </summary>
-        public string Title => System.IO.Path.GetFileNameWithoutExtension(FilePath);
+        public string Title => System.IO.Path.GetFileNameWithoutExtension(FilePath).Split('-', 3)[2];
 
         /// <summary>
         /// Gets the ADR title display name.
