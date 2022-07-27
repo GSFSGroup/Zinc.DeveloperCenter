@@ -25,7 +25,8 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
         {
         }
 
-        [Fact(Skip = "Long running test.")]
+        [Fact]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "By design.")]
         public async Task UpdateTheDatabaseAndLastUpdated()
         {
             var tenantId = "GSFSGroup";
@@ -51,6 +52,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             totalRepos.Should().BeGreaterThan(50);
             totalAdrs.Should().BeGreaterThan(20);
 
+            /*
             response = await RunRefreshAdrsLastUpdatedJob(tenantId, correlationId).ConfigureAwait(false);
             response.Should().Be(JobResult.OperationSucceeded);
 
@@ -61,6 +63,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             Output.WriteLine($"!!!!!!!!!!{totalAdrs} ADRs were updated!!!!!!!!!!");
 
             totalAdrs.Should().BeGreaterThan(20);
+             * */
         }
 
         private async Task<JobResult> RunRefreshAdrsJob(string tenantId, Guid correlationId)
@@ -76,6 +79,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             return await handler.Handle(job, CancellationToken.None).ConfigureAwait(false);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "By design.")]
         private async Task<JobResult> RunRefreshAdrsLastUpdatedJob(string tenantId, Guid correlationId)
         {
             var job = new RefreshAdrsLastUpdatedJob(tenantId, correlationId);
