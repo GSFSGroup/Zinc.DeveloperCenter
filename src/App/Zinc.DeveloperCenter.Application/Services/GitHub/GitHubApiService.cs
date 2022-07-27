@@ -242,7 +242,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
+            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={System.Web.HttpUtility.UrlEncode(filePath)}&page=1&per_page=1&sort=committer-date&order=desc";
 
             var commit = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
                 .ConfigureAwait(false)
