@@ -3,6 +3,8 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 import { IBreadCrumb, SharedServices } from '@gsfsgroup/kr-shell-services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AdrContent } from '~/models/adr-content.interface';
+import { GitHubAdrService } from '~/shared/services/github-adr.service';
 
 @Component({
     selector: 'app-adr-display',
@@ -13,14 +15,17 @@ export class AdrDisplayComponent implements OnInit {
     public adrTitle!: string;
     public adrNumberString!: string;
     public applicationName!: string;
-    public downloadUrl!: string;
+    public filePath!: string;
     public htmlUrl!: string;
+
+    public adrContent!: string;
 
     private destroyed$ = new Subject<void>();
 
     public constructor(
         private activatedRoute: ActivatedRoute,
         private sharedServices: SharedServices,
+        private adrService: GitHubAdrService,
         private router: Router) {}
 
     public ngOnInit(): void {
@@ -29,10 +34,20 @@ export class AdrDisplayComponent implements OnInit {
             this.adrNumberString = params.adrNumberString;
             this.adrNumberString = this.adrNumberString?.toUpperCase();
             this.applicationName = params.applicationName;
-            this.downloadUrl = decodeURIComponent(params.downloadUrl);
-            this.htmlUrl = decodeURIComponent(params.htmlUrl);
+            this.filePath = decodeURIComponent(params.filePath);
             this.publishCrumbs();
         });
+
+        this.downloadAdr();
+    }
+
+    private downloadAdr(): void {
+        this.adrService.downloadAdrContent(this.applicationName, this.filePath)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(content => {
+                this.adrContent = content.content;
+                this.htmlUrl = content.htmlUrl;
+            });
     }
 
     private publishCrumbs(): void {
@@ -70,5 +85,9 @@ export class AdrDisplayComponent implements OnInit {
         }
 
         return crumbs;
+    }
+
+    public encodeUrl(val: string): string {
+        return encodeURIComponent(val);
     }
 }

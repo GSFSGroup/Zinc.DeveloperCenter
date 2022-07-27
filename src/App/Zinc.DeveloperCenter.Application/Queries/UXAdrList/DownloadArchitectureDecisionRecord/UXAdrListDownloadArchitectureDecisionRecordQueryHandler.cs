@@ -64,7 +64,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
             return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(
                 fileName,
                 fileMimeType,
-                content!);
+                content!,
+                string.Format($"https://github.com/{request.TenantId}/{request.ApplicationName}/{request.FilePath}"));
         }
     }
 }

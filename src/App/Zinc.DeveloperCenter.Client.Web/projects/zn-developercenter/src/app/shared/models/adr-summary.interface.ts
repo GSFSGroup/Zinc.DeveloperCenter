@@ -18,4 +18,6 @@ export interface AdrSummary {
     lastUpdatedBy: string;
     lastUpdatedOn: Date;
     totalViews: Number;
+
+    content: string;
 }
