@@ -27,7 +27,6 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         /// Finds the architecture decision records defined in an organization.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
-        /// <param name="repositoryName">The repository to search.</param>
         /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
         Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId);
 
