@@ -234,19 +234,23 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
-            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
+            var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=2&sort=committer-date&order=desc";
 
-            var model = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
-                .ConfigureAwait(false) ?? new List<CommitModel>())
-                .FirstOrDefault();
+            var model = await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+                .ConfigureAwait(false)
+                ?? new List<CommitModel>();
 
-            if (model == null || model.committer == null)
+            var commit = model.Any()
+                ? model.FirstOrDefault(x => x.committer!.name! != "GitHub") ?? model.First()
+                : null;
+
+            if (commit == null || commit.committer == null)
             {
                 logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
                 return default;
             }
 
-            return (model.committer.name, model.committer.date);
+            return (commit.committer.name, commit.committer.date);
         }
 
         private async Task<List<GitHubRepositoryModel>> GetRepositories(

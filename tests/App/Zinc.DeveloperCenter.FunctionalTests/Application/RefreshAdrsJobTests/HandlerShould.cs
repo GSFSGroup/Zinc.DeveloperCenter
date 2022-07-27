@@ -32,8 +32,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             var tenantId = "GSFSGroup";
             var correlationId = Guid.NewGuid();
 
-            var response = await RunRefreshAdrsJob(tenantId, correlationId).ConfigureAwait(true);
-            response.Should().Be(JobResult.OperationSucceeded);
+            await RunRefreshAdrsJob(tenantId, correlationId).ConfigureAwait(true);
 
             var connection = GetRequiredService<IDbConnection>();
 
@@ -52,8 +51,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             totalRepos.Should().BeGreaterThan(50);
             totalAdrs.Should().BeGreaterThan(20);
 
-            response = await RunRefreshAdrsLastUpdatedJob(tenantId, correlationId).ConfigureAwait(false);
-            response.Should().Be(JobResult.OperationSucceeded);
+            await RunRefreshAdrsLastUpdatedJob(tenantId, correlationId).ConfigureAwait(false);
 
             totalAdrs = await connection
                 .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record where updated_by is not null AND updated_on is not null;")
