@@ -3,7 +3,7 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     /// <summary>
     /// A model used to hold the repository information.
     /// </summary>
-    public class GitHubRepositoryModel
+    public sealed class GitHubRepositoryModel : System.IEquatable<GitHubRepositoryModel>
     {
         /// <summary>
         /// Initializes a new instance of the class.
@@ -70,5 +70,28 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         /// The application url.
         /// </summary>
         public string ApplicationUrl { get; set; }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as GitHubRepositoryModel);
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(GitHubRepositoryModel? other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
+            return TenantId.Equals(other.TenantId) && ApplicationName.Equals(other.ApplicationName);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return TenantId.GetHashCode() ^ ApplicationName.GetHashCode();
+        }
     }
 }

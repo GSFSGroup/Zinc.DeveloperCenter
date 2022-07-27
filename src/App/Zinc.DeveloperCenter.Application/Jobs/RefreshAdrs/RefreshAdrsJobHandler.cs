@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -101,40 +103,89 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId);
 
             var totalUpdates = 0;
-            var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
 
-            foreach (var apiResult in apiResults)
+            var models = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, "Zinc.Templates")
+                .ConfigureAwait(false))
+                .ToHashSet();
+
+            // GitHub doesn't like rapid-fire requests
+            await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+            var remainingModels = await FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
+
+            models.UnionWith(remainingModels);
+
+            foreach (var model in models)
             {
-                var key = string.Join('/', tenantId, apiResult.ApplicationName, apiResult.FilePath);
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+                var key = string.Join('/', tenantId, model.ApplicationName, model.FilePath);
 
                 var adr = await adrRepository.Read(key).ConfigureAwait(false)
                     ?? new ArchitectureDecisionRecord(
                         tenantId,
-                        apiResult.ApplicationName,
-                        apiResult.FilePath,
+                        model.ApplicationName,
+                        model.FilePath,
                         null,
                         null,
                         null);
 
-                var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                var contentModel = await gitHubApi.DownloadArchitectureDecisionRecord(
                     tenantId,
-                    apiResult.ApplicationName,
-                    apiResult.FilePath,
+                    model.ApplicationName,
+                    model.FilePath,
                     FileFormat.Raw).ConfigureAwait(false);
 
-                adr.UpdateContent(content);
-
-                await adrRepository.Save(adr).ConfigureAwait(false);
-
-                totalUpdates++;
-
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(contentModel.Content))
+                {
+                    adr.UpdateContent(contentModel.Content);
+                    await adrRepository.Save(adr).ConfigureAwait(false);
+                    totalUpdates++;
+                }
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());
 
             return totalUpdates;
+        }
+
+        private async Task<HashSet<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId)
+        {
+            int page = 1;
+            int pageSize = 100;
+
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(256);
+
+            var apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, page, pageSize)
+                .ConfigureAwait(false))
+                .ToList();
+
+            while (apiResults.Count > 0)
+            {
+                results.UnionWith(apiResults);
+
+                page++;
+
+                if (apiResults.Count == pageSize)
+                {
+                    // GitHub doesn't like rapid-fire requests
+                    await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+                }
+                else if (apiResults.Count < pageSize)
+                {
+                    break;
+                }
+
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
+
+                apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, page, pageSize)
+                    .ConfigureAwait(false))
+                    .ToList();
+            }
+
+            return results;
         }
     }
 }

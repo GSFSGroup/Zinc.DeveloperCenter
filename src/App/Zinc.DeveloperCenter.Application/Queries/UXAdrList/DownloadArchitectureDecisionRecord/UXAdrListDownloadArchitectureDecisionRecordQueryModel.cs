@@ -10,15 +10,18 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         /// </summary>
         /// <param name="fileName">The file name to return to the client.</param>
         /// <param name="mimeType">The file mime type (markdown or html).</param>
-        /// <param name="content">The file contents as UTF8 string.</param>
+        /// <param name="content">The file contents as string.</param>
+        /// <param name="contentUrl">The content url.</param>
         public UXAdrListDownloadArchitectureDecisionRecordQueryModel(
             string fileName,
             string mimeType,
-            string content)
+            string content,
+            string contentUrl)
         {
             FileName = fileName;
             MimeType = mimeType;
             Content = content;
+            ContentUrl = contentUrl;
         }
 
         /// <summary>
@@ -35,5 +38,10 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         /// Gets the file contents as string.
         /// </summary>
         public string Content { get; set; }
+
+        /// <summary>
+        /// Gets the file content url.
+        /// </summary>
+        public string ContentUrl { get; set; }
     }
 }
