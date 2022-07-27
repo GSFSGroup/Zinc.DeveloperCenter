@@ -10,7 +10,7 @@ using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated
 {
-    internal class RefreshAdrsLastUpdatedJobHandler
+    internal class RefreshAdrsLastUpdatedJobHandler : JobHandlerBase<RefreshAdrsLastUpdatedJob>
     {
         private readonly IGitHubApiService gitHubApi;
         private readonly IArchitectureDecisionRecordRepository repository;
