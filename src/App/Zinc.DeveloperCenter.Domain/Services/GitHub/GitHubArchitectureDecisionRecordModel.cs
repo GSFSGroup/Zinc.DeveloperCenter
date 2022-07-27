@@ -5,7 +5,7 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     /// <summary>
     /// A model used to hold ADR information.
     /// </summary>
-    public class GitHubArchitectureDecisionRecordModel : IEquatable<GitHubArchitectureDecisionRecordModel>
+    public sealed class GitHubArchitectureDecisionRecordModel : IEquatable<GitHubArchitectureDecisionRecordModel>
     {
         /// <summary>
         /// Initializes a new instance of the class.
