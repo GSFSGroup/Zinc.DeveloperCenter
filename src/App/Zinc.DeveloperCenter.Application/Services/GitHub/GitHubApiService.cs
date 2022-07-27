@@ -74,7 +74,12 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "By design.")]
+        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId)
+        {
+            return await FindArchitectureDecisionRecords(tenantId, string.Empty).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc/>
         public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName)
         {
             var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
@@ -90,7 +95,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = await FindArchitectureDecisionRecords(tenantConfig).ConfigureAwait(false);
+            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
 
             if (results.Count == 0)
             {
@@ -98,24 +103,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     ? $"{tenantConfig.TenantId}"
                     : $"{tenantConfig.OrgName}";
 
-                logger.LogWarning("Failed to find any ADRs for {Org}.", orgName);
-            }
-
-            /* THIS CODE IS TOO SLOW TO USE
-            foreach (var result in results)
-            {
-                var lastUpdatedDetails = await GetLastUpdatedDetails(tenantConfig, repositoryName, result.FilePath).ConfigureAwait(false);
-
-                if (lastUpdatedDetails.LastUpdatedBy?.Length > 0 && lastUpdatedDetails.LastUpdatedOn != null)
+                if (string.IsNullOrEmpty(repositoryName))
                 {
-                    result.LastUpdatedBy = lastUpdatedDetails.LastUpdatedBy;
-                    result.LastUpdatedOn = lastUpdatedDetails.LastUpdatedOn;
+                    logger.LogWarning("Failed to find any ADRs for {OrgName}.", orgName);
                 }
-
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+                else
+                {
+                    logger.LogWarning("Failed to find any ADRs for {OrgName}/{RepositoryName}.", orgName, repositoryName);
+                }
             }
-             * */
 
             return results;
         }
@@ -197,15 +193,17 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
-            GitHubApiConfig.TenantConfig tenantConfig)
+            GitHubApiConfig.TenantConfig tenantConfig,
+            string repositoryName)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
-            // +repo:{orgName}/{repositoryName}
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page=1&per_page=100";
+            var endpoint = string.IsNullOrEmpty(repositoryName)
+                ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page=1&per_page=100"
+                : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
 
             var results = new List<GitHubArchitectureDecisionRecordModel>(32);
 
@@ -220,7 +218,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             foreach (var item in items)
             {
-                if (!item.repository!.name!.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase) && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
+                if (item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase) && !item.repository!.name!.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase))
                 {
                     continue; // Skip RedLine ADRs in non-template repositories
                 }
@@ -250,14 +248,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 .ConfigureAwait(false) ?? new List<CommitModel>())
                 .FirstOrDefault();
 
-            if (model != null && model.committer != null)
+            if (model == null || model.committer == null)
             {
-                return (model.committer.name, model.committer.date);
+                logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
+                return default;
             }
 
-            logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
-
-            return default;
+            return (model.committer.name, model.committer.date);
         }
 
         private async Task<List<GitHubRepositoryModel>> GetRepositories(
@@ -333,6 +330,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 var content = await MakeCall(httpClient, endpoint, accessToken, acceptHeaders).ConfigureAwait(false)
                     ?? "{}";
+
                 return JsonConvert.DeserializeObject<TResponse>(content);
             }
 
@@ -369,6 +367,10 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         if (int.TryParse(error.response.Headers.RetryAfter?.ToString(), out var seconds) && seconds > 0)
                         {
                             waitTime = TimeSpan.FromSeconds(seconds + 1.25);
+                        }
+                        else
+                        {
+                            waitTime = TimeSpan.FromSeconds(30);
                         }
                     }
                 }

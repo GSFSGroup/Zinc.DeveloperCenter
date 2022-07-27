@@ -24,12 +24,22 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
             FileFormat fileFormat);
 
         /// <summary>
-        /// Gets the architecture decision records defined in a repository.
+        /// Finds the architecture decision records defined in an organization.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="repositoryName">The repository to search.</param>
         /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
-        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName);
+        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId);
+
+        /// <summary>
+        /// Finds the architecture decision records defined in a repository.
+        /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
+        /// <param name="repositoryName">The repository to search.</param>
+        /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
+        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
+            string tenantId,
+            string repositoryName);
 
         /// <summary>
         /// Gets the last updated details for an ADR.

@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -48,14 +46,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             logger.LogInformation("BEGIN {JobName}...", nameof(RefreshAdrsJob));
 
-            var applications = await UpdateAndReturnApplications(request.TenantId).ConfigureAwait(false);
+            var totalUpdates = await UpdateApplications(request.TenantId).ConfigureAwait(false);
 
-            int totalUpdates = applications.Count(x => x.WasUpdated);
-
-            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, string.Empty).ConfigureAwait(false);
-
-            // foreach (var applicationName in applications.Select(x => x.ApplicationName))
-            //    totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false)
+            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId).ConfigureAwait(false);
 
             logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsJob), timer.Elapsed.ToString(), totalUpdates);
 
@@ -67,20 +60,18 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             return JobResult.NoWorkPerformed;
         }
 
-        private async Task<IEnumerable<(string ApplicationName, bool WasUpdated)>> UpdateAndReturnApplications(string tenantId)
+        private async Task<int> UpdateApplications(string tenantId)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateAndReturnApplications), tenantId);
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateApplications), tenantId);
 
-            var results = new List<(string ApplicationName, bool WasUpdated)>(256);
+            var totalUpdates = 0;
 
             var repositories = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
 
             foreach (var repository in repositories)
             {
-                bool wasUpdated = false;
-
                 var key = string.Join("/", tenantId, repository.ApplicationName);
 
                 var exists = await applicationRepository.Exists(key).ConfigureAwait(false);
@@ -94,25 +85,23 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                         repository.ApplicationDescription);
 
                     await applicationRepository.Save(aggregate).ConfigureAwait(false);
-                    wasUpdated = true;
+                    totalUpdates++;
                 }
-
-                results.Add((ApplicationName: repository.ApplicationName, WasUpdated: wasUpdated));
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), tenantId, timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateApplications), tenantId, timer.Elapsed.ToString());
 
-            return results;
+            return totalUpdates;
         }
 
-        private async Task<int> UpdateArchitectureDecisionRecords(string tenantId, string applicationName)
+        private async Task<int> UpdateArchitectureDecisionRecords(string tenantId)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName));
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId);
 
             var totalUpdates = 0;
-            var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId, applicationName).ConfigureAwait(false);
+            var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
 
             foreach (var apiResult in apiResults)
             {
@@ -127,9 +116,6 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                         null,
                         null);
 
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
-
                 var content = await gitHubApi.DownloadArchitectureDecisionRecord(
                     tenantId,
                     apiResult.ApplicationName,
@@ -143,10 +129,10 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 totalUpdates++;
 
                 // GitHub doesn't like rapid-fire requests
-                // await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false)
+                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());
 
             return totalUpdates;
         }
