@@ -45,8 +45,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
                 ? "text/markdown"
                 : "text/html";
 
-            var fileContent = System.Text.Encoding.UTF8.GetBytes(content!);
-
             try
             {
                 await mostViewedService.UpdateViewCount(request.TenantId, request.ApplicationName, request.FilePath)
@@ -66,7 +64,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
             return new UXAdrListDownloadArchitectureDecisionRecordQueryModel(
                 fileName,
                 fileMimeType,
-                fileContent);
+                content);
         }
     }
 }

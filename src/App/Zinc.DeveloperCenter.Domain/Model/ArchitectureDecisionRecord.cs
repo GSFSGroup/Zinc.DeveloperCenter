@@ -107,7 +107,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// </summary>
         /// <param name="updatedBy">The user who last updated the ADR.</param>
         /// <param name="updatedOn">The date the ADR was last updated.</param>
-        public void UpdateLastUpdated(string updatedBy, DateTimeOffset updatedOn)
+        public void UpdateLastUpdated(string? updatedBy, DateTimeOffset? updatedOn)
         {
             if (LastUpdatedBy != updatedBy || LastUpdatedOn != updatedOn)
             {
