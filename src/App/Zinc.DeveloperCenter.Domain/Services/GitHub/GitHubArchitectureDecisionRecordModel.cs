@@ -5,24 +5,21 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
     /// <summary>
     /// A model used to hold ADR information.
     /// </summary>
-    public class GitHubArchitectureDecisionRecordModel
+    public class GitHubArchitectureDecisionRecordModel : IEquatable<GitHubArchitectureDecisionRecordModel>
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
-        /// <param name="fileName">The ADR file name.</param>
         /// <param name="filePath">The ADR file path.</param>
         public GitHubArchitectureDecisionRecordModel(
             string tenantId,
             string applicationName,
-            string fileName,
             string filePath)
         {
             TenantId = tenantId;
             ApplicationName = applicationName;
-            FileName = fileName;
             FilePath = filePath;
         }
 
@@ -39,41 +36,34 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         /// <summary>
         /// Gets the file name.
         /// </summary>
-        public string FileName { get; set; }
+        public string FileName => System.IO.Path.GetFileName(FilePath);
 
         /// <summary>
         /// Gets the file path.
         /// </summary>
         public string FilePath { get; set; }
 
-        /// <summary>
-        /// Gets the ADR title.
-        /// </summary>
-        public string? Title { get; set; }
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as GitHubArchitectureDecisionRecordModel);
+        }
 
-        /// <summary>
-        /// Gets the ADR number.
-        /// </summary>
-        public int Number { get; set; }
+        /// <inheritdoc/>
+        public bool Equals(GitHubArchitectureDecisionRecordModel? other)
+        {
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
 
-        /// <summary>
-        /// Gets the user who last updated the ADR.
-        /// </summary>
-        public string? LastUpdatedBy { get; set; }
+            return FileName.Equals(other.FileName);
+        }
 
-        /// <summary>
-        /// Gets the ADR last updated date.
-        /// </summary>
-        public DateTimeOffset? LastUpdatedOn { get; set; }
-
-        /// <summary>
-        /// Gets the ADR download url.
-        /// </summary>
-        public string? DownloadUrl { get; set; }
-
-        /// <summary>
-        /// Gets the url used to view the ADR on GitHub.
-        /// </summary>
-        public string? HtmlUrl { get; set; }
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return FileName.GetHashCode();
+        }
     }
 }

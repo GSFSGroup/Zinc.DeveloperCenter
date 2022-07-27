@@ -95,7 +95,35 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
+            int page = 1;
+            int pageSize = 100; // 100 is the max
+
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(1000);
+
+            var adrs = await FindArchitectureDecisionRecords(
+                tenantConfig,
+                repositoryName,
+                page,
+                pageSize).ConfigureAwait(false);
+
+            while (adrs.Count > 0)
+            {
+                results.UnionWith(adrs);
+
+                page++;
+
+                // GitHub doesn't like rapid-fire requests
+                if ((page % 3) == 0)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                }
+
+                adrs = await FindArchitectureDecisionRecords(
+                    tenantConfig,
+                    repositoryName,
+                    page,
+                    pageSize).ConfigureAwait(false);
+            }
 
             if (results.Count == 0)
             {
@@ -113,7 +141,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 }
             }
 
-            return results;
+            return adrs;
         }
 
         /// <inheritdoc/>
@@ -194,7 +222,9 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
             GitHubApiConfig.TenantConfig tenantConfig,
-            string repositoryName)
+            string repositoryName,
+            int page,
+            int pageSize)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
@@ -202,10 +232,10 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
             var endpoint = string.IsNullOrEmpty(repositoryName)
-                ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page=1&per_page=100"
-                : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
+                ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}"
+                : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page={page}&per_page={pageSize}";
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(100);
 
             var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
                  .ConfigureAwait(false)
@@ -218,19 +248,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             foreach (var item in items)
             {
-                if (item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase) && !item.repository!.name!.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue; // Skip RedLine ADRs in non-template repositories
-                }
-
                 results.Add(new GitHubArchitectureDecisionRecordModel(
                     tenantConfig.TenantId,
                     item.repository?.name!,
-                    item.name!,
                     item.path!));
             }
 
-            return results;
+            return results.ToList();
         }
 
         private async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(
