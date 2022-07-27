@@ -26,6 +26,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests
         /// <param name="output">A helper class used to output debugging information in tests, injected at runtime if needed.</param>
         protected FunctionalTestBase(FunctionalTestFixture fixture, ITestOutputHelper output)
         {
+            fixture.RegisterTestOutputHelper(output);
             Fixture = fixture;
             Output = output;
             SchemasToInclude = new[] { "developercenter", "outbox", "authz" }; // TODO Add your schema(s) to delete between each test here
@@ -81,6 +82,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests
         /// <inheritdoc />
         public async Task DisposeAsync()
         {
+            Fixture.UnregisterTestOutputHelper();
             var cache = GetRequiredService<IDistributedCache>();
             await cache.RemoveAsync(AuthorizationCacheKey.ForGrants(GetRequiredService<IAuthenticationToken>().UserId)).ConfigureAwait(false);
             await cache.RemoveAsync(AuthorizationCacheKey.ForActivityGroups()).ConfigureAwait(false);

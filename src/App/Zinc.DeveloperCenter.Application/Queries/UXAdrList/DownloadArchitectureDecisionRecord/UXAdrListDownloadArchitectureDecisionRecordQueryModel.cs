@@ -40,7 +40,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         public string Content { get; set; }
 
         /// <summary>
-        /// Web Url of adr in GitHub.
+        /// Gets the file content url.
         /// </summary>
         public string ContentUrl { get; set; }
     }

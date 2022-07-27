@@ -46,11 +46,11 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrSearchCo
 
             result1.Should().NotBeNull();
             result1.Items.Should().HaveCount(1);
-            result1.Items.First().Title.Should().Be("adr-0001-record-architecture-decisions");
+            result1.Items.First().Title.Should().Be("record-architecture-decisions");
 
             result2.Should().NotBeNull();
             result2.Items.Should().HaveCount(1);
-            result2.Items.First().Title.Should().Be("adr-0001-event-sourcing");
+            result2.Items.First().Title.Should().Be("event-sourcing");
         }
 
         private async Task InsertData()
