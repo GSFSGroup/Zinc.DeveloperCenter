@@ -67,7 +67,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR title display name.
         /// </summary>
-        public string TitleDisplay => Title.Replace('-', ' ');
+        public string TitleDisplay => ProperCase(Title.Replace('-', ' '));
 
         /// <summary>
         /// Gets the ADR number.
@@ -128,6 +128,11 @@ namespace Zinc.DeveloperCenter.Domain.Model
             }
 
             Content = content;
+        }
+
+        private static string ProperCase(string value)
+        {
+            return new System.Globalization.CultureInfo("en-US").TextInfo.ToTitleCase(value);
         }
     }
 }
