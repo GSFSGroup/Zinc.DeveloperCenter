@@ -25,7 +25,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXMostUsed.GetMostViewed
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public int Number { get; set; }
+        public int NumberVal { get; set; }
 
         /// <summary>
         /// Gets the ADR number.

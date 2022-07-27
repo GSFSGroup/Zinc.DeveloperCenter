@@ -47,11 +47,11 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR
             {
                 if (request.SortAsc)
                 {
-                    sortedAdrList = adrList.OrderBy(o => o.Number).ToList();
+                    sortedAdrList = adrList.OrderBy(o => o.NumberVal).ToList();
                 }
                 else
                 {
-                    sortedAdrList = adrList.OrderByDescending(o => o.Number).ToList();
+                    sortedAdrList = adrList.OrderByDescending(o => o.NumberVal).ToList();
                 }
             }
             else

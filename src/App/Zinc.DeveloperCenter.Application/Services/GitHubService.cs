@@ -168,7 +168,7 @@ namespace Zinc.DeveloperCenter.Application.Services
                         NeatTitle = adrRecord.Name.Substring(indexSecondDash, adrRecord.Name.IndexOf('.') - indexSecondDash).Replace('-', ' '),
                         AdrTitle = adrRecord.Name,
                         LastUpdatedDate = string.Empty,
-                        Number = Convert.ToInt16(nameParts[1]),
+                        NumberVal = Convert.ToInt16(nameParts[1]),
                         NumberString = string.Concat(nameParts[0], '-', nameParts[1]),
                         DownloadUrl = adrRecord.DownloadUrl,
                         ContentUrl = adrRecord.ContentUrl,

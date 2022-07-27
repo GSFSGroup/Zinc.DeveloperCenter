@@ -72,12 +72,12 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR number.
         /// </summary>
-        public int Number => int.Parse(FileName.Split('-')[1]);
+        public int NumberVal => int.Parse(FileName.Split('-')[1]);
 
         /// <summary>
         /// Gets the ADR number display format (adr-0001).
         /// </summary>
-        public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
+        public string NumberDisplay => string.Format($"adr-{NumberVal:0000}");
 
         /// <summary>
         /// Gets the user who last updated the ADR.

@@ -29,13 +29,13 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
                     FilePath = x.FilePath,
                     LastUpdatedBy = x.LastUpdatedBy,
                     LastUpdatedOn = x.LastUpdatedOn,
-                    Number = x.Number,
+                    NumberVal = x.NumberVal,
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
                     TotalViews = x.TotalViews,
                 })
-                .OrderBy(x => x.Number);
+                .OrderBy(x => x.NumberVal);
 
             return new PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>(items);
         }
