@@ -10,12 +10,21 @@ using Zinc.DeveloperCenter.Domain.Services.GitHub;
 
 namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated
 {
-    internal class RefreshAdrsLastUpdatedJobHandler : JobHandlerBase<RefreshAdrsLastUpdatedJob>
+    /// <summary>
+    /// A handler for the <see cref="RefreshAdrsLastUpdatedJob"/>.
+    /// </summary>
+    public class RefreshAdrsLastUpdatedJobHandler : JobHandlerBase<RefreshAdrsLastUpdatedJob>
     {
         private readonly IGitHubApiService gitHubApi;
         private readonly IArchitectureDecisionRecordRepository repository;
         private readonly ILogger<RefreshAdrsLastUpdatedJobHandler> logger;
 
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="gitHubApi">The github api service.</param>
+        /// <param name="repository">The adr repository.</param>
+        /// <param name="logger">A diagnostic logger.</param>
         public RefreshAdrsLastUpdatedJobHandler(
             IGitHubApiService gitHubApi,
             IArchitectureDecisionRecordRepository repository,
@@ -55,7 +64,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated
                 }
 
                 // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(5)).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
             }
 
             logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsLastUpdatedJob), timer.Elapsed.ToString(), totalUpdates);

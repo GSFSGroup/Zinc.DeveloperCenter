@@ -10,12 +10,12 @@ using Microsoft.Extensions.Logging;
 using RedLine.Application.Jobs;
 using Xunit;
 using Xunit.Abstractions;
-using Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs;
+using Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated;
 using Zinc.DeveloperCenter.Domain.Repositories;
 using Zinc.DeveloperCenter.Domain.Services.GitHub;
 #pragma warning restore S1128 // Unused "using" should be removed
 
-namespace Zinc.DeveloperCenter.FunctionalTests.RefreshAdrsJobTests
+namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsLastUpdatedJobTests
 {
     public class HandlerShould : FunctionalTestBase
     {
@@ -25,34 +25,26 @@ namespace Zinc.DeveloperCenter.FunctionalTests.RefreshAdrsJobTests
         }
 
         [Fact(Skip = "Long running test.")]
-        public async Task PopulateTheDatabase()
+        public async Task UpdateTheDatabase()
         {
-            var job = new RefreshAdrsJob("GSFSGroup", Guid.NewGuid());
+            var job = new RefreshAdrsLastUpdatedJob("GSFSGroup", Guid.NewGuid());
 
-            var handler = new RefreshAdrsJobHandler(
+            var handler = new RefreshAdrsLastUpdatedJobHandler(
                 GetRequiredService<IGitHubApiService>(),
-                GetRequiredService<IApplicationRepository>(),
                 GetRequiredService<IArchitectureDecisionRecordRepository>(),
-                GetRequiredService<ILogger<RefreshAdrsJobHandler>>());
+                GetRequiredService<ILogger<RefreshAdrsLastUpdatedJobHandler>>());
 
             var response = await handler.Handle(job, CancellationToken.None).ConfigureAwait(false);
             response.Should().Be(JobResult.OperationSucceeded);
 
             var connection = GetRequiredService<IDbConnection>();
 
-            var totalRepos = await connection
-                .ExecuteScalarAsync<int>("select count(*) from developercenter.application")
-                .ConfigureAwait(false);
-
-            Output.WriteLine($"!!!!!!!!!!{totalRepos} repositories were found!!!!!!!!!!");
-
             var totalAdrs = await connection
-                .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record")
+                .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record where updated_on is not null;")
                 .ConfigureAwait(false);
 
-            Output.WriteLine($"!!!!!!!!!!{totalAdrs} ADRs were found!!!!!!!!!!");
+            Output.WriteLine($"!!!!!!!!!!{totalAdrs} ADRs were updated!!!!!!!!!!");
 
-            totalRepos.Should().BeGreaterThan(50);
             totalAdrs.Should().BeGreaterThan(20);
         }
     }
