@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -50,7 +52,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             int totalUpdates = applications.Count(x => x.WasUpdated);
 
-            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
+            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, string.Empty).ConfigureAwait(false);
 
             // foreach (var applicationName in applications.Select(x => x.ApplicationName))
             //    totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false)
