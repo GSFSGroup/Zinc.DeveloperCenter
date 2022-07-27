@@ -40,18 +40,6 @@ export class RepoListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getGSFSGitHubReposInit(): void {
-        this.loadingService.show('Loading');
-        this.repoService.listRepos()
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(repos => {
-                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.applicationName] = false);
-                this.repos = repos;
-                this.loadingService.hide();
-                this.fetchedRepos = true;
-            });
-    }
-
     public getGSFSAppsInit(): void {
         this.loadingService.show('Loading');
         this.repoService.listApps()
