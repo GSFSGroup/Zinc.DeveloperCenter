@@ -65,7 +65,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
                 fileName,
                 fileMimeType,
                 content!,
-                string.Format($"https://github.com/{request.TenantId}/{request.ApplicationName}/{request.FilePath}"));
+                string.Format($"https://github.com/{request.TenantId}/{request.ApplicationName}/blob/master/{request.FilePath}"));
         }
     }
 }
