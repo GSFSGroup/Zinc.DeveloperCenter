@@ -153,6 +153,14 @@ AND   adr.application_name = @applicationName
 AND   adr.file_path = @filePath
 ;";
 
+            internal static readonly string ReadAll = $@"
+SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
+FROM {TableName} AS adr
+LEFT OUTER JOIN {TableName}_viewcount AS views
+    ON views.id = adr.id
+WHERE tenant_id = @tenantId
+;";
+
             internal static readonly string ReadAllForApplication = $@"
 SELECT adr.*, COALESCE(views.view_count, 0) AS total_views
 FROM {TableName} AS adr

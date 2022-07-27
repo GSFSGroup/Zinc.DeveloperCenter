@@ -68,23 +68,23 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             var totalUpdates = 0;
 
-            var repositories = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
+            var apiResults = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
 
-            foreach (var repository in repositories)
+            foreach (var apiResult in apiResults)
             {
-                var key = string.Join("/", tenantId, repository.ApplicationName);
+                var key = string.Join("/", tenantId, apiResult.ApplicationName);
 
-                var exists = await applicationRepository.Exists(key).ConfigureAwait(false);
+                var app = await applicationRepository.Read(key).ConfigureAwait(false);
 
-                if (!exists)
+                if (app == null)
                 {
-                    var aggregate = new Domain.Model.Application(
+                    app = new Domain.Model.Application(
                         tenantId,
-                        repository.ApplicationName!,
-                        repository.ApplicationUrl!,
-                        repository.ApplicationDescription);
+                        apiResult.ApplicationName!,
+                        apiResult.ApplicationUrl!,
+                        apiResult.ApplicationDescription);
 
-                    await applicationRepository.Save(aggregate).ConfigureAwait(false);
+                    await applicationRepository.Save(app).ConfigureAwait(false);
                     totalUpdates++;
                 }
             }
@@ -129,7 +129,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 totalUpdates++;
 
                 // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());

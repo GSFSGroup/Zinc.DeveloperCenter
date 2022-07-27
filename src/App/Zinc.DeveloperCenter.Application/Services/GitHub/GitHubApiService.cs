@@ -383,7 +383,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         }
                         else
                         {
-                            waitTime = TimeSpan.FromSeconds(30);
+                            waitTime = TimeSpan.FromSeconds(5);
                         }
                     }
                 }

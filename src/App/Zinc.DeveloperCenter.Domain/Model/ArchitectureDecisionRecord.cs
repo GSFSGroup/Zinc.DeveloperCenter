@@ -109,7 +109,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <param name="updatedOn">The date the ADR was last updated.</param>
         public void UpdateLastUpdated(string updatedBy, DateTimeOffset updatedOn)
         {
-            if (LastUpdatedBy != updatedBy && LastUpdatedOn != updatedOn)
+            if (LastUpdatedBy != updatedBy || LastUpdatedOn != updatedOn)
             {
                 LastUpdatedBy = updatedBy;
                 LastUpdatedOn = updatedOn;
