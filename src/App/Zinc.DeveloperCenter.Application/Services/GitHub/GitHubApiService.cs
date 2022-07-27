@@ -90,7 +90,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
+            var results = await FindArchitectureDecisionRecords(tenantConfig).ConfigureAwait(false);
 
             if (results.Count == 0)
             {
@@ -197,15 +197,15 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
-            GitHubApiConfig.TenantConfig tenantConfig,
-            string repositoryName)
+            GitHubApiConfig.TenantConfig tenantConfig)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
+            // +repo:{orgName}/{repositoryName}
+            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page=1&per_page=100";
 
             var results = new List<GitHubArchitectureDecisionRecordModel>(32);
 
@@ -220,7 +220,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             foreach (var item in items)
             {
-                if (!repositoryName.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase) && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
+                if (!item.repository!.name!.Equals("Zinc.Templates", StringComparison.OrdinalIgnoreCase) && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
                 {
                     continue; // Skip RedLine ADRs in non-template repositories
                 }

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -52,10 +50,10 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             int totalUpdates = applications.Count(x => x.WasUpdated);
 
-            foreach (var applicationName in applications.Select(x => x.ApplicationName))
-            {
-                totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
-            }
+            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
+
+            // foreach (var applicationName in applications.Select(x => x.ApplicationName))
+            //    totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false)
 
             logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsJob), timer.Elapsed.ToString(), totalUpdates);
 
@@ -127,6 +125,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                         null,
                         null);
 
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+
                 var content = await gitHubApi.DownloadArchitectureDecisionRecord(
                     tenantId,
                     apiResult.ApplicationName,
@@ -140,7 +141,7 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 totalUpdates++;
 
                 // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                // await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false)
             }
 
             logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());
