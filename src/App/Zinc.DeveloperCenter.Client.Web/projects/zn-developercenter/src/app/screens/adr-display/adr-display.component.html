@@ -7,18 +7,18 @@
         <li>
             <div>
                 <button>
-                    <mat-icon *ngIf="true">star_border</mat-icon>
-                    <mat-icon *ngIf="false">star</mat-icon>
+                    <mat-icon *ngIf="true">bookmark_border</mat-icon>
+                    <mat-icon *ngIf="false">bookmark</mat-icon>
                 </button>
+                
+                <a class="secondary-action inline-text-action" href="{{contentUrl}}">You can view the original ADR
+                    here.</a>
             </div>
         </li>
-
+        <mat-divider></mat-divider>
         <li>
             <div>
                 <div markdown lineHighlight ngPreserveWhitespaces class="display padding-all-24" [data]="adrContent"></div>
-
-                <a class="secondary-action inline-text-action" href="{{contentUrl}}">You can view the original ADR
-                    here.</a>
             </div>
         </li>
     </ul>

@@ -19,7 +19,7 @@ export class GitHubAdrService {
     }
 
     public downloadAdrContent(applicationName: string, filePath: string): Observable<AdrContent> {
-        return this.backend.query<AdrContent>(`architecture-decision-records/download/${applicationName}?path=${encodeURIComponent(filePath)}`)
+        return this.backend.query<AdrContent>(`architecture-decision-records/download/${applicationName}?path=${encodeURIComponent(filePath)}`);
     }
 
     public updateDates(applicationName: string, adrTitle: string): Observable<Date> {

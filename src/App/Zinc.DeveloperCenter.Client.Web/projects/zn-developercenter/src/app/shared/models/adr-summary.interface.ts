@@ -2,12 +2,11 @@ export interface AdrSummary {
     applicationName: string;
     title: string;
     titleDisplay: string;
-    number: Number;
+    numberVal: number;
     numberDisplay: string;
     filePath: string;
     lastUpdatedBy: string;
     lastUpdatedOn: Date;
-    totalViews: Number;
-
+    totalViews: number;
     content: string;
 }

@@ -6,12 +6,12 @@
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items" (click)="adrLink.click()">
         <div class="item-summary item-content">
             <a id="adr-{{adr.title}}"
-                routerLink="adr-render/{{adr.titleDisplay}}/{{adr.number}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
+                routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
                 {{adr.titleDisplay}}
                 <button class="float-right" type="button" mat-icon-button>
-                    <mat-icon>star_border</mat-icon>
+                    <mat-icon>bookmark_border</mat-icon>
                 </button>
             </h3>
             <span class="item-detail margin-bottom-12">

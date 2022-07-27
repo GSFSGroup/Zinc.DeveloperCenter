@@ -3,7 +3,7 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router'
 import { IBreadCrumb, SharedServices } from '@gsfsgroup/kr-shell-services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AdrContent } from '~/models/adr-content.interface';
+
 import { GitHubAdrService } from '~/shared/services/github-adr.service';
 
 @Component({
