@@ -98,7 +98,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             int page = 1;
             int pageSize = 100; // 100 is the max
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(1000);
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(1000);
 
             var adrs = await FindArchitectureDecisionRecords(
                 tenantConfig,
@@ -108,7 +108,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             while (adrs.Count > 0)
             {
-                adrs.ForEach(x => results.Add(x));
+                results.UnionWith(adrs);
 
                 page++;
 
@@ -141,7 +141,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 }
             }
 
-            return results.Distinct().ToList();
+            return results;
         }
 
         /// <inheritdoc/>
@@ -179,7 +179,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubRepositoryModel>();
             }
 
-            var results = new List<GitHubRepositoryModel>(256);
+            var results = new HashSet<GitHubRepositoryModel>(256);
 
             var page = 1;
             var pageSize = 100; // 100 is the max
@@ -188,7 +188,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             while (repos.Count > 0)
             {
-                results.AddRange(repos);
+                results.UnionWith(repos);
 
                 page++;
 
@@ -209,7 +209,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             return results;
         }
 
-        private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
+        private async Task<HashSet<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
             GitHubApiConfig.TenantConfig tenantConfig,
             string repositoryName,
             int page,
@@ -224,7 +224,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}"
                 : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page={page}&per_page={pageSize}";
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(100);
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(100);
 
             var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
                  .ConfigureAwait(false)
@@ -243,7 +243,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     item.path!));
             }
 
-            return results.Distinct().ToList();
+            return results;
         }
 
         private async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(
