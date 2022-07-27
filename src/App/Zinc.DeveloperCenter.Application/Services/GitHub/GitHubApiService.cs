@@ -92,15 +92,37 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
+            var results = new List<GitHubArchitectureDecisionRecordModel>(256);
+
+            var page = 1;
+            var pageSize = 100;
+
+            while (true)
+            {
+                var adrs = await FindArchitectureDecisionRecords(tenantConfig, page, pageSize).ConfigureAwait(false);
+
+                if (adrs.Count == 0)
+                {
+                    break;
+                }
+
+                results.AddRange(adrs);
+
+                if (adrs.Count < pageSize)
+                {
+                    break;
+                }
+
+                page++;
+            }
 
             if (results.Count == 0)
             {
-                var repositoryFullName = string.IsNullOrEmpty(tenantConfig.OrgName)
-                    ? $"{tenantConfig.TenantId}/{repositoryName}"
-                    : $"{tenantConfig.OrgName}/{repositoryName}";
+                var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
+                    ? $"{tenantConfig.TenantId}"
+                    : $"{tenantConfig.OrgName}";
 
-                logger.LogWarning("Failed to find any ADRs for {Repository}.", repositoryFullName);
+                logger.LogWarning("Failed to find any ADRs for {Org}.", orgName);
             }
 
             foreach (var result in results)
@@ -176,16 +198,17 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
         private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
             GitHubApiConfig.TenantConfig tenantConfig,
-            string repositoryName)
+            int page,
+            int pageSize)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
+            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}";
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
+            var results = new List<GitHubArchitectureDecisionRecordModel>(256);
 
             using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
             {
@@ -198,19 +221,16 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
                     .ToList() ?? new List<FileSearchResultModel.ItemModel>();
 
-                if (repositoryName != "Zinc.Templates" && items.Any())
-                {
-                    // Filters out RedLine template ADRs for applications
-                    items = items
-                        .Where(x => !x.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                }
-
                 foreach (var item in items)
                 {
+                    if (item.repository?.name != "Zinc.Templates" && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue; // Skip RedLine ADRs in non-template repositories
+                    }
+
                     results.Add(new GitHubArchitectureDecisionRecordModel(
                         tenantConfig.TenantId,
-                        repositoryName,
+                        item.repository?.name!,
                         item.name!,
                         item.path!));
                 }
@@ -346,13 +366,21 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 waitTime = TimeSpan.Zero;
 
-                if (error.response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                if (error.response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    waitTime = TimeSpan.FromSeconds(1);
+                }
+                else if (error.response.StatusCode == System.Net.HttpStatusCode.Forbidden)
                 {
                     if (error.message?.Contains("secondary rate limit") ?? false)
                     {
                         if (int.TryParse(error.response.Headers.RetryAfter?.ToString(), out var seconds) && seconds > 0)
                         {
                             waitTime = TimeSpan.FromSeconds(seconds + 1.25);
+                        }
+                        else
+                        {
+                            waitTime = TimeSpan.FromSeconds(31);
                         }
                     }
                 }
@@ -371,6 +399,12 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 public string? name = null;
                 public string? path = null;
+                public ItemRepositoryModel? repository = null;
+
+                internal sealed class ItemRepositoryModel
+                {
+                    public string? name = null;
+                }
             }
         }
 
