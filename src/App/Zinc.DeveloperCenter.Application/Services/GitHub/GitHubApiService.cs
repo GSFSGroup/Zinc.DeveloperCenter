@@ -98,7 +98,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             int page = 1;
             int pageSize = 100; // 100 is the max
 
-            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(1000);
+            var results = new List<GitHubArchitectureDecisionRecordModel>(1000);
 
             var adrs = await FindArchitectureDecisionRecords(
                 tenantConfig,
@@ -141,7 +141,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 }
             }
 
-            return adrs;
+            return results.Distinct().ToList();
         }
 
         /// <inheritdoc/>
@@ -224,7 +224,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}"
                 : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page={page}&per_page={pageSize}";
 
-            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(100);
+            var results = new List<GitHubArchitectureDecisionRecordModel>(100);
 
             var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
                  .ConfigureAwait(false)
@@ -243,7 +243,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     item.path!));
             }
 
-            return results.ToList();
+            return results.Distinct().ToList();
         }
 
         private async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(
