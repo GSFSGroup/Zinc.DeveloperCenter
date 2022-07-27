@@ -330,9 +330,10 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                     null);
             }
 
-            public static async Task<TResponse?> MakeCall<TResponse?>(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
+            public static async Task<TResponse?> MakeCall<TResponse>(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
             {
-                var content = await MakeCall(httpClient, endpoint, accessToken, acceptHeaders).ConfigureAwait(false) ?? "{}";
+                var content = await MakeCall(httpClient, endpoint, accessToken, acceptHeaders).ConfigureAwait(false)
+                    ?? "{}";
                 return JsonConvert.DeserializeObject<TResponse>(content);
             }
 
@@ -372,7 +373,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         }
                         else
                         {
-                            waitTime = TimeSpan.FromSeconds(31);
+                            waitTime = TimeSpan.FromSeconds(45);
                         }
                     }
                 }
