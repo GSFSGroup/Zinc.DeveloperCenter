@@ -70,10 +70,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/contents/{filePath}";
 
-            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()))
-            {
-                return await ServiceCaller.MakeCall(httpClient, request).ConfigureAwait(false) ?? string.Empty;
-            }
+            return await ServiceCaller.MakeCall(httpClient, endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()).ConfigureAwait(false) ?? string.Empty;
         }
 
         /// <inheritdoc/>
@@ -213,30 +210,27 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var results = new List<GitHubArchitectureDecisionRecordModel>(256);
 
-            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
+            var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
+                 .ConfigureAwait(false)
+                 ?? new FileSearchResultModel();
+
+            // The check for .md or .markdown seems to be unnecessary, but just in case
+            var items = model.items?
+                .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
+                .ToList() ?? new List<FileSearchResultModel.ItemModel>();
+
+            foreach (var item in items)
             {
-                var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, request)
-                    .ConfigureAwait(false)
-                    ?? new FileSearchResultModel();
-
-                // The check for .md or .markdown seems to be unnecessary, but just in case
-                var items = model.items?
-                    .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
-                    .ToList() ?? new List<FileSearchResultModel.ItemModel>();
-
-                foreach (var item in items)
+                if (item.repository?.name != "Zinc.Templates" && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (item.repository?.name != "Zinc.Templates" && item.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue; // Skip RedLine ADRs in non-template repositories
-                    }
-
-                    results.Add(new GitHubArchitectureDecisionRecordModel(
-                        tenantConfig.TenantId,
-                        item.repository?.name!,
-                        item.name!,
-                        item.path!));
+                    continue; // Skip RedLine ADRs in non-template repositories
                 }
+
+                results.Add(new GitHubArchitectureDecisionRecordModel(
+                    tenantConfig.TenantId,
+                    item.repository?.name!,
+                    item.name!,
+                    item.path!));
             }
 
             return results;
@@ -253,19 +247,16 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
 
-            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
+            var model = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+                .ConfigureAwait(false) ?? new List<CommitModel>())
+                .FirstOrDefault();
+
+            if (model != null && model.committer != null)
             {
-                var model = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, request)
-                    .ConfigureAwait(false) ?? new List<CommitModel>())
-                    .FirstOrDefault();
-
-                if (model != null && model.committer != null)
-                {
-                    return (model.committer.name, model.committer.date);
-                }
-
-                logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
+                return (model.committer.name, model.committer.date);
             }
+
+            logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
 
             return default;
         }
@@ -286,33 +277,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"orgs/{orgName!}/repos?page={page}&per_page={pageSize}";
 
-            using (var request = CreateMessage(endpoint, tenantConfig.AccessToken))
-            {
-                var model = await ServiceCaller.MakeCall<List<RepositorySearchModel>>(httpClient, request)
-                    .ConfigureAwait(false)
-                    ?? new List<RepositorySearchModel>();
+            var model = await ServiceCaller.MakeCall<List<RepositorySearchModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+                .ConfigureAwait(false)
+                ?? new List<RepositorySearchModel>();
 
-                return model
-                    .Select(model => new GitHubRepositoryModel(tenantConfig.TenantId!, model.name!, model.html_url!, model.description))
-                    .ToList();
-            }
-        }
-
-        private HttpRequestMessage CreateMessage(string endpoint, string accessToken, params string[] acceptHeaders)
-        {
-            var message = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
-            message.SetBearerToken(accessToken);
-
-            if (acceptHeaders != null && acceptHeaders.Length > 0)
-            {
-                foreach (var header in acceptHeaders)
-                {
-                    message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
-                }
-            }
-
-            return message;
+            return model
+                .Select(model => new GitHubRepositoryModel(tenantConfig.TenantId!, model.name!, model.html_url!, model.description))
+                .ToList();
         }
 
         private static class ServiceCaller
