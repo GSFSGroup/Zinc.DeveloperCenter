@@ -52,7 +52,6 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             totalRepos.Should().BeGreaterThan(50);
             totalAdrs.Should().BeGreaterThan(20);
 
-            /*
             response = await RunRefreshAdrsLastUpdatedJob(tenantId, correlationId).ConfigureAwait(false);
             response.Should().Be(JobResult.OperationSucceeded);
 
@@ -63,7 +62,6 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             Output.WriteLine($"!!!!!!!!!!{totalAdrs} ADRs were updated!!!!!!!!!!");
 
             totalAdrs.Should().BeGreaterThan(20);
-             * */
         }
 
         private async Task<JobResult> RunRefreshAdrsJob(string tenantId, Guid correlationId)
