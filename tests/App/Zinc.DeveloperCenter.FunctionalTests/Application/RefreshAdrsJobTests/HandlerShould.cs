@@ -54,7 +54,7 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
             await RunRefreshAdrsLastUpdatedJob(tenantId, correlationId).ConfigureAwait(false);
 
             totalAdrs = await connection
-                .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record where updated_by is not null AND updated_on is not null;")
+                .ExecuteScalarAsync<int>("select count(*) from developercenter.architecture_decision_record where last_updated_by is not null AND last_updated_on is not null;")
                 .ConfigureAwait(false);
 
             Output.WriteLine($"!!!!!!!!!!{totalAdrs} ADRs were updated!!!!!!!!!!");
