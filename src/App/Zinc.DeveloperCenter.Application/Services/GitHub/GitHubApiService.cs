@@ -108,7 +108,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             while (adrs.Count > 0)
             {
-                results.UnionWith(adrs);
+                adrs.ForEach(x => results.Add(x));
 
                 page++;
 
