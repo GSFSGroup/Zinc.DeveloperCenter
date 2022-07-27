@@ -56,7 +56,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             if (tenantConfig.Disabled)
             {
                 logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
-                return string.Empty;
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", "Disabled");
             }
 
             if (fileFormat == FileFormat.Unknown)
@@ -74,13 +74,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId)
-        {
-            return await FindArchitectureDecisionRecords(tenantId, string.Empty).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc/>
-        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName)
+        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, int page, int pageSize)
         {
             var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
 
@@ -92,56 +86,14 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             if (tenantConfig.Disabled)
             {
                 logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
-                return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", "Disabled");
             }
 
-            int page = 1;
-            int pageSize = 100; // 100 is the max
-
-            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(1000);
-
-            var adrs = await FindArchitectureDecisionRecords(
+            return await FindArchitectureDecisionRecords(
                 tenantConfig,
-                repositoryName,
+                string.Empty,
                 page,
                 pageSize).ConfigureAwait(false);
-
-            while (adrs.Count > 0)
-            {
-                results.UnionWith(adrs);
-
-                page++;
-
-                // GitHub doesn't like rapid-fire requests
-                if ((page % 2) == 0)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
-                }
-
-                adrs = await FindArchitectureDecisionRecords(
-                    tenantConfig,
-                    repositoryName,
-                    page,
-                    pageSize).ConfigureAwait(false);
-            }
-
-            if (results.Count == 0)
-            {
-                var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
-                    ? $"{tenantConfig.TenantId}"
-                    : $"{tenantConfig.OrgName}";
-
-                if (string.IsNullOrEmpty(repositoryName))
-                {
-                    logger.LogWarning("Failed to find any ADRs for {OrgName}.", orgName);
-                }
-                else
-                {
-                    logger.LogWarning("Failed to find any ADRs for {OrgName}/{RepositoryName}.", orgName, repositoryName);
-                }
-            }
-
-            return results;
         }
 
         /// <inheritdoc/>
@@ -157,7 +109,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             if (tenantConfig.Disabled)
             {
                 logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
-                return default;
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", "Disabled");
             }
 
             return await GetLastUpdatedDetails(tenantConfig, repositoryName, filePath).ConfigureAwait(false);
@@ -176,7 +128,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             if (tenantConfig.Disabled)
             {
                 logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
-                return Enumerable.Empty<GitHubRepositoryModel>();
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]", "Disabled");
             }
 
             var results = new HashSet<GitHubRepositoryModel>(256);
@@ -193,10 +145,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 page++;
 
                 // GitHub doesn't like rapid-fire requests
-                if ((page % 3) == 0)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
-                }
+                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
                 repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
             }
@@ -333,7 +282,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
                 throw new ServiceCallException(
                     500,
-                    $"All retries have been exhaused to '{endpoint}'. The call has FAILED.",
+                    $"All retries to '{endpoint}' have been exhaused. The call has FAILED due to rate limiting.",
                     typeof(GitHubApiService).Name,
                     httpClient.BaseAddress?.Host ?? "api.github.com",
                     null);
@@ -383,7 +332,7 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                         }
                         else
                         {
-                            waitTime = TimeSpan.FromSeconds(15);
+                            waitTime = TimeSpan.FromSeconds(30);
                         }
                     }
                 }

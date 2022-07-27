@@ -24,8 +24,8 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsLastUpdate
         {
         }
 
-        // [Fact(Skip = "Long running test.")]
-        [Fact]
+        // [Fact]
+        [Fact(Skip = "Long running test.")]
         public async Task UpdateTheDatabase()
         {
             var job = new RefreshAdrsLastUpdatedJob("GSFSGroup", Guid.NewGuid());
