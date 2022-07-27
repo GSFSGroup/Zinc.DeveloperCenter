@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="repositoryName">The name of the repository.</param>
-        /// <param name="filePath">The download url.</param>
+        /// <param name="filePath">The GitHub file path.</param>
         /// <param name="fileFormat">The <see cref="FileFormat"/> to return.</param>
         /// <returns>The raw contents of the file to download.</returns>
         Task<string> DownloadArchitectureDecisionRecord(
@@ -23,12 +24,33 @@ namespace Zinc.DeveloperCenter.Domain.Services.GitHub
             FileFormat fileFormat);
 
         /// <summary>
-        /// Gets the architecture decision records defined in a repository.
+        /// Finds the architecture decision records defined in an organization.
+        /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
+        /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
+        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId);
+
+        /// <summary>
+        /// Finds the architecture decision records defined in a repository.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="repositoryName">The repository to search.</param>
         /// <returns>A collections of <see cref="GitHubArchitectureDecisionRecordModel"/>s.</returns>
-        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId, string repositoryName);
+        Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
+            string tenantId,
+            string repositoryName);
+
+        /// <summary>
+        /// Gets the last updated details for an ADR.
+        /// </summary>
+        /// <param name="tenantId">The tenant identifier.</param>
+        /// <param name="repositoryName">The name of the repository.</param>
+        /// <param name="filePath">The GitHub file path.</param>
+        /// <returns>The last update by and last updated on details.</returns>
+        Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(
+            string tenantId,
+            string repositoryName,
+            string filePath);
 
         /// <summary>
         /// Gets the collection of repositories defined for the organization.

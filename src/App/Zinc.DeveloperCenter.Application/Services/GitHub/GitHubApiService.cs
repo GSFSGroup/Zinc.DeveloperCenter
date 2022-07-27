@@ -70,24 +70,13 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/contents/{filePath}";
 
-            var message = CreateMessage(endpoint, tenantConfig.AccessToken, fileFormat.ToDescription());
+            return await ServiceCaller.MakeCall(httpClient, endpoint, tenantConfig.AccessToken, fileFormat.ToDescription()).ConfigureAwait(false) ?? string.Empty;
+        }
 
-            using (var response = await httpClient.SendAsync(message).ConfigureAwait(false))
-            {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                return content ?? string.Empty;
-            }
+        /// <inheritdoc/>
+        public async Task<IEnumerable<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(string tenantId)
+        {
+            return await FindArchitectureDecisionRecords(tenantId, string.Empty).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -106,29 +95,72 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubArchitectureDecisionRecordModel>();
             }
 
-            var results = await FindArchitectureDecisionRecords(tenantConfig, repositoryName).ConfigureAwait(false);
+            int page = 1;
+            int pageSize = 100; // 100 is the max
+
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(1000);
+
+            var adrs = await FindArchitectureDecisionRecords(
+                tenantConfig,
+                repositoryName,
+                page,
+                pageSize).ConfigureAwait(false);
+
+            while (adrs.Count > 0)
+            {
+                results.UnionWith(adrs);
+
+                page++;
+
+                // GitHub doesn't like rapid-fire requests
+                if ((page % 3) == 0)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                }
+
+                adrs = await FindArchitectureDecisionRecords(
+                    tenantConfig,
+                    repositoryName,
+                    page,
+                    pageSize).ConfigureAwait(false);
+            }
 
             if (results.Count == 0)
             {
-                var repositoryFullName = string.IsNullOrEmpty(tenantConfig.OrgName)
-                    ? $"{tenantConfig.TenantId}/{repositoryName}"
-                    : $"{tenantConfig.OrgName}/{repositoryName}";
+                var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
+                    ? $"{tenantConfig.TenantId}"
+                    : $"{tenantConfig.OrgName}";
 
-                logger.LogWarning("Failed to find any ADRs for {Repository}.", repositoryFullName);
-            }
-
-            foreach (var result in results)
-            {
-                var lastUpdatedDetails = await GetLastUpdatedDetails(tenantConfig, repositoryName, result.FilePath).ConfigureAwait(false);
-
-                if (lastUpdatedDetails.LastUpdatedBy?.Length > 0 && lastUpdatedDetails.LastUpdatedOn != null)
+                if (string.IsNullOrEmpty(repositoryName))
                 {
-                    result.LastUpdatedBy = lastUpdatedDetails.LastUpdatedBy;
-                    result.LastUpdatedOn = lastUpdatedDetails.LastUpdatedOn;
+                    logger.LogWarning("Failed to find any ADRs for {OrgName}.", orgName);
+                }
+                else
+                {
+                    logger.LogWarning("Failed to find any ADRs for {OrgName}/{RepositoryName}.", orgName, repositoryName);
                 }
             }
 
             return results;
+        }
+
+        /// <inheritdoc/>
+        public async Task<(string? LastUpdatedBy, DateTimeOffset? LastUpdatedOn)> GetLastUpdatedDetails(string tenantId, string repositoryName, string filePath)
+        {
+            var tenantConfig = config.Tenants.FirstOrDefault(x => x.TenantId == tenantId);
+
+            if (tenantConfig == null)
+            {
+                throw new RedLine.Domain.Exceptions.InvalidConfigurationException($"GitHubApi:Tenants[{tenantId}]");
+            }
+
+            if (tenantConfig.Disabled)
+            {
+                logger.LogWarning("The {Service} for tenant {TenantId} is disabled. The request will not be processed.", GetType().Name, tenantId);
+                return default;
+            }
+
+            return await GetLastUpdatedDetails(tenantConfig, repositoryName, filePath).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -147,97 +179,68 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
                 return Enumerable.Empty<GitHubRepositoryModel>();
             }
 
-            var results = new List<GitHubRepositoryModel>(256);
+            var results = new HashSet<GitHubRepositoryModel>(256);
 
             var page = 1;
             var pageSize = 100; // 100 is the max
 
-            while (true)
+            var repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+
+            while (repos.Count > 0)
             {
-                var retries = 0;
-                var repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
-
-                while (repos.Count == 0 || retries < 3)
-                {
-                    // Sometimes these api calls fail to return results, so retry 3 times before giving up.
-                    if (results.Count == 0)
-                    {
-                        logger.LogWarning("Failed to find any repositories for {Org}. Retrying...", tenantConfig.OrgName ?? tenantConfig.TenantId);
-                    }
-
-                    retries++;
-
-                    repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
-                }
-
-                if (repos.Count == 0)
-                {
-                    logger.LogWarning("Failed to find any repositories for {Org}. Retries have been exhausted.", tenantConfig.OrgName ?? tenantConfig.TenantId);
-                }
-
-                results.AddRange(repos);
-
-                if (repos.Count < pageSize)
-                {
-                    break;
-                }
+                results.UnionWith(repos);
 
                 page++;
+
+                // GitHub doesn't like rapid-fire requests
+                if ((page % 3) == 0)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1.5)).ConfigureAwait(false);
+                }
+
+                repos = await GetRepositories(tenantConfig, page, pageSize).ConfigureAwait(false);
+            }
+
+            if (results.Count == 0)
+            {
+                logger.LogWarning("Failed to find any repositories for {Org}.", tenantConfig.OrgName ?? tenantConfig.TenantId);
             }
 
             return results;
         }
 
-        private async Task<List<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
+        private async Task<HashSet<GitHubArchitectureDecisionRecordModel>> FindArchitectureDecisionRecords(
             GitHubApiConfig.TenantConfig tenantConfig,
-            string repositoryName)
+            string repositoryName,
+            int page,
+            int pageSize)
         {
             var orgName = string.IsNullOrEmpty(tenantConfig.OrgName)
                 ? tenantConfig.TenantId
                 : tenantConfig.OrgName;
 
             // NOTE: This url assumes there will never be more than 100 ADRs in a given app
-            var endpoint = $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page=1&per_page=100";
+            var endpoint = string.IsNullOrEmpty(repositoryName)
+                ? $"search/code?q=adr+in:path+language:markdown+org:{orgName}&page={page}&per_page={pageSize}"
+                : $"search/code?q=adr+in:path+language:markdown+org:{orgName}+repo:{orgName}/{repositoryName}&page={page}&per_page={pageSize}";
 
-            var results = new List<GitHubArchitectureDecisionRecordModel>(32);
+            var results = new HashSet<GitHubArchitectureDecisionRecordModel>(100);
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            var model = await ServiceCaller.MakeCall<FileSearchResultModel>(httpClient, endpoint, tenantConfig.AccessToken)
+                 .ConfigureAwait(false)
+                 ?? new FileSearchResultModel();
+
+            // The check for .md or .markdown seems to be unnecessary, but just in case
+            var items = model.items?
+                .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
+                .ToList() ?? new List<FileSearchResultModel.ItemModel>();
+
+            foreach (var item in items)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var model = JsonConvert.DeserializeObject<FileSearchResultModel>(content) ?? new FileSearchResultModel();
-
-                // The check for .md or .markdown seems to be unnecessary, but just in case
-                var items = model.items?
-                    .Where(x => x.path!.EndsWith(".md") || x.path!.EndsWith(".markdown"))
-                    .ToList() ?? new List<FileSearchResultModel.ItemModel>();
-
-                if (repositoryName != "Zinc.Templates" && items.Any())
-                {
-                    // Filters out RedLine template ADRs for applications
-                    items = items
-                        .Where(x => !x.path!.Contains("docs/RedLine", StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                }
-
-                foreach (var item in items)
-                {
-                    results.Add(new GitHubArchitectureDecisionRecordModel(
-                        tenantConfig.TenantId,
-                        repositoryName,
-                        item.name!,
-                        item.path!));
-                }
+                results.Add(new GitHubArchitectureDecisionRecordModel(
+                    tenantConfig.TenantId,
+                    item.repository?.name!,
+                    item.path!));
             }
 
             return results;
@@ -254,37 +257,17 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"repos/{orgName}/{repositoryName}/commits?path={filePath}&page=1&per_page=1&sort=committer-date&order=desc";
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
+            var model = (await ServiceCaller.MakeCall<List<CommitModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+                .ConfigureAwait(false) ?? new List<CommitModel>())
+                .FirstOrDefault();
+
+            if (model == null || model.committer == null)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
-
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                if (string.IsNullOrEmpty(content))
-                {
-                    return default;
-                }
-
-                var model = (JsonConvert.DeserializeObject<List<CommitModel>>(content) ?? new List<CommitModel>())
-                    .FirstOrDefault();
-
-                if (model != null && model.committer != null)
-                {
-                    return (model.committer.name, model.committer.date);
-                }
-
                 logger.LogWarning("Failed to get commit details for ADR {ADR}.", filePath);
+                return default;
             }
 
-            return default;
+            return (model.committer.name, model.committer.date);
         }
 
         private async Task<List<GitHubRepositoryModel>> GetRepositories(
@@ -303,43 +286,110 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
 
             var endpoint = $"orgs/{orgName!}/repos?page={page}&per_page={pageSize}";
 
-            using (var response = await httpClient.SendAsync(CreateMessage(endpoint, tenantConfig.AccessToken)).ConfigureAwait(false))
-            {
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ServiceCallException(
-                        (int)response.StatusCode,
-                        response.ReasonPhrase ?? response.StatusCode.ToString(),
-                        GetType().Name,
-                        httpClient.BaseAddress?.Host ?? "api.github.com",
-                        null);
-                }
+            var model = await ServiceCaller.MakeCall<List<RepositorySearchModel>>(httpClient, endpoint, tenantConfig.AccessToken)
+                .ConfigureAwait(false)
+                ?? new List<RepositorySearchModel>();
 
-                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                var results = (JsonConvert.DeserializeObject<List<RepositorySearchModel>>(content) ?? new List<RepositorySearchModel>())
-                    .Select(model => new GitHubRepositoryModel(tenantConfig.TenantId!, model.name!, model.html_url!, model.description))
-                    .ToList();
-
-                return results;
-            }
+            return model
+                .Select(model => new GitHubRepositoryModel(tenantConfig.TenantId!, model.name!, model.html_url!, model.description))
+                .ToList();
         }
 
-        private HttpRequestMessage CreateMessage(string endpoint, string accessToken, params string[] acceptHeaders)
+        private static class ServiceCaller
         {
-            var message = new HttpRequestMessage(HttpMethod.Get, endpoint);
-
-            message.SetBearerToken(accessToken);
-
-            if (acceptHeaders != null && acceptHeaders.Length > 0)
+            public static async Task<string?> MakeCall(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
             {
-                foreach (var header in acceptHeaders)
+                var totalRetries = 0;
+
+                while (totalRetries < 3)
                 {
-                    message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
+                    using var request = CreateMessage(endpoint, accessToken, acceptHeaders);
+                    using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
+                    {
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            var error = JsonConvert.DeserializeAnonymousType(
+                                await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}",
+                                new { message = (string?)null });
+
+                            if (IsRecoverableError((response, error?.message), out var waitTime))
+                            {
+                                await Task.Delay(waitTime).ConfigureAwait(false);
+                                totalRetries++;
+                                continue;
+                            }
+
+                            throw new ServiceCallException(
+                                (int)response.StatusCode,
+                                error?.message ?? response.ReasonPhrase ?? response.StatusCode.ToString(),
+                                typeof(GitHubApiService).Name,
+                                httpClient.BaseAddress?.Host ?? "api.github.com",
+                                null);
+                        }
+
+                        return await response.Content.ReadAsStringAsync().ConfigureAwait(false) ?? "{}";
+                    }
                 }
+
+                throw new ServiceCallException(
+                    500,
+                    $"All retries have been exhaused to '{endpoint}'. The call has FAILED.",
+                    typeof(GitHubApiService).Name,
+                    httpClient.BaseAddress?.Host ?? "api.github.com",
+                    null);
             }
 
-            return message;
+            public static async Task<TResponse?> MakeCall<TResponse>(HttpClient httpClient, string endpoint, string accessToken, params string[] acceptHeaders)
+            {
+                var content = await MakeCall(httpClient, endpoint, accessToken, acceptHeaders).ConfigureAwait(false)
+                    ?? "{}";
+
+                return JsonConvert.DeserializeObject<TResponse>(content);
+            }
+
+            private static HttpRequestMessage CreateMessage(string endpoint, string accessToken, params string[] acceptHeaders)
+            {
+                var message = new HttpRequestMessage(HttpMethod.Get, endpoint);
+
+                message.SetBearerToken(accessToken);
+
+                if (acceptHeaders != null && acceptHeaders.Length > 0)
+                {
+                    foreach (var header in acceptHeaders)
+                    {
+                        message.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(header));
+                    }
+                }
+
+                return message;
+            }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1316:Tuple element names should use correct casing", Justification = "By design.")]
+            private static bool IsRecoverableError((HttpResponseMessage response, string? message) error, out TimeSpan waitTime)
+            {
+                waitTime = TimeSpan.Zero;
+
+                if (error.response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    waitTime = TimeSpan.FromSeconds(1);
+                }
+                else if (error.response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                {
+                    if (error.message?.Contains("secondary rate limit") ?? false)
+                    {
+                        if (int.TryParse(error.response.Headers.RetryAfter?.ToString(), out var seconds) && seconds > 0)
+                        {
+                            waitTime = TimeSpan.FromSeconds(seconds + 1.25);
+                        }
+                        else
+                        {
+                            waitTime = TimeSpan.FromSeconds(5);
+                        }
+                    }
+                }
+
+                return waitTime != TimeSpan.Zero;
+            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1307:Accessible fields should begin with upper-case letter", Justification = "By design.")]
@@ -352,6 +402,12 @@ namespace Zinc.DeveloperCenter.Application.Services.GitHub
             {
                 public string? name = null;
                 public string? path = null;
+                public ItemRepositoryModel? repository = null;
+
+                internal sealed class ItemRepositoryModel
+                {
+                    public string? name = null;
+                }
             }
         }
 

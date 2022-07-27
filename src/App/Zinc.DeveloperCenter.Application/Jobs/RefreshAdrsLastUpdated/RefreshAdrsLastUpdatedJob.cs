@@ -1,19 +1,19 @@
 using System;
 using RedLine.Application.Jobs;
 
-namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
+namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated
 {
     /// <summary>
-    /// A job used to refresh the ADRs in the database.
+    /// A job that refreshes last updated details for ADRs.
     /// </summary>
-    public class RefreshAdrsJob : JobBase
+    public class RefreshAdrsLastUpdatedJob : JobBase
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="correlationId">The correlation identifier.</param>
-        public RefreshAdrsJob(string tenantId, Guid correlationId)
+        public RefreshAdrsLastUpdatedJob(string tenantId, Guid correlationId)
             : base(tenantId, correlationId)
         {
             TransactionIsolation = System.Transactions.IsolationLevel.ReadUncommitted;
@@ -21,9 +21,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
         }
 
         /// <inheritdoc/>
-        public override string ActivityDisplayName => "Refresh ADRs job";
+        public override string ActivityDisplayName => "Update ADR last updated details";
 
         /// <inheritdoc/>
-        public override string ActivityDescription => "Refreshes ADRs in the local database from GitHub.";
+        public override string ActivityDescription => "Updates the last updated details of ADRs in the local database from GitHub.";
     }
 }

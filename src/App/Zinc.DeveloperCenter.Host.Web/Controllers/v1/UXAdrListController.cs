@@ -78,7 +78,7 @@ namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 
                 var response = await mediator.Send(request).ConfigureAwait(false);
 
-                return File(response.Content, response.MimeType, response.FileName);
+                return Ok(response);
             }).ConfigureAwait(false);
         }
 

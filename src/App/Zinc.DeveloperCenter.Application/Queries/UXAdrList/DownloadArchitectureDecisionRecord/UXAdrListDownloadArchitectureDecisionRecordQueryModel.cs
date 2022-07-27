@@ -14,7 +14,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         public UXAdrListDownloadArchitectureDecisionRecordQueryModel(
             string fileName,
             string mimeType,
-            byte[] content)
+            string content)
         {
             FileName = fileName;
             MimeType = mimeType;
@@ -32,8 +32,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
         public string MimeType { get; set; }
 
         /// <summary>
-        /// Gets the file contents as UTF8 string.
+        /// Gets the file contents as string.
         /// </summary>
-        public byte[] Content { get; set; }
+        public string Content { get; set; }
     }
 }
