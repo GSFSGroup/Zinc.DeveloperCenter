@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -48,14 +46,9 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             logger.LogInformation("BEGIN {JobName}...", nameof(RefreshAdrsJob));
 
-            var applications = await UpdateAndReturnApplications(request.TenantId).ConfigureAwait(false);
+            var totalUpdates = await UpdateApplications(request.TenantId).ConfigureAwait(false);
 
-            int totalUpdates = applications.Count(x => x.WasUpdated);
-
-            foreach (var applicationName in applications.Select(x => x.ApplicationName))
-            {
-                totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId, applicationName).ConfigureAwait(false);
-            }
+            totalUpdates += await UpdateArchitectureDecisionRecords(request.TenantId).ConfigureAwait(false);
 
             logger.LogInformation("END {JobName} [Elapsed] - {TotalUpdates} records were updated", nameof(RefreshAdrsJob), timer.Elapsed.ToString(), totalUpdates);
 
@@ -67,98 +60,79 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
             return JobResult.NoWorkPerformed;
         }
 
-        private async Task<IEnumerable<(string ApplicationName, bool WasUpdated)>> UpdateAndReturnApplications(string tenantId)
+        private async Task<int> UpdateApplications(string tenantId)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateAndReturnApplications), tenantId);
-
-            var results = new List<(string ApplicationName, bool WasUpdated)>(256);
-
-            var repositories = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
-
-            foreach (var repository in repositories)
-            {
-                bool wasUpdated = false;
-
-                var key = string.Join("/", tenantId, repository.ApplicationName);
-
-                var exists = await applicationRepository.Exists(key).ConfigureAwait(false);
-
-                if (!exists)
-                {
-                    var aggregate = new Domain.Model.Application(
-                        tenantId,
-                        repository.ApplicationName!,
-                        repository.ApplicationUrl!,
-                        repository.ApplicationDescription);
-
-                    await applicationRepository.Save(aggregate).ConfigureAwait(false);
-                    wasUpdated = true;
-                }
-
-                results.Add((ApplicationName: repository.ApplicationName, WasUpdated: wasUpdated));
-            }
-
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateAndReturnApplications), tenantId, timer.Elapsed.ToString());
-
-            return results;
-        }
-
-        private async Task<int> UpdateArchitectureDecisionRecords(string tenantId, string applicationName)
-        {
-            Stopwatch timer = Stopwatch.StartNew();
-
-            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName));
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateApplications), tenantId);
 
             var totalUpdates = 0;
-            var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId, applicationName).ConfigureAwait(false);
+
+            var apiResults = await gitHubApi.GetRepositories(tenantId).ConfigureAwait(false);
+
+            foreach (var apiResult in apiResults)
+            {
+                var key = string.Join("/", tenantId, apiResult.ApplicationName);
+
+                var app = await applicationRepository.Read(key).ConfigureAwait(false);
+
+                if (app == null)
+                {
+                    app = new Domain.Model.Application(
+                        tenantId,
+                        apiResult.ApplicationName!,
+                        apiResult.ApplicationUrl!,
+                        apiResult.ApplicationDescription);
+
+                    await applicationRepository.Save(app).ConfigureAwait(false);
+                    totalUpdates++;
+                }
+            }
+
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateApplications), tenantId, timer.Elapsed.ToString());
+
+            return totalUpdates;
+        }
+
+        private async Task<int> UpdateArchitectureDecisionRecords(string tenantId)
+        {
+            Stopwatch timer = Stopwatch.StartNew();
+
+            logger.LogDebug("BEGIN {MethodName}({Args})...", nameof(UpdateArchitectureDecisionRecords), tenantId);
+
+            var totalUpdates = 0;
+            var apiResults = await gitHubApi.FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
 
             foreach (var apiResult in apiResults)
             {
                 var key = string.Join('/', tenantId, apiResult.ApplicationName, apiResult.FilePath);
 
-                var adr = await adrRepository.Read(key).ConfigureAwait(false);
-
-                if (adr == null)
-                {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                var adr = await adrRepository.Read(key).ConfigureAwait(false)
+                    ?? new ArchitectureDecisionRecord(
                         tenantId,
                         apiResult.ApplicationName,
                         apiResult.FilePath,
-                        FileFormat.Raw).ConfigureAwait(false);
+                        null,
+                        null,
+                        null);
 
-                    adr = new ArchitectureDecisionRecord(
-                        tenantId,
-                        apiResult.ApplicationName,
-                        apiResult.FilePath,
-                        apiResult.LastUpdatedBy,
-                        apiResult.LastUpdatedOn,
-                        content);
+                var content = await gitHubApi.DownloadArchitectureDecisionRecord(
+                    tenantId,
+                    apiResult.ApplicationName,
+                    apiResult.FilePath,
+                    FileFormat.Raw).ConfigureAwait(false);
 
-                    await adrRepository.Save(adr).ConfigureAwait(false);
+                adr.UpdateContent(content);
 
-                    totalUpdates++;
-                }
-                else if (adr.LastUpdatedOn != apiResult.LastUpdatedOn && apiResult.LastUpdatedOn.HasValue)
-                {
-                    var content = await gitHubApi.DownloadArchitectureDecisionRecord(
-                        tenantId,
-                        apiResult.ApplicationName,
-                        apiResult.FilePath,
-                        FileFormat.Raw).ConfigureAwait(false);
+                await adrRepository.Save(adr).ConfigureAwait(false);
 
-                    adr.UpdateContent(content);
+                totalUpdates++;
 
-                    adr.UpdateLastUpdated(apiResult.LastUpdatedBy!, apiResult.LastUpdatedOn.Value);
-
-                    await adrRepository.Save(adr).ConfigureAwait(false);
-
-                    totalUpdates++;
-                }
+                // GitHub doesn't like rapid-fire requests
+                await Task.Delay(TimeSpan.FromSeconds(2)).ConfigureAwait(false);
             }
 
-            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), string.Join(',', tenantId, applicationName), timer.Elapsed.ToString());
+            logger.LogDebug("END {MethodName}({Args}) [Elapsed]", nameof(UpdateArchitectureDecisionRecords), tenantId, timer.Elapsed.ToString());
 
             return totalUpdates;
         }
