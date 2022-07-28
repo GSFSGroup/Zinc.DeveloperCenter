@@ -68,6 +68,8 @@ namespace Zinc.DeveloperCenter.Host.Jobs
 
                 configureMethod!.Invoke(job, new object[] { quartz, Configuration });
             }
+
+            /* Add future jobs here */
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "By design.")]
@@ -86,12 +88,9 @@ namespace Zinc.DeveloperCenter.Host.Jobs
                     throw new System.InvalidOperationException($"The job '{job.Name}' does not have a static ConfigureHealthCheck() method.");
                 }
 
-                configureMethod!.Invoke(job, new object[] { healthChecks });
+                configureMethod!.Invoke(job, new object[] { healthChecks, Configuration });
             }
 
-            // OutboxJob.ConfigureHealthCheck(healthChecks, Configuration)
-            // RefreshGsfsGroupAdrsJob.ConfigureHealthCheck(healthChecks, Configuration)
-            // RefreshGsfsGroupAdrsLastUpdatedJob.ConfigureHealthCheck(healthChecks, Configuration)
             /* Add future job health checks here */
         }
     }

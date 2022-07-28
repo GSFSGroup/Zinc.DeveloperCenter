@@ -19,7 +19,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Jobs
         public JobsTestFixture()
         {
             var services = Startup
-                .CreateHostBuilder()
+                .CreateHostBuilder(sink)
                 .ConfigureServices((context, container) => container.AddFluentMigrator(context.Configuration))
                 .Build()
                 .Services;

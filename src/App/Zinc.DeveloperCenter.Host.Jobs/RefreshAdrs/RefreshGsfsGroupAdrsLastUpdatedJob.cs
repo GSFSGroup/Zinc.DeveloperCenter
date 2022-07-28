@@ -92,7 +92,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
             quartz.ScheduleJob<RefreshGsfsGroupAdrsLastUpdatedJob>(
                 trigger => trigger
                     .WithIdentity($"{nameof(RefreshGsfsGroupAdrsLastUpdatedJob)}Trigger")
-                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(10))
+                    .StartAt(DateTimeOffset.UtcNow.AddSeconds(12))
                     .WithCronSchedule(jobConfig.CronSchedule)
                     .WithDescription($"A cron-based trigger for the {nameof(RefreshGsfsGroupAdrsLastUpdatedJob)}."),
                 job => job
