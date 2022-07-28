@@ -35,7 +35,6 @@ namespace Zinc.DeveloperCenter.Application
                 .AddFluentValidation<AssemblyMarker>()
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
-                .AddApiServices(configuration)
                 .AddScoped<IApplicationRepository, ApplicationRepository>()
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
                 .AddScoped<IMostViewedService, MostViewedService>()
