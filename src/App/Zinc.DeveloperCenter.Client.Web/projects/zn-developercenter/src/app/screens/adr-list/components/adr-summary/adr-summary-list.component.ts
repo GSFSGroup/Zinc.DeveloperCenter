@@ -13,7 +13,7 @@ import { GitHubAdrService } from '~/shared/services/github-adr.service';
 })
 export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
-    public repoDotName!: string;
+    public applicationName!: string;
 
     @Input()
     public sortedOn = 'number';
@@ -43,40 +43,21 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     }
 
     public ngOnChanges(): void {
-        this.getAdrsForCurrentRepo();
+        this.getAppAdrs();
     }
 
-    private getAdrsForCurrentRepo(): void {
+    private getAppAdrs(): void {
         if (this.expanded) {
-            this.adrService.listAdrs(this.repoDotName, this.sortedOn, this.sortAsc)
+            this.adrService.listAppAdrs(this.applicationName)
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe(adrs => {
                     this.adrs = adrs;
-                    this.updateLastUpdatedDates();
-                    if (this.sortedOn === 'lud') {
-                        if (this.sortAsc) {
-                            console.log(adrs.items[0].lastUpdatedDate);
-                            this.adrs.items.sort((a, b) => new Date(a.lastUpdatedDate).getTime() - new Date(b.lastUpdatedDate).getTime());
-                        } else {
-                            this.adrs.items.sort((a, b) => new Date(b.lastUpdatedDate).getTime() - new Date(a.lastUpdatedDate).getTime());
-                        }
-                    }
+                    console.log(this.adrs.items[0].number);
+                    console.log(this.adrs.items[0].numberDisplay);
+                    console.log(this.adrs.items[1].number);
+                    console.log(this.adrs.items[1].numberDisplay);
                 });
         }
-    }
-
-    public updateLastUpdatedDates(): void {
-        this.adrs.items.forEach(adr => {
-            this.adrService.updateDates(this.repoDotName, adr.adrTitle)
-                .subscribe(_lastUpdatedDate => {
-                    adr.lastUpdatedDate = _lastUpdatedDate;
-                    adr.lastUpdatedDateString = new Date(_lastUpdatedDate).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                });
-        });
     }
 
     public encodeUrl(val: string): string {

@@ -10,7 +10,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: zn-developercenter
-  minReplicas: 3
+  minReplicas: 2
   maxReplicas: 12
   metrics:
   - type: Resource
@@ -24,12 +24,12 @@ spec:
       name: memory
       target:
         type: AverageValue
-        averageValue: 300Mi
+        averageValue: 700Mi
   # - type: Pods
   #   pods:
-  #     metricName: zn_developercenter_k8s_scaling_requests_per_second_rate
+  #     metricName: fe_legalconsent_k8s_scaling_requests_per_second_rate
   #     targetAverageValue: 300m
   # - type: Pods
   #   pods:
-  #     metricName: zn_developercenter_k8s_scaling_request_duration_seconds
+  #     metricName: fe_legalconsent_k8s_scaling_request_duration_seconds
   #     targetAverageValue: 3

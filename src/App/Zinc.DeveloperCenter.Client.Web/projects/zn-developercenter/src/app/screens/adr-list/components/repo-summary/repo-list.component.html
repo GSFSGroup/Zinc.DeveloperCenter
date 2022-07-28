@@ -1,92 +1,149 @@
-<div class="empty-state-container" *ngIf="!repos?.items?.length && fetchedRepos">
-    <h1>Uh oh, something is missing.</h1>
-</div>
+<mat-sidenav-container style="height: 100%;">
+    <mat-sidenav mode="side" [(opened)]="isSideBarOpen" position="end">
 
-<div>
-    <mat-toolbar class="toolbar flex-row">
-        <button mat-button [matMenuTriggerFor]="searchmenu">
-            <mat-icon aria-hidden="false">image_search</mat-icon>
-        </button>
-        <mat-menu #searchmenu="matMenu">
-            <span class="menu-section-title">Search for</span>
-            <button mat-menu-item id="search-all">
-                <span>
-                    All
-                </span>
-            </button>
-            <button mat-menu-item id="search-number" >
-                <span>
-                    Number
-                </span>
-            </button>
-            <button mat-menu-item id="search-title">
-                <span>
-                    Title
-                </span>
-            </button>
-            <button mat-menu-item id="search-in-depth">
-                <span>
-                    In-Depth
-                </span>
-            </button>
-        </mat-menu>
-        <form>
-            <div id="search-left">
-                <!-- Place search dropdown here -->
-            </div>
-            <div id="search-right">
-                <mat-form-field appearance="outline">
-                    <input matInput type="text" placeholder="What ADR are you looking for?">
-                </mat-form-field>
-            </div>
-        </form>
-        <button mat-button [matMenuTriggerFor]="menu">
-            <mat-icon aria-hidden="false">sort</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <span class="menu-section-title">Sort by</span>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate(); $event.stopPropagation()">
-                <mat-icon *ngIf="!sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_upward</mat-icon>
-                <mat-icon *ngIf="sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_downward</mat-icon>
-                <span>
-                    Last updated date
-                </span>
-            </button>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByNumber(); $event.stopPropagation()">
-                <mat-icon *ngIf="!sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_upward</mat-icon>
-                <mat-icon *ngIf="sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_downward</mat-icon>
-                <span>
-                    Number
-                </span>
-            </button>
-            <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle(); $event.stopPropagation()">
-                <mat-icon *ngIf="!sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_upward</mat-icon>
-                <mat-icon *ngIf="sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_downward</mat-icon>
-                <span>
-                    Title
-                </span>
-            </button>
-        </mat-menu>
-    </mat-toolbar>
-    <span class="spacer"></span>
-</div>
+        <div>
+            <ul id="selected-adrs-list">
+                <mat-accordion>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title class="panel-title">Favorites</mat-panel-title>
+                            <mat-panel-description class="panel-header">
+                                Quickly access your selected ADRs.
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
 
-<div>
-    <ul class="adr-list fill-container scrollable-y" id="adr-list">
-        <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
-            <mat-expansion-panel [expanded]="expanded[repo.dotName]" (opened)="repoToggle(repo.dotName, true)"
-                (closed)="repoToggle(repo.dotName, false)">
-                <mat-expansion-panel-header class="panel-header">
-                    <mat-panel-title class="panel-title">{{repo.neatName}}</mat-panel-title>
-                    <mat-panel-description class="panel-header">
-                        {{repo.element}}
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
+                        <div class="empty-state-container" *ngIf="true">
+                            <h1>No favorites yet...</h1>
+                        </div>
 
-                <app-adr-summary-list #appAdrSummaryList [repoDotName]="repo.dotName" [sortedOn]="sortedOn"
-                    [sortAsc]="sortAsc" [expanded]="expanded[repo.dotName]"></app-adr-summary-list>
+                    </mat-expansion-panel>
+                </mat-accordion>
 
-            </mat-expansion-panel>
-        </mat-accordion>
-    </ul>
-</div>
+                <mat-accordion>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title class="panel-title">Most Popular</mat-panel-title>
+                            <mat-panel-description class="panel-header">
+                                View the top ADRs of this sprint.
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div class="empty-state-container" *ngIf="true">
+                            <h1>No top ADRs yet...</h1>
+                        </div>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </ul>
+        </div>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="empty-state-container" *ngIf="!repos?.items?.length && fetchedRepos">
+            <h1>Uh oh, something is missing.</h1>
+        </div>
+        
+        <div>
+            <mat-toolbar class="toolbar flex-row">
+                <button mat-button [matMenuTriggerFor]="searchmenu">
+                    <mat-icon aria-hidden="false">image_search</mat-icon>
+                </button>
+                <mat-menu #searchmenu="matMenu">
+                    <span class="menu-section-title">Search for</span>
+                    <button mat-menu-item id="search-all" (click)="searchFor('all')">
+                        <mat-icon *ngIf="searchingFor === 'all'" class="arrow-icon">search</mat-icon>
+                        <span>
+                            All
+                        </span>
+                    </button>
+                    <button mat-menu-item id="search-number" (click)="searchFor('number')">
+                        <mat-icon *ngIf="searchingFor === 'number'" class="arrow-icon">search</mat-icon>
+                        <span>
+                            Number
+                        </span>
+                    </button>
+                    <button mat-menu-item id="search-title" (click)="searchFor('title')">
+                        <mat-icon *ngIf="searchingFor === 'title'" class="arrow-icon">search</mat-icon>
+                        <span>
+                            Title
+                        </span>
+                    </button>
+                    <button mat-menu-item id="search-full-text" (click)="searchFor('indepth')">
+                        <mat-icon *ngIf="searchingFor === 'indepth'" class="arrow-icon">search</mat-icon>
+                        <span>
+                            Full-text
+                        </span>
+                    </button>
+                </mat-menu>
+                <form>
+                    <div id="search-left">
+                        <!-- Place search dropdown here -->
+                    </div>
+                    <div id="search-right">
+                        <mat-form-field appearance="outline">
+                            <input matInput type="text" placeholder="What ADR are you looking for?">
+                        </mat-form-field>
+                    </div>
+                </form>
+                <button mat-button [matMenuTriggerFor]="menu">
+                    <mat-icon aria-hidden="false">sort</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <span class="menu-section-title">Sort by</span>
+                    <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate(); $event.stopPropagation()">
+                        <mat-icon *ngIf="!sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_downward</mat-icon>
+                        <span>
+                            Last updated date
+                        </span>
+                    </button>
+                    <button mat-menu-item id="sort-by-name-action" (click)="sortByNumber(); $event.stopPropagation()">
+                        <mat-icon *ngIf="!sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_downward</mat-icon>
+                        <span>
+                            Number
+                        </span>
+                    </button>
+                    <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle(); $event.stopPropagation()">
+                        <mat-icon *ngIf="!sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_upward</mat-icon>
+                        <mat-icon *ngIf="sortAsc && sortedOn === 'title'" class="arrow-icon">arrow_downward</mat-icon>
+                        <span>
+                            Title
+                        </span>
+                    </button>
+                </mat-menu>
+            </mat-toolbar>
+            <span class="spacer"></span>
+        </div>
+        
+        <div>
+            <ul class="adr-list fill-container scrollable-y margin-right-36" id="adr-list">
+                <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
+                    <mat-expansion-panel [expanded]="expanded[repo.applicationName]" (opened)="repoToggle(repo.applicationName, true)"
+                        (closed)="repoToggle(repo.applicationName, false)">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title class="panel-title">{{repo.applicationDisplayName}}</mat-panel-title>
+                            <mat-panel-description class="panel-header">
+                                {{repo.applicationElement}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+        
+                        <app-adr-summary-list #appAdrSummaryList [applicationName]="repo.applicationName" [sortedOn]="sortedOn"
+                            [sortAsc]="sortAsc" [expanded]="expanded[repo.applicationName]"></app-adr-summary-list>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </ul>
+        </div>
+
+        <div class="right-docked-toolbar" [ngClass]="isSideBarOpen ? 'open' : ''">
+            <button type="button" mat-icon-button id="show-form-toolbox"
+                aria-label="Click to show favorites and most popular" (click)="toggleSideBarClicked()"
+                matTooltip="Click to show favorites and most popular">
+                <mat-icon aria-hidden="true">bookmark</mat-icon>
+            </button>
+        </div>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

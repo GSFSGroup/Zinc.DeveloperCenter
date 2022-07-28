@@ -5,6 +5,7 @@ import { SharedServices } from '@gsfsgroup/kr-shell-services';
 import { of } from 'rxjs';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
+import { AdrContent } from '~/models/adr-content.interface';
 import { AdrSummary } from '~/models/adr-summary.interface';
 import { Page } from '~/models/page.interface';
 import { GitHubAdrService } from '~/shared/services/github-adr.service';
@@ -28,10 +29,15 @@ describe('AdrDisplayComponent', () => {
         totalItems: 0,
         totalPages: 0
     };
+    const adrContent: AdrContent = {
+        content: '# Test Content',
+        contentUrl: 'x'
+    };
 
     beforeEach(async () => {
         adrService = jasmine.createSpyObj<GitHubAdrService>('adrService', {
-            listAdrs: of(adrPage)
+            listAdrs: of(adrPage),
+            downloadAdrContent: of(adrContent)
         });
         loadingOverlayService = jasmine.createSpyObj<LoadingOverlayService>('loadingOverlayService', ['show', 'hide']);
 

@@ -3,6 +3,23 @@
 </div>
 
 <div class="scrollable-y fill-container">
-    <div markdown lineHighlight ngPreserveWhitespaces class="display padding-all-24" [src]="downloadUrl"></div>
-    <a class="secondary-action inline-text-action" href="{{htmlUrl}}">You can view the original ADR here.</a>
+    <ul>
+        <li>
+            <div>
+                <button>
+                    <mat-icon *ngIf="true">bookmark_border</mat-icon>
+                    <mat-icon *ngIf="false">bookmark</mat-icon>
+                </button>
+                
+                <a class="secondary-action inline-text-action" href="{{contentUrl}}">You can view the original ADR
+                    here.</a>
+            </div>
+        </li>
+        <mat-divider></mat-divider>
+        <li>
+            <div>
+                <div markdown lineHighlight ngPreserveWhitespaces class="display padding-all-24" [data]="adrContent"></div>
+            </div>
+        </li>
+    </ul>
 </div>

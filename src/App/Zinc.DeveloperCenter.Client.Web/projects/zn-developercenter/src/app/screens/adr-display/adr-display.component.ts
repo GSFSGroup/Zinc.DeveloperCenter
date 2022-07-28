@@ -4,6 +4,8 @@ import { IBreadCrumb, SharedServices } from '@gsfsgroup/kr-shell-services';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { GitHubAdrService } from '~/shared/services/github-adr.service';
+
 @Component({
     selector: 'app-adr-display',
     templateUrl: './adr-display.component.html',
@@ -12,15 +14,18 @@ import { takeUntil } from 'rxjs/operators';
 export class AdrDisplayComponent implements OnInit {
     public adrTitle!: string;
     public adrNumberString!: string;
-    public repoDotName!: string;
-    public downloadUrl!: string;
-    public htmlUrl!: string;
+    public applicationName!: string;
+    public filePath!: string;
+    public contentUrl!: string;
+
+    public adrContent!: string;
 
     private destroyed$ = new Subject<void>();
 
     public constructor(
         private activatedRoute: ActivatedRoute,
         private sharedServices: SharedServices,
+        private adrService: GitHubAdrService,
         private router: Router) {}
 
     public ngOnInit(): void {
@@ -28,11 +33,21 @@ export class AdrDisplayComponent implements OnInit {
             this.adrTitle = params.adrTitle;
             this.adrNumberString = params.adrNumberString;
             this.adrNumberString = this.adrNumberString?.toUpperCase();
-            this.repoDotName = params.repoDotName;
-            this.downloadUrl = decodeURIComponent(params.downloadUrl);
-            this.htmlUrl = decodeURIComponent(params.htmlUrl);
+            this.applicationName = params.applicationName;
+            this.filePath = decodeURIComponent(params.filePath);
             this.publishCrumbs();
         });
+
+        this.downloadAdr();
+    }
+
+    private downloadAdr(): void {
+        this.adrService.downloadAdrContent(this.applicationName, this.filePath)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(content => {
+                this.adrContent = content.content;
+                this.contentUrl = content.contentUrl;
+            });
     }
 
     private publishCrumbs(): void {
@@ -42,7 +57,7 @@ export class AdrDisplayComponent implements OnInit {
             const crumb = crumbs[crumbs.length - 1];
 
             crumb.title = this.adrTitle;
-            crumb.description = this.repoDotName.concat(' - ', this.adrNumberString);
+            crumb.description = this.applicationName.concat(' - ', this.adrNumberString);
 
             crumbs.forEach(c => this.sharedServices.breadCrumbs.addCrumb(c));
         }
@@ -70,5 +85,9 @@ export class AdrDisplayComponent implements OnInit {
         }
 
         return crumbs;
+    }
+
+    public encodeUrl(val: string): string {
+        return encodeURIComponent(val);
     }
 }

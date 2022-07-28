@@ -1,10 +1,13 @@
 export interface AdrSummary {
-    neatTitle: string;
-    adrTitle: string;
-    lastUpdatedDate: Date;
-    lastUpdatedDateString: string;
-    adrNumber: number;
-    numberString: string;
-    downloadUrl: string;
-    htmlUrl: string;
+    applicationName: string;
+    title: string;
+    titleDisplay: string;
+    // eslint-disable-next-line id-blacklist
+    number: number;
+    numberDisplay: string;
+    filePath: string;
+    lastUpdatedBy: string;
+    lastUpdatedOn: Date;
+    totalViews: number;
+    content: string;
 }

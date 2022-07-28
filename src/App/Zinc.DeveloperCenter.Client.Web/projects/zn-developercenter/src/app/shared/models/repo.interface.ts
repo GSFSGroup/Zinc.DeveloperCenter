@@ -1,5 +1,5 @@
 export interface RepositoryListComponent {
-    neatName: string;
-    dotName: string;
-    element: string;
+    applicationDisplayName: string;
+    applicationName: string;
+    applicationElement: string;
 }

@@ -1,4 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatMenuModule } from '@angular/material/menu';
 import { of } from 'rxjs';
@@ -29,7 +30,7 @@ describe('RepoListComponent', () => {
 
     beforeEach(async () => {
         repoService = jasmine.createSpyObj<GitHubRepoService>('repoService', {
-            listRepos: of(repoPage)
+            listApps: of(repoPage)
         });
         loadingOverlayService = jasmine.createSpyObj<LoadingOverlayService>('loadingOverlayService', ['show', 'hide']);
 
@@ -39,7 +40,8 @@ describe('RepoListComponent', () => {
             providers: [
                 { provide: GitHubRepoService, useValue: repoService },
                 { provide: LoadingOverlayService, useValue: loadingOverlayService }
-            ]
+            ],
+            schemas: [CUSTOM_ELEMENTS_SCHEMA]
         })
             .compileComponents();
     });
