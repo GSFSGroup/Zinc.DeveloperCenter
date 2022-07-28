@@ -34,7 +34,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
             // Assert
             var result = response.ReadAsJson<PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>>();
             result.Should().NotBeNull();
-            result.Items.Should().HaveCount(1);
+            result.Items.Should().HaveCount(3);
         }
 
         private async Task InsertData()
