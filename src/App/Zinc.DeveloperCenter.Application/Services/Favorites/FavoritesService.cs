@@ -20,13 +20,13 @@ namespace Zinc.DeveloperCenter.Application.Services.Favorites
         }
 
         /// <inheritdoc/>
-        public async Task AddFavorite(string tenantId, string applicationName, string filePath)
+        public async Task AddFavorite(string applicationName, string filePath)
         {
             await context.Connection().ExecuteAsync(
                 Sql.AddFavorite,
                 new
                 {
-                    tenantId = tenantId,
+                    tenantId = context.TenantId(),
                     applicationName = applicationName,
                     filePath = filePath,
                     userId = context.AccessToken().UserId,
@@ -34,13 +34,13 @@ namespace Zinc.DeveloperCenter.Application.Services.Favorites
         }
 
         /// <inheritdoc/>
-        public async Task RemoveFavorite(string tenantId, string applicationName, string filePath)
+        public async Task RemoveFavorite(string applicationName, string filePath)
         {
             await context.Connection().ExecuteAsync(
                 Sql.RemoveFavorite,
                 new
                 {
-                    tenantId = tenantId,
+                    tenantId = context.TenantId(),
                     applicationName = applicationName,
                     filePath = filePath,
                     userId = context.AccessToken().UserId,

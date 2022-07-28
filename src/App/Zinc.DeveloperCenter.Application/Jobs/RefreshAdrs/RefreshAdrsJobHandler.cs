@@ -104,37 +104,39 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
 
             var totalUpdates = 0;
 
-            var models = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, "Zinc.Templates")
+            // Get the template ADRs first since they have precedent
+            var apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, "Zinc.Templates")
                 .ConfigureAwait(false))
                 .ToHashSet();
 
             // GitHub doesn't like rapid-fire requests
             await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
-            var remainingModels = await FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
+            // Get the remaining ADRs
+            var additionalApiResults = await FindArchitectureDecisionRecords(tenantId).ConfigureAwait(false);
 
-            models.UnionWith(remainingModels);
+            apiResults.UnionWith(additionalApiResults);
 
-            foreach (var model in models)
+            foreach (var apiResult in apiResults)
             {
                 // GitHub doesn't like rapid-fire requests
                 await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
-                var key = string.Join('/', tenantId, model.ApplicationName, model.FilePath);
+                var key = string.Join('/', tenantId, apiResult.ApplicationName, apiResult.FilePath);
 
                 var adr = await adrRepository.Read(key).ConfigureAwait(false)
                     ?? new ArchitectureDecisionRecord(
                         tenantId,
-                        model.ApplicationName,
-                        model.FilePath,
+                        apiResult.ApplicationName,
+                        apiResult.FilePath,
                         null,
                         null,
                         null);
 
                 var contentModel = await gitHubApi.DownloadArchitectureDecisionRecord(
                     tenantId,
-                    model.ApplicationName,
-                    model.FilePath,
+                    apiResult.ApplicationName,
+                    apiResult.FilePath,
                     FileFormat.Raw).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(contentModel.Content))
@@ -176,9 +178,6 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs
                 {
                     break;
                 }
-
-                // GitHub doesn't like rapid-fire requests
-                await Task.Delay(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
                 apiResults = (await gitHubApi.FindArchitectureDecisionRecords(tenantId, page, pageSize)
                     .ConfigureAwait(false))

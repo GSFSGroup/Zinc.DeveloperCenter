@@ -16,7 +16,7 @@ namespace Zinc.DeveloperCenter.Application.Commands.AddFavorite
 
         public async Task<Unit> Handle(AddFavoriteCommand request, CancellationToken cancellationToken)
         {
-            await favorites.AddFavorite(request.TenantId, request.ApplicationName, request.FilePath).ConfigureAwait(false);
+            await favorites.AddFavorite(request.ApplicationName, request.FilePath).ConfigureAwait(false);
             return Unit.Value;
         }
     }

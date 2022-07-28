@@ -10,19 +10,17 @@ namespace Zinc.DeveloperCenter.Domain.Services.MostViewed
         /// <summary>
         /// Gets the view count for an ADR.
         /// </summary>
-        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
         /// <param name="filePath">The ADR file path.</param>
         /// <returns>The total ADR views.</returns>
-        Task<int> GetViewCount(string tenantId, string applicationName, string filePath);
+        Task<int> GetViewCount(string applicationName, string filePath);
 
         /// <summary>
         /// Updates the view counter for an ADR and returns the total views.
         /// </summary>
-        /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="applicationName">The application name.</param>
         /// <param name="filePath">The ADR file path.</param>
         /// <returns>The total ADR views.</returns>
-        Task<int> UpdateViewCount(string tenantId, string applicationName, string filePath);
+        Task<int> UpdateViewCount(string applicationName, string filePath);
     }
 }

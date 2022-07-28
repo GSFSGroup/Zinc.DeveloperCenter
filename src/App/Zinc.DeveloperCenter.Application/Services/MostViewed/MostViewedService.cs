@@ -1,6 +1,7 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
+using RedLine.Domain;
 using Zinc.DeveloperCenter.Domain.Services.MostViewed;
 
 namespace Zinc.DeveloperCenter.Application.Services.MostViewed
@@ -8,37 +9,37 @@ namespace Zinc.DeveloperCenter.Application.Services.MostViewed
     /// <inheritdoc/>
     public class MostViewedService : IMostViewedService
     {
-        private readonly IDbConnection connection;
+        private readonly IActivityContext context;
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="connection">The database connection.</param>
-        public MostViewedService(IDbConnection connection)
+        /// <param name="context">The activity context for the current request.</param>
+        public MostViewedService(IActivityContext context)
         {
-            this.connection = connection;
+            this.context = context;
         }
 
         /// <inheritdoc/>
-        public async Task<int> GetViewCount(string tenantId, string applicationName, string filePath)
+        public async Task<int> GetViewCount(string applicationName, string filePath)
         {
-            return await connection.ExecuteScalarAsync<int>(
+            return await context.Connection().ExecuteScalarAsync<int>(
                 Sql.GetViewCount,
-                new { tenantId, applicationName, filePath }).ConfigureAwait(false);
+                new { tenantId = context.TenantId(), applicationName = applicationName, filePath = filePath }).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
-        public async Task<int> UpdateViewCount(string tenantId, string applicationName, string filePath)
+        public async Task<int> UpdateViewCount(string applicationName, string filePath)
         {
-            var result = await connection.ExecuteScalarAsync<int>(
+            var result = await context.Connection().ExecuteScalarAsync<int>(
                 Sql.UpdateViewCount,
-                new { tenantId, applicationName, filePath }).ConfigureAwait(false);
+                new { tenantId = context.TenantId(), applicationName = applicationName, filePath = filePath }).ConfigureAwait(false);
 
             if (result == 0)
             {
-                result = await connection.ExecuteScalarAsync<int>(
+                result = await context.Connection().ExecuteScalarAsync<int>(
                     Sql.InsertViewCount,
-                    new { tenantId, applicationName, filePath }).ConfigureAwait(false);
+                    new { tenantId = context.TenantId(), applicationName = applicationName, filePath = filePath }).ConfigureAwait(false);
             }
 
             return result;
