@@ -25,7 +25,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXFavorites
         public override string ActivityDisplayName => "Get a user's favorite ADRs";
 
         /// <inheritdoc/>
-        public override string ActivityDescription => "Retrieves the list of favorite ADRs for a user.";
+        public override string ActivityDescription => "Retrieves the list of favorite ADRs for the current user.";
 
         /// <summary>
         /// The user id who's favorites are being searched.

@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RedLine.Application;
-using Zinc.DeveloperCenter.Application.Services;
 using Zinc.DeveloperCenter.Application.Services.Favorites;
 using Zinc.DeveloperCenter.Application.Services.GitHub;
 using Zinc.DeveloperCenter.Application.Services.MostViewed;
@@ -36,26 +35,10 @@ namespace Zinc.DeveloperCenter.Application
                 .AddFluentValidation<AssemblyMarker>()
                 .AddAutoMapper(typeof(AssemblyMarker))
                 .AddActivities<AssemblyMarker>()
-                .AddApiServices(configuration)
                 .AddScoped<IApplicationRepository, ApplicationRepository>()
                 .AddScoped<IArchitectureDecisionRecordRepository, ArchitectureDecisionRecordRepository>()
                 .AddScoped<IMostViewedService, MostViewedService>()
                 .AddScoped<IFavoritesService, FavoritesService>()
-                ;
-
-            return services;
-        }
-
-        /// <summary>
-        /// Adds the api services to the container.
-        /// </summary>
-        /// <param name="services">The IoC container.</param>
-        /// <param name="configuration">The GitHub Service Configuration.</param>
-        /// <returns><see cref="IServiceCollection"/>.</returns>
-        public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
-        {
-            // GitHub
-            services
                 .AddScoped(_ => configuration.GetSection(GitHubApiConfig.SectionName).Get<GitHubApiConfig>())
                 .AddHttpClient<IGitHubApiService, GitHubApiService>(client =>
                 {
@@ -63,20 +46,6 @@ namespace Zinc.DeveloperCenter.Application
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
                     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("RedLine", "1.0"));
                 });
-
-            var gitHubServiceConfig = configuration
-                .GetSection(GitHubServiceConfig.SectionName)
-                .Get<GitHubServiceConfig>();
-
-            if (gitHubServiceConfig.Enabled)
-            {
-                services
-                    .AddHttpClient<IGitHubService, GitHubService>();
-            }
-            else
-            {
-                services.AddTransient<IGitHubService, FakeGitHubService>();
-            }
 
             return services;
         }

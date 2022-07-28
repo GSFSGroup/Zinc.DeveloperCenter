@@ -33,6 +33,6 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
         public override string ActivityDisplayName => "Search for ADRs";
 
         /// <inheritdoc/>
-        public override string ActivityDescription => "Search for ADRs across all applications.";
+        public override string ActivityDescription => "Performs a full-text search for ADRs across all applications.";
     }
 }

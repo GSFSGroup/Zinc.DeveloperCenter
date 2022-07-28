@@ -36,7 +36,8 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXMostUsed.GetMostViewed
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
                     TotalViews = x.TotalViews,
-                });
+                })
+                .OrderByDescending(x => x.TotalViews);
 
             return new PageableResult<UXGetMostViewedQueryModel>(items);
         }

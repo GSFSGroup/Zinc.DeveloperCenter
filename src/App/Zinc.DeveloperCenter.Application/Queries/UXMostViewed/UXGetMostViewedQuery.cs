@@ -22,7 +22,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXMostUsed.GetMostViewed
         }
 
         /// <inheritdoc/>
-        public override string ActivityDisplayName => "Get most viewed ADRs";
+        public override string ActivityDisplayName => "Get the most viewed ADRs";
 
         /// <inheritdoc/>
         public override string ActivityDescription => "Retrieves the top N most viewed ADRs.";

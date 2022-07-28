@@ -35,7 +35,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrSearch
                     TitleDisplay = x.TitleDisplay,
                     TotalViews = x.TotalViews,
                 })
-                .OrderBy(x => x.Number);
+                .OrderBy(x => x.ApplicationName).ThenBy(x => x.Number);
 
             return new PageableResult<UXSearchArchitectureDecisionRecordsQueryModel>(items);
         }

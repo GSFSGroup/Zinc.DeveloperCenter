@@ -40,6 +40,6 @@ namespace Zinc.DeveloperCenter.Application.Commands.AddFavorite
         public override string ActivityDisplayName => "Add a favorite ADR";
 
         /// <inheritdoc/>
-        public override string ActivityDescription => "Add a favorite ADR for the current user.";
+        public override string ActivityDescription => "Adds a favorite ADR for the current user.";
     }
 }

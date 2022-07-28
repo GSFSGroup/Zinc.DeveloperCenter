@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
 using RedLine.Domain;
-using Zinc.DeveloperCenter.Application.Jobs.RefreshAdrs;
+using Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated;
 using Zinc.DeveloperCenter.Host.Jobs.Configuration;
 using Zinc.DeveloperCenter.Host.Jobs.HealthChecks;
 
@@ -16,24 +16,24 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
     /// A Quartz job used to refresh the database with ADR details stored in the GSFSGroup GitHub repository.
     /// </summary>
     [DisallowConcurrentExecution]
-    internal class RefreshGsfsGroupAdrsJob : IJob
+    internal class RefreshGsfsGroupAdrsLastUpdatedJob : IJob
     {
-        internal static readonly string SectionName = $"Jobs:{nameof(RefreshGsfsGroupAdrsJob)}";
+        internal static readonly string SectionName = $"Jobs:{nameof(RefreshGsfsGroupAdrsLastUpdatedJob)}";
         private readonly IMediator mediator;
         private readonly string tenantId = "GSFSGroup";
         private readonly Guid correlationId;
-        private readonly ILogger<RefreshGsfsGroupAdrsJob> logger;
+        private readonly ILogger<RefreshGsfsGroupAdrsLastUpdatedJob> logger;
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        /// <param name="mediator">The <see cref="IMediator"/> used to send the <see cref="RefreshAdrsJob"/>.</param>
+        /// <param name="mediator">The <see cref="IMediator"/> used to send the <see cref="RefreshAdrsLastUpdatedJob"/>.</param>
         /// <param name="correlationId">The <see cref="ICorrelationId"/> for the request.</param>
         /// <param name="logger">A diagnostic logger.</param>
-        public RefreshGsfsGroupAdrsJob(
+        public RefreshGsfsGroupAdrsLastUpdatedJob(
             IMediator mediator,
             ICorrelationId correlationId,
-            ILogger<RefreshGsfsGroupAdrsJob> logger)
+            ILogger<RefreshGsfsGroupAdrsLastUpdatedJob> logger)
         {
             this.mediator = mediator;
             this.correlationId = correlationId.Value;
@@ -49,11 +49,11 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
         {
             try
             {
-                var activity = new RefreshAdrsJob(tenantId, correlationId);
+                var activity = new RefreshAdrsLastUpdatedJob(tenantId, correlationId);
 
                 await mediator.Send(activity).ConfigureAwait(false);
 
-                JobHealthCheck<RefreshGsfsGroupAdrsJob>.Heartbeat();
+                JobHealthCheck<RefreshGsfsGroupAdrsLastUpdatedJob>.Heartbeat();
             }
             catch (Exception e)
             {
@@ -89,15 +89,15 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
                 return;
             }
 
-            quartz.ScheduleJob<RefreshGsfsGroupAdrsJob>(
+            quartz.ScheduleJob<RefreshGsfsGroupAdrsLastUpdatedJob>(
                 trigger => trigger
-                    .WithIdentity($"{nameof(RefreshGsfsGroupAdrsJob)}Trigger")
+                    .WithIdentity($"{nameof(RefreshGsfsGroupAdrsLastUpdatedJob)}Trigger")
                     .StartAt(DateTimeOffset.UtcNow.AddSeconds(12))
                     .WithCronSchedule(jobConfig.CronSchedule)
-                    .WithDescription($"A cron-based trigger for the {nameof(RefreshGsfsGroupAdrsJob)}."),
+                    .WithDescription($"A cron-based trigger for the {nameof(RefreshGsfsGroupAdrsLastUpdatedJob)}."),
                 job => job
-                    .WithIdentity(nameof(RefreshGsfsGroupAdrsJob))
-                    .WithDescription("The job used to refresh the database with ADR details stored in the GSFSGroup GitHub repository."));
+                    .WithIdentity(nameof(RefreshGsfsGroupAdrsLastUpdatedJob))
+                    .WithDescription("The job used to refresh the last updated details of ADRs stored in the GSFSGroup GitHub repository."));
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs
             }
 
             healthChecks.AddAsyncCheck(
-                typeof(RefreshGsfsGroupAdrsJob).FullName ?? throw new NullReferenceException(),
-                () => new JobHealthCheck<RefreshGsfsGroupAdrsJob>(
+                typeof(RefreshGsfsGroupAdrsLastUpdatedJob).FullName ?? throw new NullReferenceException(),
+                () => new JobHealthCheck<RefreshGsfsGroupAdrsLastUpdatedJob>(
                     jobConfig.DegradedThreshold,
                     jobConfig.UnhealthyThreshold).CheckAsync());
         }
