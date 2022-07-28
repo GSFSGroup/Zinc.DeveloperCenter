@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { LoadingOverlayService } from '~/core/loading-module/services/loading-overlay/loading-overlay.service';
+import { AdrSummary } from '~/models/adr-summary.interface';
 import { Page } from '~/models/page.interface';
 import { RepositoryListComponent } from '~/models/repo.interface';
 import { GitHubRepoService } from '~/shared/services/github-repo.service';
@@ -23,6 +24,12 @@ export class RepoListComponent implements OnInit, OnDestroy {
     public expanded: { [repository: string]: boolean } = {};
 
     public isSideBarOpen = false;
+
+    // The list of ADRs for a specific repo.
+    public searchedAdrs!: Page<AdrSummary>;
+    public searchedRepos!: Page<RepoListComponent>;
+    public hasSearched = false;
+    public searchQuery = '';
 
     private destroyed$ = new Subject<void>();
 
@@ -90,10 +97,24 @@ export class RepoListComponent implements OnInit, OnDestroy {
         }
     }
 
+    // THIS IS PENDING, may remove this.
     // search functions will search Adrs on one of four options:
     // title, number, text body, or all.
 
-    public searchFor(searchForThis: string): void {
-        this.searchingFor = searchForThis;
+    public filterSearchBy(filterSearchByThis: string): void {
+        this.searchingFor = filterSearchByThis;
+    }
+
+    public searchFor(searchQuery: string): void {
+        if (searchQuery !== '') {
+            this.repoService.searchApps(searchQuery)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(foundAdrs => {
+                    this.searchedAdrs = foundAdrs;
+                    if (foundAdrs.items.length) {
+                        this.hasSearched = true;
+                    }
+                });
+        }
     }
 }

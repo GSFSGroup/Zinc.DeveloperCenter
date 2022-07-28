@@ -24,6 +24,14 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
     public expanded = false;
 
+    // The list of ADRs returned by a search query.
+    // This will be empty until a search is called that returns ADRs.
+    @Input()
+    public searchedAdrs!: Page<AdrSummary>;
+
+    @Input()
+    public searchAccordion = false;
+
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
 
@@ -43,7 +51,11 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     }
 
     public ngOnChanges(): void {
-        this.getAppAdrs();
+        if (typeof(this.searchedAdrs) !== 'undefined' && this.searchedAdrs.items.length) {
+            this.adrs = this.searchedAdrs;
+        } else {
+            this.getAppAdrs();
+        }
     }
 
     private getAppAdrs(): void {
@@ -52,10 +64,6 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe(adrs => {
                     this.adrs = adrs;
-                    console.log(this.adrs.items[0].number);
-                    console.log(this.adrs.items[0].numberDisplay);
-                    console.log(this.adrs.items[1].number);
-                    console.log(this.adrs.items[1].numberDisplay);
                 });
         }
     }
