@@ -1,15 +1,13 @@
+using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using RedLine.Extensions.Hosting;
 using RedLine.Extensions.Hosting.Jobs;
-using System.Linq;
-using System.Reflection;
 using Zinc.DeveloperCenter.Application;
 using Zinc.DeveloperCenter.Data;
-using Zinc.DeveloperCenter.Host.Jobs.Outbox;
-using Zinc.DeveloperCenter.Host.Jobs.RefreshAdrs;
 
 namespace Zinc.DeveloperCenter.Host.Jobs
 {
