@@ -39,6 +39,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Jobs.HealthCheckTests
             // Jobs:
             // 8. OutboxJob
             // 9. RefreshGsfsGroupAdrsJob
+            // 10.RefreshGsfsGroupAdrsLastUpdatedJob
 
             var jobCount = typeof(Host.Jobs.AssemblyMarker).Assembly.GetTypes()
                 .Count(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableTo(typeof(IJob)));
