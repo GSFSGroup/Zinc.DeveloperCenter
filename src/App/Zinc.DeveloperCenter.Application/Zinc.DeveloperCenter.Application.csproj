@@ -14,24 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Services\GitHubApiGetReposResponse.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Services\GitHubApiGetReposResponse.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="IdentityModel" Version="5.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MapperProfiles\" />
-    <Folder Include="Commands\" />
     <Folder Include="Messages\" />
-    <Folder Include="Jobs\" />
     <Folder Include="Notifications\" />
   </ItemGroup>
 

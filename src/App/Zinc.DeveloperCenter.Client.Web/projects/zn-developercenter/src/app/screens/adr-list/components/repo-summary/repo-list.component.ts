@@ -18,8 +18,11 @@ export class RepoListComponent implements OnInit, OnDestroy {
 
     public sortedOn = 'number';
     public sortAsc = true;
+    public searchingFor = 'all';
 
     public expanded: { [repository: string]: boolean } = {};
+
+    public isSideBarOpen = false;
 
     private destroyed$ = new Subject<void>();
 
@@ -29,7 +32,7 @@ export class RepoListComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit(): void {
-        this.getGSFSGitHubReposInit();
+        this.getGSFSAppsInit();
     }
 
     public ngOnDestroy(): void {
@@ -37,20 +40,24 @@ export class RepoListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public getGSFSGitHubReposInit(): void {
+    public getGSFSAppsInit(): void {
         this.loadingService.show('Loading');
-        this.repoService.listRepos()
+        this.repoService.listApps()
             .pipe(takeUntil(this.destroyed$))
             .subscribe(repos => {
-                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.dotName] = false);
+                repos.items.forEach((item: RepositoryListComponent) => this.expanded[item.applicationName] = false);
                 this.repos = repos;
                 this.loadingService.hide();
                 this.fetchedRepos = true;
             });
     }
 
-    public repoToggle(repoDotName: string, openedState: boolean) {
-        this.expanded[repoDotName] = openedState;
+    public repoToggle(applicationName: string, openedState: boolean) {
+        this.expanded[applicationName] = openedState;
+    }
+
+    public toggleSideBarClicked() {
+        this.isSideBarOpen = !this.isSideBarOpen;
     }
 
     // sort functions will sort Adrs on one of three options: date, number, or title,
@@ -81,5 +88,12 @@ export class RepoListComponent implements OnInit, OnDestroy {
             this.sortAsc = true;
             this.sortedOn = 'title';
         }
+    }
+
+    // search functions will search Adrs on one of four options:
+    // title, number, text body, or all.
+
+    public searchFor(searchForThis: string): void {
+        this.searchingFor = searchForThis;
     }
 }

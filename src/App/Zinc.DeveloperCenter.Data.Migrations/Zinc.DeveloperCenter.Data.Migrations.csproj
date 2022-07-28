@@ -8,9 +8,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData.sql" />
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData_adr_01.md" />
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData_adr_02.md" />
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData_adr_03.md" />
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData_adr_04.md" />
+    <None Remove="EmbeddedResources\Migration_2022072101_TestData_adr_05.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData.sql" />
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData_adr_01.md" />
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData_adr_02.md" />
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData_adr_03.md" />
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData_adr_04.md" />
+    <EmbeddedResource Include="EmbeddedResources\Migration_2022072101_TestData_adr_05.md" />
   </ItemGroup>
 
   <ItemGroup>

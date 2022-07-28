@@ -17,8 +17,7 @@ metadata:
     flux.weave.works/automated_msg: test
     flux.weave.works/tag.migrations: regexp:^[a-f0-9]{7,40}$
     flux.weave.works/tag.zn-developercenter-pod: regexp:^[a-f0-9]{7,40}$
-    # TODO: Uncomment next line when deploying to preprod. It makes sure that new images for zn-developercenter gets deployed automatically.
-    # fluxcd.io/automated: 'true'
+    fluxcd.io/automated: 'true'
 spec:
   selector:
     matchLabels:
@@ -45,19 +44,15 @@ spec:
         prometheus.io/scrape: 'true'
         ad.datadoghq.com/zn-developercenter-pod.check_names: '[ "prometheus" ]'
         ad.datadoghq.com/zn-developercenter-pod.init_configs: '[ {} ]'
-        ad.datadoghq.com/zn-developercenter-pod.instances: '[
-          {
-            "prometheus_url": "http://%%host%%:5000/metrics",
-            "namespace": "redline",
-            "metrics": [ "*" ]
-          }
-        ]'
-        ad.datadoghq.com/zn-developercenter-pod.logs: '[ { "source": "zn-developercenter", "service":
-          "zn-developercenter"} ]'
+        ad.datadoghq.com/zn-developercenter-pod.instances: '[ { "prometheus_url":
+          "http://%%host%%:5000/metrics", "namespace": "redline", "metrics": [ "*"
+          ] } ]'
+        ad.datadoghq.com/zn-developercenter-pod.logs: '[ { "source": "zn-developercenter",
+          "service": "zn-developercenter"} ]'
     spec:
       initContainers:
       - name: migrations
-        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        image: quay.io/gsfsgroup/zn-developercenter:e6ae459
         env:
         - name: POSTGRES_CERT
           value: "/aws-certs/us-east-1-bundle.pem"
@@ -94,7 +89,7 @@ spec:
           readOnly: true
       containers:
       - name: zn-developercenter-pod
-        image: quay.io/gsfsgroup/zn-developercenter:be764a5
+        image: quay.io/gsfsgroup/zn-developercenter:e6ae459
         ports:
         - name: http
           containerPort: 5000
@@ -180,14 +175,14 @@ spec:
             memory: "300Mi"
             cpu: "500m"
       imagePullSecrets:
-      - name: quay-registry-pull-secret
+      - name: internal-registry-pull-secret
       volumes:
       - name: authn-public-key
         configMap:
           name: kr-authentication-svc-cert-public
       - name: cluster-ca-cert-bundle
-        configMap:
-          name: hawking-dimebox-io-ca-bundle
+        secret:
+          secretName: internal-ca-bundle
       - name: aws-ca-cert-bundle
         configMap:
           name: aws-ca-cert-bundle
@@ -197,3 +192,26 @@ spec:
       - name: nsb-license-secret
         secret:
           secretName: nsb-license
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: zn-developercenter-svc
+spec:
+  commonName: zn-developercenter-svc.default.svc.cluster.local
+  secretName: zn-developercenter-svc-cert-private
+  duration: 2160h
+  renewBefore: 24h
+  dnsNames:
+    - zn-developercenter-svc.default.svc.cluster.local
+  privateKey:
+    algorithm: RSA
+    size: 4096
+  issuerRef:
+    name: internal-ca-issuer
+    kind: Issuer
+    group: cert-manager.io
+  secretTemplate:
+    labels:
+      app: zn-developercenter
+      platform: redline

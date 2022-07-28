@@ -2,19 +2,22 @@
     <span>There are no ADRs in this repository.</span>
 </div>
 
-<ul class="item-list padding-all-24" id="adr-summary-list" *ngIf="adrs?.items?.length">
+<ul class="item-list padding-all-24 margin-right-36" id="adr-summary-list" *ngIf="adrs?.items?.length">
     <li class="list-item transform-on-hover pointer" *ngFor="let adr of adrs?.items" (click)="adrLink.click()">
         <div class="item-summary item-content">
-            <a id="adr-{{adr.adrTitle}}"
-                routerLink="adr-render/{{adr.neatTitle}}/{{adr.numberString}}/{{repoDotName}}/download-url/{{encodeUrl(adr.downloadUrl)}}/html-url/{{encodeUrl(adr.htmlUrl)}}"
+            <a id="adr-{{adr.title}}"
+                routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
                 #adrLink></a>
             <h3 class="item-title margin-0 capitalize clickable-text">
-                {{adr.neatTitle}}
+                {{adr.titleDisplay}}
+                <button class="float-right" type="button" mat-icon-button>
+                    <mat-icon>bookmark_border</mat-icon>
+                </button>
             </h3>
             <span class="item-detail margin-bottom-12">
-                {{adr.numberString}}
+                {{adr.numberDisplay}}
                 <br>
-                Last updated on {{adr.lastUpdatedDateString}}
+                Last updated on {{adr.lastUpdatedOn}} by {{adr.lastUpdatedBy}}
             </span>
             <span style="clear: both"></span>
         </div>

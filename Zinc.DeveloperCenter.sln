@@ -88,6 +88,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedLine.UnitTests", "tests\RedLine\RedLine.UnitTests\RedLine.UnitTests.csproj", "{CA008958-D115-43EA-AE9A-4422C397339A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{DA421547-985F-4A86-B23B-525A0DBDDDCD}"
+	ProjectSection(SolutionItems) = preProject
+		docs\App\adr-0001-github-api.md = docs\App\adr-0001-github-api.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

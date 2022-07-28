@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +8,6 @@ using RedLine.Extensions.Hosting;
 using RedLine.Extensions.Hosting.Jobs;
 using Zinc.DeveloperCenter.Application;
 using Zinc.DeveloperCenter.Data;
-using Zinc.DeveloperCenter.Host.Jobs.Outbox;
 
 namespace Zinc.DeveloperCenter.Host.Jobs
 {
@@ -49,16 +50,44 @@ namespace Zinc.DeveloperCenter.Host.Jobs
             app.UseRedLineJobHost();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "By design.")]
         private void WithJobs(IServiceCollectionQuartzConfigurator quartz)
         {
-            OutboxJob.ConfigureJob(quartz, Configuration);
-            /* Add future jobs here */
+            var jobs = typeof(AssemblyMarker).Assembly.GetTypes()
+                .Where(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableTo(typeof(IJob)))
+                .ToList();
+
+            foreach (var job in jobs)
+            {
+                var configureMethod = job.GetMethod("ConfigureJob", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+                if (configureMethod == null)
+                {
+                    throw new System.InvalidOperationException($"The job '{job.Name}' does not have a static ConfigureJob() method.");
+                }
+
+                configureMethod!.Invoke(job, new object[] { quartz, Configuration });
+            }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3011:Reflection should not be used to increase accessibility of classes, methods, or fields", Justification = "By design.")]
         private void WithCustomHealthChecks(IHealthChecksBuilder healthChecks)
         {
-            OutboxJob.ConfigureHealthCheck(healthChecks, Configuration);
-            /* Add future job health checks here */
+            var jobs = typeof(AssemblyMarker).Assembly.GetTypes()
+                .Where(x => x.IsClass && !x.IsAbstract && !x.IsGenericTypeDefinition && x.IsAssignableTo(typeof(IJob)))
+                .ToList();
+
+            foreach (var job in jobs)
+            {
+                var configureMethod = job.GetMethod("ConfigureHealthCheck", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+
+                if (configureMethod == null)
+                {
+                    throw new System.InvalidOperationException($"The job '{job.Name}' does not have a static ConfigureHealthCheck() method.");
+                }
+
+                configureMethod!.Invoke(job, new object[] { healthChecks, Configuration });
+            }
         }
     }
 }

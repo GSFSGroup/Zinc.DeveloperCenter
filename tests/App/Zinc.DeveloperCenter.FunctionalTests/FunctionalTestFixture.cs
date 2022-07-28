@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using RedLine.Data;
+using Xunit.Abstractions;
 using Zinc.DeveloperCenter.Data.Migrations;
 
 namespace Zinc.DeveloperCenter.FunctionalTests
@@ -13,6 +14,8 @@ namespace Zinc.DeveloperCenter.FunctionalTests
     /// </summary>
     public class FunctionalTestFixture : IDisposable
     {
+        private readonly TestOutputSink sink = new TestOutputSink();
+
         /// <summary>
         /// This constructor initializes the configuration settings in the appsettings.test.json file in the
         /// root of the project. It also registers the ServiceCollection extensions in the Application layer
@@ -34,6 +37,16 @@ namespace Zinc.DeveloperCenter.FunctionalTests
         /// This is a reference to the ServiceProvider in case a service needs to be retrieved that is not provided by the fixture.
         /// </summary>
         public IServiceProvider ServiceProvider { get; }
+
+        public void RegisterTestOutputHelper(ITestOutputHelper output)
+        {
+            sink.Register(output);
+        }
+
+        public void UnregisterTestOutputHelper()
+        {
+            sink.Unregister();
+        }
 
         /// <summary>
         /// This method destroys the database created in the constructor after all tests have run.

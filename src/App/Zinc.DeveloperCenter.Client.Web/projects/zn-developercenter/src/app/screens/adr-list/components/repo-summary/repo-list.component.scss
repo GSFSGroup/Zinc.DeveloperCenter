@@ -65,3 +65,22 @@ mat-form-field {
     margin-top: -0.25em;
   }
 }
+
+mat-sidenav {
+  width: 50%;
+}
+
+mat-sidenav-content {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr max-content;
+  grid-template-rows: 1fr;
+  justify-items: stretch;
+
+  .right-docked-toolbar {
+    grid-column: 2;
+    position: unset;
+    left: unset;
+    top: unset;
+  }
+}
