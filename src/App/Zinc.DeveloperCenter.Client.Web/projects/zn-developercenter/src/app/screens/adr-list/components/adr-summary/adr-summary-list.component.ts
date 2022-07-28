@@ -52,9 +52,9 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
                 .pipe(takeUntil(this.destroyed$))
                 .subscribe(adrs => {
                     this.adrs = adrs;
-                    console.log(this.adrs.items[0].numberVal);
+                    console.log(this.adrs.items[0].number);
                     console.log(this.adrs.items[0].numberDisplay);
-                    console.log(this.adrs.items[1].numberVal);
+                    console.log(this.adrs.items[1].number);
                     console.log(this.adrs.items[1].numberDisplay);
                 });
         }

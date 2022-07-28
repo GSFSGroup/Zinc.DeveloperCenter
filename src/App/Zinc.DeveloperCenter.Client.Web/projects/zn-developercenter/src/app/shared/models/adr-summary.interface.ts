@@ -2,7 +2,8 @@ export interface AdrSummary {
     applicationName: string;
     title: string;
     titleDisplay: string;
-    numberVal: number;
+    // eslint-disable-next-line id-blacklist
+    number: number;
     numberDisplay: string;
     filePath: string;
     lastUpdatedBy: string;

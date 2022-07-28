@@ -43,7 +43,7 @@ There are several standard rounding rules available for rounding floating point 
 
 The rounding algorithm of [JavaScript's `Math.round()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round) does *NOT* conform to any of the 5 rounding rules in IEEE 754, does not accept a decimals parameter, and only returns an integer.
 
-`NumberVal.toFixed()` uses a different algorithm than `Math.round()`, but still doesn't conform to any of the 5 rounding rules in IEEE 754. It only returns a string, not a NumberVal.
+`Number.toFixed()` uses a different algorithm than `Math.round()`, but still doesn't conform to any of the 5 rounding rules in IEEE 754. It only returns a string, not a Number.
 
 As expected, JavaScript is the strangest by a [sheppey](https://en.wikipedia.org/wiki/List_of_humorous_units_of_measurement#Length).
 

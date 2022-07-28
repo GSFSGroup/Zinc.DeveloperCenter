@@ -31,7 +31,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXFavorites
                     FilePath = x.FilePath,
                     LastUpdatedBy = x.LastUpdatedBy,
                     LastUpdatedOn = x.LastUpdatedOn,
-                    NumberVal = x.NumberVal,
+                    Number = x.Number,
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,

@@ -23,7 +23,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.GitHubADR.Models
         /// <summary>
         /// Adr number: ex. adr-0012, number is 12.
         /// </summary>
-        public int NumberVal { get; init; }
+        public int Number { get; init; }
 
         /// <summary>
         /// Adr number string: ex. adr-0012.

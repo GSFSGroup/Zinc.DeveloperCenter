@@ -32,13 +32,13 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.GetArchitectureDeci
                     FilePath = x.FilePath,
                     LastUpdatedBy = x.LastUpdatedBy,
                     LastUpdatedOn = x.LastUpdatedOn,
-                    NumberVal = x.NumberVal,
+                    Number = x.Number,
                     NumberDisplay = x.NumberDisplay,
                     Title = x.Title,
                     TitleDisplay = x.TitleDisplay,
                     TotalViews = x.TotalViews,
                 })
-                .OrderBy(x => x.NumberVal);
+                .OrderBy(x => x.Number);
 
             return new PageableResult<UXAdrListGetArchitectureDecisionRecordsQueryModel>(items);
         }

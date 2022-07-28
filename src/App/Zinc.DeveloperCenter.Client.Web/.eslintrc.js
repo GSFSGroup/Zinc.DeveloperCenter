@@ -165,7 +165,7 @@
         "id-blacklist": [
           "error",
           "any",
-          "NumberVal",
+          "Number",
           "number",
           "String",
           "string",

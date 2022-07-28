@@ -60,7 +60,7 @@
                     <button mat-menu-item id="search-number" (click)="searchFor('number')">
                         <mat-icon *ngIf="searchingFor === 'number'" class="arrow-icon">search</mat-icon>
                         <span>
-                            NumberVal
+                            Number
                         </span>
                     </button>
                     <button mat-menu-item id="search-title" (click)="searchFor('title')">
@@ -102,7 +102,7 @@
                         <mat-icon *ngIf="!sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="sortAsc && sortedOn === 'number'" class="arrow-icon">arrow_downward</mat-icon>
                         <span>
-                            NumberVal
+                            Number
                         </span>
                     </button>
                     <button mat-menu-item id="sort-by-name-action" (click)="sortByTitle(); $event.stopPropagation()">
