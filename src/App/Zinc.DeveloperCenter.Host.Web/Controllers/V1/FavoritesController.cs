@@ -10,7 +10,7 @@ using Zinc.DeveloperCenter.Host.Web.Models;
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 {
     /// <summary>
-    /// An api that provides endpoints for retrieving architecture decision record data.
+    /// An api used to manage user favorites.
     /// </summary>
     [ApiController]
     [ApiVersion("1.0")]

@@ -10,7 +10,7 @@ using Zinc.DeveloperCenter.Application.Queries.UXFavorites;
 namespace Zinc.DeveloperCenter.Host.Web.Controllers.V1
 {
     /// <summary>
-    /// An api that provides endpoints for adding and removing ADR favorites.
+    /// An api for retrieving user favorites.
     /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
