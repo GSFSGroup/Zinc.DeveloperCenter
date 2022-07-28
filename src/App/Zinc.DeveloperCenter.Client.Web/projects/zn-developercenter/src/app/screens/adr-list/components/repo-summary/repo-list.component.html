@@ -36,11 +36,10 @@
                 </mat-accordion>
 
                 <mat-accordion>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false">
                         <mat-expansion-panel-header class="panel-header">
                             <mat-panel-title class="panel-title">
                                 <mat-icon>help_outline</mat-icon>
-                                Help
                             </mat-panel-title>
                             <mat-panel-description class="panel-header">
                                 Tips for Developer Center.
@@ -48,12 +47,8 @@
                         </mat-expansion-panel-header>
 
                         <ul class="item-list padding-all-24 margin-right-36" id="help-list">
-                            <mat-divider></mat-divider>
-                            <li class="list-item transform-on-hover pointer">
+                            <li class="list-item transform-on-hover pointer help-item">
                                 <div class="item-summary item-content">
-                                    <!-- <a id="adr-{{adr.title}}"
-                                        routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
-                                        #adrLink></a> -->
                                     <h3 class="item-title margin-0 capitalize clickable-text">
                                         Searching
                                     </h3>
@@ -65,12 +60,8 @@
                                     <span style="clear: both"></span>
                                 </div>
                             </li>
-                            <mat-divider></mat-divider>
-                            <li class="list-item transform-on-hover pointer">
+                            <li class="list-item transform-on-hover pointer help-item">
                                 <div class="item-summary item-content">
-                                    <!-- <a id="adr-{{adr.title}}"
-                                        routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
-                                        #adrLink></a> -->
                                     <h3 class="item-title margin-0 capitalize clickable-text">
                                         GitHub Data
                                     </h3>
@@ -82,7 +73,6 @@
                                     <span style="clear: both"></span>
                                 </div>
                             </li>
-                            <mat-divider></mat-divider>
                         </ul>
 
                     </mat-expansion-panel>
@@ -190,8 +180,8 @@
                             </mat-panel-description>
                         </mat-expansion-panel-header>
 
-                        <app-adr-summary-list #appAdrSummaryList [searchAccordion]="true" [searchedAdrs]="searchedAdrs" [sortedOn]="sortedOn"
-                            [sortAsc]="sortAsc">
+                        <app-adr-summary-list #appAdrSummaryList [searchAccordion]="true" [searchedAdrs]="searchedAdrs"
+                            [sortedOn]="sortedOn" [sortAsc]="sortAsc">
                         </app-adr-summary-list>
 
                     </mat-expansion-panel>
