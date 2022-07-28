@@ -48,7 +48,7 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAdrListCont
             result2.Content.Should().NotBeEmpty();
             result2.ContentUrl.Should().NotBeEmpty();
 
-            var viewCount = await GetRequiredService<IMostViewedService>().GetViewCount(applicationName, filePath).ConfigureAwait(false);
+            var viewCount = await GetRequiredService<IMostViewedService>().GetViewCount(TenantId, applicationName, filePath).ConfigureAwait(false);
             viewCount.Should().Be(2);
 
             (await GetRequiredService<IArchitectureDecisionRecordRepository>()

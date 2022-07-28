@@ -45,7 +45,7 @@ namespace Zinc.DeveloperCenter.Application.Queries.UXAdrList.DownloadArchitectur
 
             try
             {
-                await mostViewedService.UpdateViewCount(request.ApplicationName, request.FilePath)
+                await mostViewedService.UpdateViewCount(request.TenantId, request.ApplicationName, request.FilePath)
                     .ConfigureAwait(false);
             }
             catch (Exception e)
