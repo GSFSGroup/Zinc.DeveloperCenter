@@ -25,7 +25,8 @@ namespace Zinc.DeveloperCenter.FunctionalTests.Application.RefreshAdrsJobTests
         {
         }
 
-        [Fact(Skip = "Long running test.")]
+        // [Fact(Skip = "Long running test.")]
+        [Fact]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S125:Sections of code should not be commented out", Justification = "By design.")]
         public async Task UpdateTheDatabaseAndLastUpdated()
         {
