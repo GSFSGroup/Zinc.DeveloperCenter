@@ -59,7 +59,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs
 
             foreach (var job in jobs)
             {
-                var configureMethod = job.GetMethod("ConfigureJob", BindingFlags.NonPublic | BindingFlags.Static);
+                var configureMethod = job.GetMethod("ConfigureJob", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 
                 if (configureMethod == null)
                 {
@@ -79,7 +79,7 @@ namespace Zinc.DeveloperCenter.Host.Jobs
 
             foreach (var job in jobs)
             {
-                var configureMethod = job.GetMethod("ConfigureHealthCheck", BindingFlags.NonPublic | BindingFlags.Static);
+                var configureMethod = job.GetMethod("ConfigureHealthCheck", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
 
                 if (configureMethod == null)
                 {

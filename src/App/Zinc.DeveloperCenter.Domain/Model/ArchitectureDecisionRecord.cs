@@ -77,7 +77,7 @@ namespace Zinc.DeveloperCenter.Domain.Model
         /// <summary>
         /// Gets the ADR number display format (adr-0001).
         /// </summary>
-        public string NumberDisplay => string.Format($"adr-{0}", Number.ToString("0000"));
+        public string NumberDisplay => string.Format("adr-{0}", Number.ToString("0000"));
 
         /// <summary>
         /// Gets the user who last updated the ADR.
