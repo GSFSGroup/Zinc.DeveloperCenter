@@ -43,7 +43,7 @@
         <div class="empty-state-container" *ngIf="!repos?.items?.length && fetchedRepos">
             <h1>Uh oh, something is missing.</h1>
         </div>
-        
+
         <div>
             <mat-toolbar class="toolbar flex-row">
                 <button mat-button [matMenuTriggerFor]="searchmenu">
@@ -51,38 +51,43 @@
                 </button>
                 <mat-menu #searchmenu="matMenu">
                     <span class="menu-section-title">Search for</span>
-                    <button mat-menu-item id="search-all" (click)="searchFor('all')">
+                    <button mat-menu-item id="search-all" (click)="filterSearchBy('all')">
                         <mat-icon *ngIf="searchingFor === 'all'" class="arrow-icon">search</mat-icon>
                         <span>
                             All
                         </span>
                     </button>
-                    <button mat-menu-item id="search-number" (click)="searchFor('number')">
+                    <button mat-menu-item id="search-number" (click)="filterSearchBy('number')">
                         <mat-icon *ngIf="searchingFor === 'number'" class="arrow-icon">search</mat-icon>
                         <span>
                             Number
                         </span>
                     </button>
-                    <button mat-menu-item id="search-title" (click)="searchFor('title')">
+                    <button mat-menu-item id="search-title" (click)="filterSearchBy('title')">
                         <mat-icon *ngIf="searchingFor === 'title'" class="arrow-icon">search</mat-icon>
                         <span>
                             Title
                         </span>
                     </button>
-                    <button mat-menu-item id="search-full-text" (click)="searchFor('indepth')">
+                    <button mat-menu-item id="search-full-text" (click)="filterSearchBy('indepth')">
                         <mat-icon *ngIf="searchingFor === 'indepth'" class="arrow-icon">search</mat-icon>
                         <span>
                             Full-text
                         </span>
                     </button>
                 </mat-menu>
+
+                <button mat-button (click)="searchFor(searchQuery)" [disabled]="searchQuery === ''">
+                    <mat-icon aria-hidden="false">search</mat-icon>
+                </button>
+
                 <form>
                     <div id="search-left">
                         <!-- Place search dropdown here -->
                     </div>
                     <div id="search-right">
                         <mat-form-field appearance="outline">
-                            <input matInput type="text" placeholder="What ADR are you looking for?">
+                            <input matInput [(ngModel)]="searchQuery" name="searchQuery" type="text" placeholder="What ADR are you looking for?" (change)="searchQueryChange($event)">
                         </mat-form-field>
                     </div>
                 </form>
@@ -91,7 +96,8 @@
                 </button>
                 <mat-menu #menu="matMenu">
                     <span class="menu-section-title">Sort by</span>
-                    <button mat-menu-item id="sort-by-name-action" (click)="sortByLastUpdatedDate(); $event.stopPropagation()">
+                    <button mat-menu-item id="sort-by-name-action"
+                        (click)="sortByLastUpdatedDate(); $event.stopPropagation()">
                         <mat-icon *ngIf="!sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_upward</mat-icon>
                         <mat-icon *ngIf="sortAsc && sortedOn === 'lud'" class="arrow-icon">arrow_downward</mat-icon>
                         <span>
@@ -116,11 +122,28 @@
             </mat-toolbar>
             <span class="spacer"></span>
         </div>
-        
+
         <div>
             <ul class="adr-list fill-container scrollable-y margin-right-36" id="adr-list">
+                <mat-accordion [multi]="true" class="flex-fill">
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title class="panel-title">Searched ADRs</mat-panel-title>
+                            <mat-panel-description class="panel-header">
+                                ADRs that matched your search query
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+    
+                        <app-adr-summary-list #appAdrSummaryList [searchedAdrs]="searchedAdrs" [sortedOn]="sortedOn"
+                            [sortAsc]="sortAsc">
+                        </app-adr-summary-list>
+    
+                    </mat-expansion-panel>
+                </mat-accordion>
+
                 <mat-accordion *ngFor="let repo of repos?.items" [multi]="true" class="flex-fill">
-                    <mat-expansion-panel [expanded]="expanded[repo.applicationName]" (opened)="repoToggle(repo.applicationName, true)"
+                    <mat-expansion-panel [expanded]="expanded[repo.applicationName]"
+                        (opened)="repoToggle(repo.applicationName, true)"
                         (closed)="repoToggle(repo.applicationName, false)">
                         <mat-expansion-panel-header class="panel-header">
                             <mat-panel-title class="panel-title">{{repo.applicationDisplayName}}</mat-panel-title>
@@ -128,9 +151,10 @@
                                 {{repo.applicationElement}}
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-        
-                        <app-adr-summary-list #appAdrSummaryList [applicationName]="repo.applicationName" [sortedOn]="sortedOn"
-                            [sortAsc]="sortAsc" [expanded]="expanded[repo.applicationName]"></app-adr-summary-list>
+
+                        <app-adr-summary-list #appAdrSummaryList [applicationName]="repo.applicationName"
+                            [sortedOn]="sortedOn" [sortAsc]="sortAsc" [expanded]="expanded[repo.applicationName]">
+                        </app-adr-summary-list>
 
                     </mat-expansion-panel>
                 </mat-accordion>
