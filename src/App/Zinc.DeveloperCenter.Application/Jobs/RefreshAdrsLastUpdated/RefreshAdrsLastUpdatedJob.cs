@@ -24,6 +24,6 @@ namespace Zinc.DeveloperCenter.Application.Jobs.RefreshAdrsLastUpdated
         public override string ActivityDisplayName => "Refresh ADRs last updated job";
 
         /// <inheritdoc/>
-        public override string ActivityDescription => "Updates the last updated details for ADRs in the database using the GitHub api.";
+        public override string ActivityDescription => "Updates the last updated details for ADRs in the application database using the GitHub api.";
     }
 }
