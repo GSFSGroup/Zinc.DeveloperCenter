@@ -16,7 +16,7 @@ namespace Zinc.DeveloperCenter.Application.Commands.RemoveFavorite
 
         public async Task<Unit> Handle(RemoveFavoriteCommand request, CancellationToken cancellationToken)
         {
-            await favorites.RemoveFavorite(request.TenantId, request.ApplicationName, request.FilePath).ConfigureAwait(false);
+            await favorites.RemoveFavorite(request.ApplicationName, request.FilePath).ConfigureAwait(false);
             return Unit.Value;
         }
     }
