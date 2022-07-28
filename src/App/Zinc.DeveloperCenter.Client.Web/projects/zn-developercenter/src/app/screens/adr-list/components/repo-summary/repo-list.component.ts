@@ -106,17 +106,15 @@ export class RepoListComponent implements OnInit, OnDestroy {
     }
 
     public searchFor(searchQuery: string): void {
-        this.repoService.searchApps(searchQuery)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe(foundAdrs => {
-                this.searchedAdrs = foundAdrs;
-                if (foundAdrs.items.length) {
-                    this.hasSearched = true;
-                }
-            });
-    }
-
-    public searchQueryChange(): void {
-        console.log(this.searchQuery);
+        if (searchQuery !== '') {
+            this.repoService.searchApps(searchQuery)
+                .pipe(takeUntil(this.destroyed$))
+                .subscribe(foundAdrs => {
+                    this.searchedAdrs = foundAdrs;
+                    if (foundAdrs.items.length) {
+                        this.hasSearched = true;
+                    }
+                });
+        }
     }
 }

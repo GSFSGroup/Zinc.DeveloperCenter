@@ -34,6 +34,59 @@
 
                     </mat-expansion-panel>
                 </mat-accordion>
+
+                <mat-accordion>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header class="panel-header">
+                            <mat-panel-title class="panel-title">
+                                <mat-icon>help_outline</mat-icon>
+                                Help
+                            </mat-panel-title>
+                            <mat-panel-description class="panel-header">
+                                Tips for Developer Center.
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <ul class="item-list padding-all-24 margin-right-36" id="help-list">
+                            <mat-divider></mat-divider>
+                            <li class="list-item transform-on-hover pointer">
+                                <div class="item-summary item-content">
+                                    <!-- <a id="adr-{{adr.title}}"
+                                        routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
+                                        #adrLink></a> -->
+                                    <h3 class="item-title margin-0 capitalize clickable-text">
+                                        Searching
+                                    </h3>
+                                    <span class="item-detail margin-bottom-12">
+                                        Search queries use boolean logic.
+                                        <br>
+                                        Ex: 'record & value', 'record | value'
+                                    </span>
+                                    <span style="clear: both"></span>
+                                </div>
+                            </li>
+                            <mat-divider></mat-divider>
+                            <li class="list-item transform-on-hover pointer">
+                                <div class="item-summary item-content">
+                                    <!-- <a id="adr-{{adr.title}}"
+                                        routerLink="adr-render/{{adr.titleDisplay}}/{{adr.numberDisplay}}/{{applicationName}}/file-path/{{encodeUrl(adr.filePath)}}"
+                                        #adrLink></a> -->
+                                    <h3 class="item-title margin-0 capitalize clickable-text">
+                                        GitHub Data
+                                    </h3>
+                                    <span class="item-detail margin-bottom-12">
+                                        A job runs daily to retrieve all repo and ADR data.
+                                        <br>
+                                        If you make a change to an ADR, it will appear the next day.
+                                    </span>
+                                    <span style="clear: both"></span>
+                                </div>
+                            </li>
+                            <mat-divider></mat-divider>
+                        </ul>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
             </ul>
         </div>
 
@@ -46,7 +99,25 @@
 
         <div>
             <mat-toolbar class="toolbar flex-row">
-                <button mat-button [matMenuTriggerFor]="searchmenu">
+
+                <button mat-button (click)="searchFor(searchQuery)" [disabled]="searchQuery === ''"
+                    aria-label="Search ADRs" matTooltip="Search ADRs">
+                    <mat-icon aria-hidden="false">search</mat-icon>
+                </button>
+
+                <form>
+                    <div id="search-left">
+                        <!-- Place search dropdown here -->
+                    </div>
+                    <div id="search-right">
+                        <mat-form-field appearance="outline">
+                            <input matInput [(ngModel)]="searchQuery" name="searchQuery" type="text"
+                                placeholder="What term are you looking for?" (keydown.enter)="searchFor(searchQuery)">
+                        </mat-form-field>
+                    </div>
+                </form>
+                <button mat-button [matMenuTriggerFor]="searchmenu" aria-label="Filter ADR search"
+                    matTooltip="Filter ADR search">
                     <mat-icon aria-hidden="false">image_search</mat-icon>
                 </button>
                 <mat-menu #searchmenu="matMenu">
@@ -76,22 +147,7 @@
                         </span>
                     </button>
                 </mat-menu>
-
-                <button mat-button (click)="searchFor(searchQuery)" [disabled]="searchQuery === ''">
-                    <mat-icon aria-hidden="false">search</mat-icon>
-                </button>
-
-                <form>
-                    <div id="search-left">
-                        <!-- Place search dropdown here -->
-                    </div>
-                    <div id="search-right">
-                        <mat-form-field appearance="outline">
-                            <input matInput [(ngModel)]="searchQuery" name="searchQuery" type="text" placeholder="What ADR are you looking for?" (change)="searchQueryChange($event)">
-                        </mat-form-field>
-                    </div>
-                </form>
-                <button mat-button [matMenuTriggerFor]="menu">
+                <button mat-button [matMenuTriggerFor]="menu" aria-label="Sort ADRs" matTooltip="Sort ADRs">
                     <mat-icon aria-hidden="false">sort</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
@@ -133,11 +189,11 @@
                                 ADRs that matched your search query
                             </mat-panel-description>
                         </mat-expansion-panel-header>
-    
-                        <app-adr-summary-list #appAdrSummaryList [searchedAdrs]="searchedAdrs" [sortedOn]="sortedOn"
+
+                        <app-adr-summary-list #appAdrSummaryList [searchAccordion]="true" [searchedAdrs]="searchedAdrs" [sortedOn]="sortedOn"
                             [sortAsc]="sortAsc">
                         </app-adr-summary-list>
-    
+
                     </mat-expansion-panel>
                 </mat-accordion>
 

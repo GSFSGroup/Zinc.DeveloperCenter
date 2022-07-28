@@ -29,6 +29,9 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     @Input()
     public searchedAdrs!: Page<AdrSummary>;
 
+    @Input()
+    public searchAccordion = false;
+
     // The list of ADRs for a specific repo.
     public adrs!: Page<AdrSummary>;
 
@@ -50,7 +53,6 @@ export class AdrSummaryComponent implements OnChanges, OnDestroy {
     public ngOnChanges(): void {
         if (typeof(this.searchedAdrs) !== 'undefined' && this.searchedAdrs.items.length) {
             this.adrs = this.searchedAdrs;
-            console.log('search hit');
         } else {
             this.getAppAdrs();
         }

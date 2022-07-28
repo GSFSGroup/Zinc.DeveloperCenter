@@ -1,5 +1,5 @@
-<div class="empty-state-container" *ngIf="!adrs?.items?.length">
-    <span>There are no ADRs in this repository.</span>
+<div class="empty-state-container" *ngIf="searchAccordion && !adrs?.items?.length">
+    <span>No ADRs found... search for a term or refactor your search.</span>
 </div>
 
 <ul class="item-list padding-all-24 margin-right-36" id="adr-summary-list" *ngIf="adrs?.items?.length">
