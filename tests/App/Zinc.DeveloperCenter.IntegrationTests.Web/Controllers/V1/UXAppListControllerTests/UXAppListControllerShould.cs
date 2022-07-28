@@ -39,19 +39,10 @@ namespace Zinc.DeveloperCenter.IntegrationTests.Web.Controllers.V1.UXAppListCont
 
         private async Task InsertData()
         {
-            var repository = GetRequiredService<IApplicationRepository>();
-
-            await repository.Save(new Domain.Model.Application(
+            await Mothers.TestData.InsertData(
                 TenantId,
-                "Zinc.Templates",
-                "https://github.com/GSFSGroup/Zinc.Templates",
-                "A template for new projects... .NET projects to be specific")).ConfigureAwait(false);
-
-            await repository.Save(new Domain.Model.Application(
-                TenantId,
-                "Molybdenum.Earnings",
-                "https://github.com/GSFSGroup/Zinc.Templates",
-                "A service to calculate earnings based on curves for insurance and insurance-like financial products.")).ConfigureAwait(false);
+                GetRequiredService<IApplicationRepository>(),
+                GetRequiredService<IArchitectureDecisionRecordRepository>()).ConfigureAwait(false);
         }
     }
 }
